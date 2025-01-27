@@ -1,4 +1,13 @@
+using Control_Machine_Sistem.Models;
+using Microsoft.EntityFrameworkCore;
+using System;
+
 var builder = WebApplication.CreateBuilder(args);
+
+//Dependenci inyection
+builder.Services.AddDbContext<AppDbContext>(
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString("conexionDb"))
+    );
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

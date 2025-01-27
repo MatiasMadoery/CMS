@@ -8,5 +8,7 @@
         public string? Model { get; set; }
         public string? SerialNumber { get; set; }
         public string? PurchaseDate { get; set; }
+
+        public ICollection<Service>? Services { get; set; }
     }
 }
