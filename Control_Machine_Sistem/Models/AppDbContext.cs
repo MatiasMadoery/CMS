@@ -5,10 +5,10 @@ namespace Control_Machine_Sistem.Models
 {
     public class AppDbContext : DbContext
     {
-        //Utilizacion de la dependencia de conxion.
+        //Use the connection dependency
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        //Relaciones entre tablas
+        //Relationships between tables
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //One to many relationship between Machine and Customer
@@ -23,12 +23,19 @@ namespace Control_Machine_Sistem.Models
                .WithMany(c => c.Services)
                .HasForeignKey(p => p.MachineId);
 
+            //One to many relationship between Manual and Machine
+            modelBuilder.Entity<Manual>()
+               .HasOne(p => p.Machine)
+               .WithMany(c => c.Manuals)
+               .HasForeignKey(p => p.MachineId);
+
+
         }
-        public DbSet<Control_Machine_Sistem.Models.Customer> Customer { get; set; } = default!;
-        public DbSet<Control_Machine_Sistem.Models.Machine> Machine { get; set; } = default!;
-        public DbSet<Control_Machine_Sistem.Models.Manual> Manual { get; set; } = default!;
-        public DbSet<Control_Machine_Sistem.Models.Service> Service { get; set; } = default!;
-        public DbSet<Control_Machine_Sistem.Models.User> User { get; set; } = default!;
+        public DbSet<Customer> Customers{ get; set; } = default!;
+        public DbSet<Machine> Machines { get; set; } = default!;
+        public DbSet<Manual> Manuals { get; set; } = default!;
+        public DbSet<Service> Services { get; set; } = default!;
+        public DbSet<User> Users { get; set; } = default!;
 
     }
 }

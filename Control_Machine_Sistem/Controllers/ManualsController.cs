@@ -21,7 +21,7 @@ namespace Control_Machine_Sistem.Controllers
         // GET: Manuals
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Manual.ToListAsync());
+            return View(await _context.Manuals.ToListAsync());
         }
 
         // GET: Manuals/Details/5
@@ -32,7 +32,7 @@ namespace Control_Machine_Sistem.Controllers
                 return NotFound();
             }
 
-            var manual = await _context.Manual
+            var manual = await _context.Manuals
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (manual == null)
             {
@@ -72,7 +72,7 @@ namespace Control_Machine_Sistem.Controllers
                 return NotFound();
             }
 
-            var manual = await _context.Manual.FindAsync(id);
+            var manual = await _context.Manuals.FindAsync(id);
             if (manual == null)
             {
                 return NotFound();
@@ -123,7 +123,7 @@ namespace Control_Machine_Sistem.Controllers
                 return NotFound();
             }
 
-            var manual = await _context.Manual
+            var manual = await _context.Manuals
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (manual == null)
             {
@@ -138,10 +138,10 @@ namespace Control_Machine_Sistem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var manual = await _context.Manual.FindAsync(id);
+            var manual = await _context.Manuals.FindAsync(id);
             if (manual != null)
             {
-                _context.Manual.Remove(manual);
+                _context.Manuals.Remove(manual);
             }
 
             await _context.SaveChangesAsync();
@@ -150,7 +150,7 @@ namespace Control_Machine_Sistem.Controllers
 
         private bool ManualExists(int id)
         {
-            return _context.Manual.Any(e => e.Id == id);
+            return _context.Manuals.Any(e => e.Id == id);
         }
     }
 }

@@ -14,6 +14,6 @@
         public string? Province { get; set; }        
         public string? Country { get; set; }     
         
-        public ICollection<Machine>? Machines { get; set; }
+        public ICollection<Machine>? Machines { get; set; } = new List<Machine>();
     }
 }

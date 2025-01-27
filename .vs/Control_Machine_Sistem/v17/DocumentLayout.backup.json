@@ -3,24 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\Control_Machine_Sistem\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|c:\\users\\matim\\onedrive\\escritorio\\cms\\control_machine_sistem\\control_machine_sistem\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|solutionrelative:control_machine_sistem\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|c:\\users\\matim\\onedrive\\escritorio\\cms\\control_machine_sistem\\control_machine_sistem\\controllers\\servicescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|solutionrelative:control_machine_sistem\\controllers\\servicescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|c:\\users\\matim\\onedrive\\escritorio\\cms\\control_machine_sistem\\control_machine_sistem\\controllers\\manualscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|solutionrelative:control_machine_sistem\\controllers\\manualscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|c:\\users\\matim\\onedrive\\escritorio\\cms\\control_machine_sistem\\control_machine_sistem\\controllers\\machinescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|solutionrelative:control_machine_sistem\\controllers\\machinescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|c:\\users\\matim\\onedrive\\escritorio\\cms\\control_machine_sistem\\control_machine_sistem\\controllers\\customerscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|solutionrelative:control_machine_sistem\\controllers\\customerscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|c:\\users\\matim\\onedrive\\escritorio\\cms\\control_machine_sistem\\control_machine_sistem\\models\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|solutionrelative:control_machine_sistem\\models\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -47,66 +31,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "UsersController.cs",
-              "DocumentMoniker": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\Control_Machine_Sistem\\Control_Machine_Sistem\\Controllers\\UsersController.cs",
-              "RelativeDocumentMoniker": "Control_Machine_Sistem\\Controllers\\UsersController.cs",
-              "ToolTip": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\Control_Machine_Sistem\\Control_Machine_Sistem\\Controllers\\UsersController.cs",
-              "RelativeToolTip": "Control_Machine_Sistem\\Controllers\\UsersController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\Control_Machine_Sistem\\Control_Machine_Sistem\\Models\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "Control_Machine_Sistem\\Models\\AppDbContext.cs",
+              "ToolTip": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\Control_Machine_Sistem\\Control_Machine_Sistem\\Models\\AppDbContext.cs",
+              "RelativeToolTip": "Control_Machine_Sistem\\Models\\AppDbContext.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAcwCUAAAA6AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-27T14:01:27.754Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ServicesController.cs",
-              "DocumentMoniker": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\Control_Machine_Sistem\\Control_Machine_Sistem\\Controllers\\ServicesController.cs",
-              "RelativeDocumentMoniker": "Control_Machine_Sistem\\Controllers\\ServicesController.cs",
-              "ToolTip": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\Control_Machine_Sistem\\Control_Machine_Sistem\\Controllers\\ServicesController.cs",
-              "RelativeToolTip": "Control_Machine_Sistem\\Controllers\\ServicesController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-27T14:00:47.373Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ManualsController.cs",
-              "DocumentMoniker": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\Control_Machine_Sistem\\Control_Machine_Sistem\\Controllers\\ManualsController.cs",
-              "RelativeDocumentMoniker": "Control_Machine_Sistem\\Controllers\\ManualsController.cs",
-              "ToolTip": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\Control_Machine_Sistem\\Control_Machine_Sistem\\Controllers\\ManualsController.cs",
-              "RelativeToolTip": "Control_Machine_Sistem\\Controllers\\ManualsController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-27T14:00:08.383Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "MachinesController.cs",
-              "DocumentMoniker": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\Control_Machine_Sistem\\Control_Machine_Sistem\\Controllers\\MachinesController.cs",
-              "RelativeDocumentMoniker": "Control_Machine_Sistem\\Controllers\\MachinesController.cs",
-              "ToolTip": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\Control_Machine_Sistem\\Control_Machine_Sistem\\Controllers\\MachinesController.cs",
-              "RelativeToolTip": "Control_Machine_Sistem\\Controllers\\MachinesController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-27T13:59:35.574Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "CustomersController.cs",
-              "DocumentMoniker": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\Control_Machine_Sistem\\Control_Machine_Sistem\\Controllers\\CustomersController.cs",
-              "RelativeDocumentMoniker": "Control_Machine_Sistem\\Controllers\\CustomersController.cs",
-              "ToolTip": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\Control_Machine_Sistem\\Control_Machine_Sistem\\Controllers\\CustomersController.cs",
-              "RelativeToolTip": "Control_Machine_Sistem\\Controllers\\CustomersController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-27T13:58:49.831Z",
+              "WhenOpened": "2025-01-27T17:37:08.612Z",
               "EditorCaption": ""
             }
           ]

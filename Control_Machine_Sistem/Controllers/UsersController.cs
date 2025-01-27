@@ -21,7 +21,7 @@ namespace Control_Machine_Sistem.Controllers
         // GET: Users
         public async Task<IActionResult> Index()
         {
-            return View(await _context.User.ToListAsync());
+            return View(await _context.Users.ToListAsync());
         }
 
         // GET: Users/Details/5
@@ -32,7 +32,7 @@ namespace Control_Machine_Sistem.Controllers
                 return NotFound();
             }
 
-            var user = await _context.User
+            var user = await _context.Users
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (user == null)
             {
@@ -72,7 +72,7 @@ namespace Control_Machine_Sistem.Controllers
                 return NotFound();
             }
 
-            var user = await _context.User.FindAsync(id);
+            var user = await _context.Users.FindAsync(id);
             if (user == null)
             {
                 return NotFound();
@@ -123,7 +123,7 @@ namespace Control_Machine_Sistem.Controllers
                 return NotFound();
             }
 
-            var user = await _context.User
+            var user = await _context.Users
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (user == null)
             {
@@ -138,10 +138,10 @@ namespace Control_Machine_Sistem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var user = await _context.User.FindAsync(id);
+            var user = await _context.Users.FindAsync(id);
             if (user != null)
             {
-                _context.User.Remove(user);
+                _context.Users.Remove(user);
             }
 
             await _context.SaveChangesAsync();
@@ -150,7 +150,7 @@ namespace Control_Machine_Sistem.Controllers
 
         private bool UserExists(int id)
         {
-            return _context.User.Any(e => e.Id == id);
+            return _context.Users.Any(e => e.Id == id);
         }
     }
 }

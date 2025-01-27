@@ -3,9 +3,9 @@
     public class Service
     {
         public int Id { get; set; }
-        public string? MachineId { get; set; }
+        public int? MachineId { get; set; }
         public Machine? Machine { get; set; }
-        public string? ServiceDate { get; set; }
+        public DateTime? ServiceDate { get; set; }
         public string? Description { get; set; }
     }
 }
