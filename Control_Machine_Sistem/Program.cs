@@ -1,13 +1,32 @@
 using Control_Machine_Sistem.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Dependenci inyection
+//Dependency injection
 builder.Services.AddDbContext<AppDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("conexionDb"))
     );
+
+// Agregar servicios de autenticación y autorización
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        // To mitigate the risk of session hijacking and XSS (Cross-Site Scripting) attacks.
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
+        options.LoginPath = "/UsersLogin/Login"; // Login path
+        options.AccessDeniedPath = "/UsersLogin/AccessDenied"; // Denied path 
+    });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("IsTec", policy => policy.RequireRole("Tec"));
+    options.AddPolicy("IsAdm", policy => policy.RequireRole("Adm"));   
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -25,6 +44,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseAuthentication();
 app.UseRouting();
 
 app.UseAuthorization();

@@ -5,12 +5,20 @@
       "PackagePath": "staticwebassets\\Control_Machine_Sistem.an6ta178cz.bundle.scp.css"
     },
     {
+      "Id": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\Control_Machine_Sistem\\Control_Machine_Sistem\\wwwroot\\css\\login.css",
+      "PackagePath": "staticwebassets\\css\\login.css"
+    },
+    {
       "Id": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\Control_Machine_Sistem\\Control_Machine_Sistem\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
       "Id": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\Control_Machine_Sistem\\Control_Machine_Sistem\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\Control_Machine_Sistem\\Control_Machine_Sistem\\wwwroot\\img\\icons\\user-solid (1).svg",
+      "PackagePath": "staticwebassets\\img\\icons\\user-solid (1).svg"
     },
     {
       "Id": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\Control_Machine_Sistem\\Control_Machine_Sistem\\wwwroot\\js\\site.js",

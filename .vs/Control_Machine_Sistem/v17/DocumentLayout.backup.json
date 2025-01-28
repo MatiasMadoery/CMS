@@ -3,8 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\Control_Machine_Sistem\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|c:\\users\\matim\\onedrive\\escritorio\\cms\\control_machine_sistem\\control_machine_sistem\\models\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|solutionrelative:control_machine_sistem\\models\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|c:\\users\\matim\\onedrive\\escritorio\\cms\\control_machine_sistem\\control_machine_sistem\\views\\userslogin\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|solutionrelative:control_machine_sistem\\views\\userslogin\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|c:\\users\\matim\\onedrive\\escritorio\\cms\\control_machine_sistem\\control_machine_sistem\\controllers\\userslogincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|solutionrelative:control_machine_sistem\\controllers\\userslogincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|c:\\users\\matim\\onedrive\\escritorio\\cms\\control_machine_sistem\\control_machine_sistem\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|solutionrelative:control_machine_sistem\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -31,14 +39,40 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "AppDbContext.cs",
-              "DocumentMoniker": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\Control_Machine_Sistem\\Control_Machine_Sistem\\Models\\AppDbContext.cs",
-              "RelativeDocumentMoniker": "Control_Machine_Sistem\\Models\\AppDbContext.cs",
-              "ToolTip": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\Control_Machine_Sistem\\Control_Machine_Sistem\\Models\\AppDbContext.cs",
-              "RelativeToolTip": "Control_Machine_Sistem\\Models\\AppDbContext.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAcwCUAAAA6AAAAAAAAAA==",
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\Control_Machine_Sistem\\Control_Machine_Sistem\\Views\\UsersLogin\\Login.cshtml",
+              "RelativeDocumentMoniker": "Control_Machine_Sistem\\Views\\UsersLogin\\Login.cshtml",
+              "ToolTip": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\Control_Machine_Sistem\\Control_Machine_Sistem\\Views\\UsersLogin\\Login.cshtml*",
+              "RelativeToolTip": "Control_Machine_Sistem\\Views\\UsersLogin\\Login.cshtml*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAABVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-01-28T00:24:07.814Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UsersLoginController.cs",
+              "DocumentMoniker": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\Control_Machine_Sistem\\Control_Machine_Sistem\\Controllers\\UsersLoginController.cs",
+              "RelativeDocumentMoniker": "Control_Machine_Sistem\\Controllers\\UsersLoginController.cs",
+              "ToolTip": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\Control_Machine_Sistem\\Control_Machine_Sistem\\Controllers\\UsersLoginController.cs",
+              "RelativeToolTip": "Control_Machine_Sistem\\Controllers\\UsersLoginController.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-27T17:37:08.612Z",
+              "WhenOpened": "2025-01-28T00:23:27.364Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\Control_Machine_Sistem\\Control_Machine_Sistem\\Program.cs",
+              "RelativeDocumentMoniker": "Control_Machine_Sistem\\Program.cs",
+              "ToolTip": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\Control_Machine_Sistem\\Control_Machine_Sistem\\Program.cs",
+              "RelativeToolTip": "Control_Machine_Sistem\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-28T00:22:09.96Z",
               "EditorCaption": ""
             }
           ]
