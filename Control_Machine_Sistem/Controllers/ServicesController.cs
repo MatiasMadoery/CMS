@@ -21,7 +21,7 @@ namespace Control_Machine_Sistem.Controllers
         // GET: Services
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Service.ToListAsync());
+            return View(await _context.Services.ToListAsync());
         }
 
         // GET: Services/Details/5
@@ -32,7 +32,7 @@ namespace Control_Machine_Sistem.Controllers
                 return NotFound();
             }
 
-            var service = await _context.Service
+            var service = await _context.Services
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (service == null)
             {
@@ -72,7 +72,7 @@ namespace Control_Machine_Sistem.Controllers
                 return NotFound();
             }
 
-            var service = await _context.Service.FindAsync(id);
+            var service = await _context.Services.FindAsync(id);
             if (service == null)
             {
                 return NotFound();
@@ -123,7 +123,7 @@ namespace Control_Machine_Sistem.Controllers
                 return NotFound();
             }
 
-            var service = await _context.Service
+            var service = await _context.Services
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (service == null)
             {
@@ -138,10 +138,10 @@ namespace Control_Machine_Sistem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var service = await _context.Service.FindAsync(id);
+            var service = await _context.Services.FindAsync(id);
             if (service != null)
             {
-                _context.Service.Remove(service);
+                _context.Services.Remove(service);
             }
 
             await _context.SaveChangesAsync();
@@ -150,7 +150,7 @@ namespace Control_Machine_Sistem.Controllers
 
         private bool ServiceExists(int id)
         {
-            return _context.Service.Any(e => e.Id == id);
+            return _context.Services.Any(e => e.Id == id);
         }
     }
 }

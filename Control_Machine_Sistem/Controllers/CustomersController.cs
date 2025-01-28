@@ -21,7 +21,7 @@ namespace Control_Machine_Sistem.Controllers
         // GET: Customers
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Customer.ToListAsync());
+            return View(await _context.Customers.ToListAsync());
         }
 
         // GET: Customers/Details/5
@@ -32,7 +32,7 @@ namespace Control_Machine_Sistem.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customer
+            var customer = await _context.Customers
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (customer == null)
             {
@@ -72,7 +72,7 @@ namespace Control_Machine_Sistem.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customer.FindAsync(id);
+            var customer = await _context.Customers.FindAsync(id);
             if (customer == null)
             {
                 return NotFound();
@@ -123,7 +123,7 @@ namespace Control_Machine_Sistem.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customer
+            var customer = await _context.Customers
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (customer == null)
             {
@@ -138,10 +138,10 @@ namespace Control_Machine_Sistem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var customer = await _context.Customer.FindAsync(id);
+            var customer = await _context.Customers.FindAsync(id);
             if (customer != null)
             {
-                _context.Customer.Remove(customer);
+                _context.Customers.Remove(customer);
             }
 
             await _context.SaveChangesAsync();
@@ -150,7 +150,7 @@ namespace Control_Machine_Sistem.Controllers
 
         private bool CustomerExists(int id)
         {
-            return _context.Customer.Any(e => e.Id == id);
+            return _context.Customers.Any(e => e.Id == id);
         }
     }
 }

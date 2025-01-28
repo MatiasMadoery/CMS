@@ -21,7 +21,7 @@ namespace Control_Machine_Sistem.Controllers
         // GET: Machines
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Machine.ToListAsync());
+            return View(await _context.Machines.ToListAsync());
         }
 
         // GET: Machines/Details/5
@@ -32,7 +32,7 @@ namespace Control_Machine_Sistem.Controllers
                 return NotFound();
             }
 
-            var machine = await _context.Machine
+            var machine = await _context.Machines
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (machine == null)
             {
@@ -72,7 +72,7 @@ namespace Control_Machine_Sistem.Controllers
                 return NotFound();
             }
 
-            var machine = await _context.Machine.FindAsync(id);
+            var machine = await _context.Machines.FindAsync(id);
             if (machine == null)
             {
                 return NotFound();
@@ -123,7 +123,7 @@ namespace Control_Machine_Sistem.Controllers
                 return NotFound();
             }
 
-            var machine = await _context.Machine
+            var machine = await _context.Machines
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (machine == null)
             {
@@ -138,10 +138,10 @@ namespace Control_Machine_Sistem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var machine = await _context.Machine.FindAsync(id);
+            var machine = await _context.Machines.FindAsync(id);
             if (machine != null)
             {
-                _context.Machine.Remove(machine);
+                _context.Machines.Remove(machine);
             }
 
             await _context.SaveChangesAsync();
@@ -150,7 +150,7 @@ namespace Control_Machine_Sistem.Controllers
 
         private bool MachineExists(int id)
         {
-            return _context.Machine.Any(e => e.Id == id);
+            return _context.Machines.Any(e => e.Id == id);
         }
     }
 }
