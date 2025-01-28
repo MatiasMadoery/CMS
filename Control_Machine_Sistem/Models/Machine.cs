@@ -11,5 +11,10 @@
 
         public ICollection<Service>? Services { get; set; } = new List<Service>();
         public ICollection<Manual>? Manuals { get; set; } = new List<Manual>();
+        //Referring to the manuals
+        public string ManualPath { get; set; }
+        public string ServiceManualPath { get; set; }
+        //End
+        public ICollection<Service>? Service { get; set; }
     }
 }

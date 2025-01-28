@@ -1,0 +1,19 @@
+﻿@model Control_Machine_Sistem.Models.QrCode
+
+@{
+    ViewData["Title"] = "Detalles de la Máquina";
+}
+
+<h1>Detalles para @Model.ClientName - @Model.MachineModel</h1>
+
+<ul>
+    <li>
+        <a href="@Model.UserManualUrl" target="_blank" class="btn btn-info">Descargar Manual de Usuario</a>
+    </li>
+    <li>
+        <a href="@Model.MachineManualUrl" target="_blank" class="btn btn-info">Descargar Manual de la Máquina</a>
+    </li>
+    <li>
+        <a href="@Model.ServiceDataUrl" target="_blank" class="btn btn-info">Descargar Datos del Servicio</a>
+    </li>
+</ul>

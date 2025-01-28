@@ -1,0 +1,15 @@
+﻿@model Control_Machine_Sistem.Models.QrCode
+@{
+    ViewData["Title"] = "QR Generado";
+}
+
+<h1>QR Generado para @Model.ClientName</h1>
+
+<div>
+    <h3>Escanee el siguiente código QR para acceder a la información:</h3>
+    <img src="data:image/png;base64,@Model.QrImageBase64" alt="QR Code" />
+</div>
+
+<div>
+    <button onclick="window.print()">Imprimir QR</button>
+</div>

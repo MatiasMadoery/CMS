@@ -1,0 +1,33 @@
+﻿@model Control_Machine_Sistem.ViewModels.QrCodeIndexViewModel
+
+@{
+    ViewData["Title"] = "Generar QR";
+}
+
+<h1>Generar QR</h1>
+
+<form method="post" asp-action="GenerateQr">
+    <div class="form-group">
+        <label for="customer">Selecciona un Cliente:</label>
+        <select class="form-control" id="customer" name="customerId">
+            <option value="">Seleccione un cliente</option>
+            @foreach (var client in Model.Clients)
+            {
+                <option value="@client.Value">@client.Text</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="machine">Selecciona una Máquina:</label>
+        <select class="form-control" id="machine" name="machineId">
+            <option value="">Seleccione una máquina</option>
+            @foreach (var machine in Model.Machines)
+            {
+                <option value="@machine.Value">@machine.Text</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Generar QR</button>
+</form>
