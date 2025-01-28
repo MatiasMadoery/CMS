@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "b9IdmtNY4hnAPScrgfAJWEDrTj0DvV634gWMaDz0v9I=",
+  "Hash": "DwtEl8oB/sBFwzCGaUHofjkWBF9fA+JJFvtwYZEmvBc=",
   "Source": "Control_Machine_Sistem",
   "BasePath": "_content/Control_Machine_Sistem",
   "Mode": "Default",
@@ -2872,7 +2872,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Mon, 27 Jan 2025 23:55:43 GMT"
+          "Value": "Tue, 28 Jan 2025 00:55:30 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2909,7 +2909,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Mon, 27 Jan 2025 23:55:43 GMT"
+          "Value": "Tue, 28 Jan 2025 00:55:30 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2991,7 +2991,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 28 Jan 2025 00:15:04 GMT"
+          "Value": "Tue, 28 Jan 2025 00:55:30 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3028,7 +3028,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 28 Jan 2025 00:15:04 GMT"
+          "Value": "Tue, 28 Jan 2025 00:55:30 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -5523,7 +5523,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 07 Nov 2024 16:38:16 GMT"
+          "Value": "Tue, 28 Jan 2025 00:55:30 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -5568,7 +5568,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 07 Nov 2024 16:38:16 GMT"
+          "Value": "Tue, 28 Jan 2025 00:55:30 GMT"
         },
         {
           "Name": "Cache-Control",
