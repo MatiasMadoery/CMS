@@ -21,7 +21,8 @@ namespace Control_Machine_Sistem.Controllers
         // GET: Machines
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Machines.ToListAsync());
+            var appDbContext = _context.Machines.Include(m => m.Customer).Include(m => m.Model);
+            return View(await appDbContext.ToListAsync());
         }
 
         // GET: Machines/Details/5
@@ -33,7 +34,9 @@ namespace Control_Machine_Sistem.Controllers
             }
 
             var machine = await _context.Machines
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(m => m.Customer)
+                .Include(m => m.Model)
+                .FirstOrDefaultAsync(m => m.CustomerId == id);
             if (machine == null)
             {
                 return NotFound();
@@ -45,6 +48,8 @@ namespace Control_Machine_Sistem.Controllers
         // GET: Machines/Create
         public IActionResult Create()
         {
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Id");
+            ViewData["ModelId"] = new SelectList(_context.Models, "Id", "Id");
             return View();
         }
 
@@ -53,7 +58,7 @@ namespace Control_Machine_Sistem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CustomerId,Model,SerialNumber,PurchaseDate")] Machine machine)
+        public async Task<IActionResult> Create([Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,WarrantyExpirationDate")] Machine machine)
         {
             if (ModelState.IsValid)
             {
@@ -61,6 +66,8 @@ namespace Control_Machine_Sistem.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Id", machine.CustomerId);
+            ViewData["ModelId"] = new SelectList(_context.Models, "Id", "Id", machine.ModelId);
             return View(machine);
         }
 
@@ -77,6 +84,8 @@ namespace Control_Machine_Sistem.Controllers
             {
                 return NotFound();
             }
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Id", machine.CustomerId);
+            ViewData["ModelId"] = new SelectList(_context.Models, "Id", "Id", machine.ModelId);
             return View(machine);
         }
 
@@ -85,9 +94,9 @@ namespace Control_Machine_Sistem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CustomerId,Model,SerialNumber,PurchaseDate")] Machine machine)
+        public async Task<IActionResult> Edit(int? id, [Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,WarrantyExpirationDate")] Machine machine)
         {
-            if (id != machine.Id)
+            if (id != machine.CustomerId)
             {
                 return NotFound();
             }
@@ -101,7 +110,7 @@ namespace Control_Machine_Sistem.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MachineExists(machine.Id))
+                    if (!MachineExists(machine.CustomerId))
                     {
                         return NotFound();
                     }
@@ -112,6 +121,8 @@ namespace Control_Machine_Sistem.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Id", machine.CustomerId);
+            ViewData["ModelId"] = new SelectList(_context.Models, "Id", "Id", machine.ModelId);
             return View(machine);
         }
 
@@ -124,7 +135,9 @@ namespace Control_Machine_Sistem.Controllers
             }
 
             var machine = await _context.Machines
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(m => m.Customer)
+                .Include(m => m.Model)
+                .FirstOrDefaultAsync(m => m.CustomerId == id);
             if (machine == null)
             {
                 return NotFound();
@@ -136,7 +149,7 @@ namespace Control_Machine_Sistem.Controllers
         // POST: Machines/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int? id)
         {
             var machine = await _context.Machines.FindAsync(id);
             if (machine != null)
@@ -148,9 +161,9 @@ namespace Control_Machine_Sistem.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool MachineExists(int id)
+        private bool MachineExists(int? id)
         {
-            return _context.Machines.Any(e => e.Id == id);
+            return _context.Machines.Any(e => e.CustomerId == id);
         }
     }
 }

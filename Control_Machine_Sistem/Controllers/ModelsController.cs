@@ -9,22 +9,22 @@ using Control_Machine_Sistem.Models;
 
 namespace Control_Machine_Sistem.Controllers
 {
-    public class ServicesController : Controller
+    public class ModelsController : Controller
     {
         private readonly AppDbContext _context;
 
-        public ServicesController(AppDbContext context)
+        public ModelsController(AppDbContext context)
         {
             _context = context;
         }
 
-        // GET: Services
+        // GET: Models
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Services.ToListAsync());
+            return View(await _context.Models.ToListAsync());
         }
 
-        // GET: Services/Details/5
+        // GET: Models/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -32,39 +32,39 @@ namespace Control_Machine_Sistem.Controllers
                 return NotFound();
             }
 
-            var service = await _context.Services
+            var model = await _context.Models
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (service == null)
+            if (model == null)
             {
                 return NotFound();
             }
 
-            return View(service);
+            return View(model);
         }
 
-        // GET: Services/Create
+        // GET: Models/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Services/Create
+        // POST: Models/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,MachineId,ServiceDate,Description")] Service service)
+        public async Task<IActionResult> Create([Bind("Id,Name,Manual")] Model model)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(service);
+                _context.Add(model);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(service);
+            return View(model);
         }
 
-        // GET: Services/Edit/5
+        // GET: Models/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -72,22 +72,22 @@ namespace Control_Machine_Sistem.Controllers
                 return NotFound();
             }
 
-            var service = await _context.Services.FindAsync(id);
-            if (service == null)
+            var model = await _context.Models.FindAsync(id);
+            if (model == null)
             {
                 return NotFound();
             }
-            return View(service);
+            return View(model);
         }
 
-        // POST: Services/Edit/5
+        // POST: Models/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,MachineId,ServiceDate,Description")] Service service)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Manual")] Model model)
         {
-            if (id != service.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
@@ -96,12 +96,12 @@ namespace Control_Machine_Sistem.Controllers
             {
                 try
                 {
-                    _context.Update(service);
+                    _context.Update(model);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ServiceExists(service.Id))
+                    if (!ModelExists(model.Id))
                     {
                         return NotFound();
                     }
@@ -112,10 +112,10 @@ namespace Control_Machine_Sistem.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(service);
+            return View(model);
         }
 
-        // GET: Services/Delete/5
+        // GET: Models/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -123,34 +123,34 @@ namespace Control_Machine_Sistem.Controllers
                 return NotFound();
             }
 
-            var service = await _context.Services
+            var model = await _context.Models
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (service == null)
+            if (model == null)
             {
                 return NotFound();
             }
 
-            return View(service);
+            return View(model);
         }
 
-        // POST: Services/Delete/5
+        // POST: Models/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var service = await _context.Services.FindAsync(id);
-            if (service != null)
+            var model = await _context.Models.FindAsync(id);
+            if (model != null)
             {
-                _context.Services.Remove(service);
+                _context.Models.Remove(model);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ServiceExists(int id)
+        private bool ModelExists(int id)
         {
-            return _context.Services.Any(e => e.Id == id);
+            return _context.Models.Any(e => e.Id == id);
         }
     }
 }

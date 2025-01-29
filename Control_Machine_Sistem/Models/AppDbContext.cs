@@ -11,30 +11,34 @@ namespace Control_Machine_Sistem.Models
         //Relationships between tables
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //One to many relationship between Machine and Customer
+            ////One to many relationship between Machine and Customer
+            //modelBuilder.Entity<Machine>()
+            //    .HasOne(p => p.Customer)
+            //    .WithMany(c => c.Machines)
+            //    .HasForeignKey(p => p.CustomerId);
+
+
+
             modelBuilder.Entity<Machine>()
-                .HasOne(p => p.Customer)
-                .WithMany(c => c.Machines)
-                .HasForeignKey(p => p.CustomerId);
+              .HasKey(ac => new { ac.CustomerId, ac.ModelId });
 
-            //One to many relationship between Service and Machine
-            modelBuilder.Entity<Service>()
-               .HasOne(p => p.Machine)
-               .WithMany(c => c.Services)
-               .HasForeignKey(p => p.MachineId);
+            modelBuilder.Entity<Machine>()
+                .HasOne(ac => ac.Customer)
+                .WithMany(p => p.Machines)
+                .HasForeignKey(ac => ac.CustomerId);
 
-            //One to many relationship between Manual and Machine
-            modelBuilder.Entity<Manual>()
-               .HasOne(p => p.Machine)
-               .WithMany(c => c.Manuals)
-               .HasForeignKey(p => p.MachineId);
+            modelBuilder.Entity<Machine>()
+                .HasOne(ac => ac.Model)
+                .WithMany(a => a.Machines)
+                .HasForeignKey(ac => ac.ModelId);
+
+
 
 
         }
         public DbSet<Customer> Customers{ get; set; } = default!;
-        public DbSet<Machine> Machines { get; set; } = default!;
-        public DbSet<Manual> Manuals { get; set; } = default!;
-        public DbSet<Service> Services { get; set; } = default!;
+        public DbSet<Machine> Machines { get; set; } = default!;        
+        public DbSet<Model> Models { get; set; } = default!;      
         public DbSet<User> Users { get; set; } = default!;
 
     }

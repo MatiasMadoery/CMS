@@ -53,7 +53,7 @@ namespace Control_Machine_Sistem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,LastName,Dni,Phone,Email,Address,City,PostalCode,Province,Country")] Customer customer)
+        public async Task<IActionResult> Create([Bind("Id,Name,LastName,Cuit,Phone,Email,Address,City,PostalCode,Province,Country")] Customer customer)
         {
             if (ModelState.IsValid)
             {
@@ -85,7 +85,7 @@ namespace Control_Machine_Sistem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,LastName,Dni,Phone,Email,Address,City,PostalCode,Province,Country")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,LastName,Cuit,Phone,Email,Address,City,PostalCode,Province,Country")] Customer customer)
         {
             if (id != customer.Id)
             {

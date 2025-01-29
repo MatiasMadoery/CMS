@@ -1,4 +1,4 @@
-﻿@model Control_Machine_Sistem.Models.Manual
+﻿@model Control_Machine_Sistem.Models.Model
 
 @{
     ViewData["Title"] = "Edit";
@@ -6,7 +6,7 @@
 
 <h1>Edit</h1>
 
-<h4>Manual</h4>
+<h4>Model</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,14 +14,14 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="MachineId" class="control-label"></label>
-                <input asp-for="MachineId" class="form-control" />
-                <span asp-validation-for="MachineId" class="text-danger"></span>
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ManualUrl" class="control-label"></label>
-                <input asp-for="ManualUrl" class="form-control" />
-                <span asp-validation-for="ManualUrl" class="text-danger"></span>
+                <label asp-for="Manual" class="control-label"></label>
+                <input asp-for="Manual" class="form-control" />
+                <span asp-validation-for="Manual" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

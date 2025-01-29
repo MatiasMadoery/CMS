@@ -18,13 +18,4 @@
     <PackageReference Include="QRCoder" Version="1.6.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\manuals\machines\" />
-    <Folder Include="wwwroot\manuals\machines\" />
-    <Folder Include="wwwroot\manuals\user\" />
-    <Folder Include="wwwroot\manuals\servicesData\" />
-    <Folder Include="wwwroot\manuals\servicesData\" />
-    <Folder Include="wwwroot\manuals\user\" />
-  </ItemGroup>
-
 </Project>

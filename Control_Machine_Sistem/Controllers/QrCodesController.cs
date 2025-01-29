@@ -28,7 +28,7 @@ namespace Control_Machine_Sistem.Controllers
             var machines = await _context.Machines.Select(m => new SelectListItem
             {
                 Value = m.Id.ToString(),
-                Text = m.Model
+                Text = m.ModelId.ToString()
             }).ToListAsync();
 
             var model = new QrCodeIndexViewModel
@@ -54,12 +54,9 @@ namespace Control_Machine_Sistem.Controllers
 
             var model = new QrCode
             {
-                ClientName = customer.Name,
-                UserManualUrl = Url.Content("~/manuals/user/Usuario.pdf"),
-                MachineManualUrl = Url.Content($"~/manuals/machines/{machine.ManualPath}"),
-                ServiceDataUrl = Url.Content($"~/manuals/servicesData/{machine.ServiceManualPath}"),
+                ClientName = customer.Name,                
                 QrContentUrl = Url.Action("Details", "QrCodes", new { customerId, machineId }, Request.Scheme),
-                QrImageBase64 = GenerateQrCodeAsBase64(Url.Action("Details", "QrCodes", new { customerId, machineId }, Request.Scheme))
+                QrImageBase64 = GenerateQrCodeAsBase64(Url.Action("Details", "QrCodes", new { customerId, machineId }, Request.Scheme)!)
             };
 
             return View(model);
@@ -89,9 +86,7 @@ namespace Control_Machine_Sistem.Controllers
             var model = new QrCode
             {
                 ClientName = customer.Name,
-                UserManualUrl = Url.Content("~/manuals/user/Usuario.pdf"),
-                MachineManualUrl = Url.Content($"~/manuals/machines/{machine.ManualPath}"),
-                ServiceDataUrl = Url.Content($"~/manuals/servicesData/{machine.ServiceManualPath}")
+                MachineModel = machine.ModelId.ToString(),
             };
 
             return View(model);

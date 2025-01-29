@@ -13,16 +13,25 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.CustomerId)
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Model)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SerialNumber)
+                @Html.DisplayNameFor(model => model.ChasisNumber)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PurchaseDate)
+                @Html.DisplayNameFor(model => model.EngineNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeliveryDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WarrantyExpirationDate)
             </th>
             <th></th>
         </tr>
@@ -31,21 +40,30 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.CustomerId)
+                @Html.DisplayFor(modelItem => item.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Model)
+                @Html.DisplayFor(modelItem => item.Customer.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SerialNumber)
+                @Html.DisplayFor(modelItem => item.Model.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PurchaseDate)
+                @Html.DisplayFor(modelItem => item.ChasisNumber)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @Html.DisplayFor(modelItem => item.EngineNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeliveryDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WarrantyExpirationDate)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
             </td>
         </tr>
 }
