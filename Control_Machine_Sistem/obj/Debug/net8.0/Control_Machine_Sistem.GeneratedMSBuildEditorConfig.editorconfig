@@ -17,159 +17,161 @@ build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Control_Machine_Sistem
 build_property.RootNamespace = Control_Machine_Sistem
-build_property.ProjectDir = C:\Users\Usuario\OneDrive\Escritorio\CMS\CMS\Control_Machine_Sistem\
+build_property.ProjectDir = C:\Users\matim\OneDrive\Escritorio\CMS_QrGenerator\Control_Machine_Sistem\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\Usuario\OneDrive\Escritorio\CMS\CMS\Control_Machine_Sistem
+build_property.MSBuildProjectDirectory = C:\Users\matim\OneDrive\Escritorio\CMS_QrGenerator\Control_Machine_Sistem
 build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 8.0
+build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Customers/Create.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Customers/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VzdG9tZXJzXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Customers/Delete.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Customers/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VzdG9tZXJzXERlbGV0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Customers/Details.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Customers/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VzdG9tZXJzXERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Customers/Edit.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Customers/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VzdG9tZXJzXEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Customers/Index.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Customers/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ3VzdG9tZXJzXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Home/Index.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Home/Privacy.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Machines/Create.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Machines/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFjaGluZXNcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Machines/Delete.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Machines/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFjaGluZXNcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Machines/Details.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Machines/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFjaGluZXNcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Machines/Edit.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Machines/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFjaGluZXNcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Machines/Index.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Machines/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFjaGluZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Manuals/Create.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Manuals/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudWFsc1xDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Manuals/Delete.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Manuals/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudWFsc1xEZWxldGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Manuals/Details.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Manuals/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudWFsc1xEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Manuals/Edit.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Manuals/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudWFsc1xFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Manuals/Index.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Manuals/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFudWFsc1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/QrCodes/Details.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/QrCodes/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUXJDb2Rlc1xEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/QrCodes/GenerateQr.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/QrCodes/GenerateQr.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUXJDb2Rlc1xHZW5lcmF0ZVFyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/QrCodes/Index.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/QrCodes/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUXJDb2Rlc1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Services/Create.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Services/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2VydmljZXNcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Services/Delete.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Services/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2VydmljZXNcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Services/Details.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Services/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2VydmljZXNcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Services/Edit.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Services/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2VydmljZXNcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Services/Index.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Services/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2VydmljZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Shared/Error.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/UsersLogin/AccessDenied.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/UsersLogin/AccessDenied.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNMb2dpblxBY2Nlc3NEZW5pZWQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/UsersLogin/Login.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/UsersLogin/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNMb2dpblxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Users/Create.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Users/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Users/Delete.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Users/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Users/Details.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Users/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Users/Edit.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Users/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Users/Index.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Users/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/_ViewImports.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/_ViewStart.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Escritorio/CMS/CMS/Control_Machine_Sistem/Views/Shared/_Layout.cshtml]
+[C:/Users/matim/OneDrive/Escritorio/CMS_QrGenerator/Control_Machine_Sistem/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-eklabres30

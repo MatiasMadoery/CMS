@@ -62,7 +62,7 @@ namespace Control_Machine_Sistem.Controllers
                 QrImageBase64 = GenerateQrCodeAsBase64(Url.Action("Details", "QrCodes", new { customerId, machineId }, Request.Scheme))
             };
 
-            return View("PrintQr", model);
+            return View(model);
         }
 
         private string GenerateQrCodeAsBase64(string content)
