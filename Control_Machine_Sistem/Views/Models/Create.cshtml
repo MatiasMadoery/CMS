@@ -10,18 +10,21 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="Manual" class="control-label"></label>
-                <input asp-for="Manual" class="form-control" />
-                <span asp-validation-for="Manual" class="text-danger"></span>
+                <label asp-for="Manuals" class="control-label"></label>
+                <input type="file" asp-for="Manuals" class="form-control" multiple />
+                <span asp-validation-for="Manuals" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

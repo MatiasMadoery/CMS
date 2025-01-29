@@ -4,16 +4,41 @@
     ViewData["Title"] = "Detalles de la Máquina";
 }
 
-<h1>Detalles para @Model.ClientName - @Model.MachineModel</h1>
-
+<h3>Sr @Model.ClientName</h3>
+<h4>Modelo de Máquina: @Model.MachineModel</h4>
 <ul>
+    <ul>
+        @if (Model.ManualUrl != "No manual available")
+        {
+            <li>
+                <button onclick="openManuals()">Abrir Manuales</button>
+            </li>
+        }
+        else
+        {
+            <p>No hay manuales disponibles.</p>
+        }
+    </ul>
     <li>
-        <a href="@Model.UserManualUrl" target="_blank" class="btn btn-info">Descargar Manual de Usuario</a>
+        <a href="" target="_blank" class="btn btn-info">Descargar Documentación</a>
     </li>
     <li>
-        <a href="@Model.MachineManualUrl" target="_blank" class="btn btn-info">Descargar Manual de la Máquina</a>
-    </li>
-    <li>
-        <a href="@Model.ServiceDataUrl" target="_blank" class="btn btn-info">Descargar Datos del Servicio</a>
+        <a href="" target="_blank" class="btn btn-info">Descargar Datos del Servicio Técnico</a>
     </li>
 </ul>
+
+
+<script>
+    function openManuals() {
+        var urls = "@Model.ManualUrl".split(",");
+
+        console.log(urls);
+
+        for (var i = 0; i < urls.length; i++) {
+            var url = urls[i].trim();
+            if (url) {
+                window.open(url, "_blank");
+            }
+        }
+    }
+</script>

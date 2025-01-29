@@ -53,14 +53,46 @@ namespace Control_Machine_Sistem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Manual")] Model model)
+        public async Task<IActionResult> Create([Bind("Id,Name,Manuals")] Model model)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(model);
+                List<string> manualUrls = new List<string>();
+
+                if (model.Manuals != null && model.Manuals.Any())
+                {
+                    string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "manuals", "models");
+                    Directory.CreateDirectory(uploadsFolder);
+
+                    foreach (var manual in model.Manuals)
+                    {
+                        if (manual.Length > 0)
+                        {
+                            string uniqueFileName = $"{Guid.NewGuid()}_{manual.FileName}";
+                            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                            using (var fileStream = new FileStream(filePath, FileMode.Create))
+                            {
+                                await manual.CopyToAsync(fileStream);
+                            }
+
+                            manualUrls.Add($"/manuals/models/{uniqueFileName}");
+                        }
+                    }
+                }
+
+                var newModel = new Model
+                {
+                    Name = model.Name,
+                    ManualUrls = manualUrls
+                };
+
+                _context.Models.Add(newModel);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(model);
         }
 

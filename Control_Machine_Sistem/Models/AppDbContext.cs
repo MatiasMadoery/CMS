@@ -32,9 +32,6 @@ namespace Control_Machine_Sistem.Models
                 .WithMany(a => a.Machines)
                 .HasForeignKey(ac => ac.ModelId);
 
-
-
-
         }
         public DbSet<Customer> Customers{ get; set; } = default!;
         public DbSet<Machine> Machines { get; set; } = default!;        
