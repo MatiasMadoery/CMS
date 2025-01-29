@@ -1,0 +1,30 @@
+# .NET
+bin/
+obj/
+
+# ASP.NET Core
+wwwroot/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+
+# User-specific files
+.vs/
+.vscode/
+
+# Windows Installer files
+Thumbs.db
+ehthumbs.db
+
+# JetBrains Rider config folder
+.idea/
+
+# JetBrains Rider project-specific files
+.idea/*
+
+# Logs
+*.log
