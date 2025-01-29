@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\buildMultiTargeting\Control_Machine_Sistem.props" />
-</Project>

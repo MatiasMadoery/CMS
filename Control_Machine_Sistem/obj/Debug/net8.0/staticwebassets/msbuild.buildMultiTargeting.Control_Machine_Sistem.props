@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\Control_Machine_Sistem.props" />
-</Project>

@@ -55,9 +55,9 @@ namespace Control_Machine_Sistem.Controllers
             var model = new QrCode
             {
                 ClientName = customer.Name,
-                UserManualUrl = Url.Content("~/manuals/user-manual.pdf"),
-                MachineManualUrl = Url.Content($"~/manuals/{machine.ManualPath}"),
-                ServiceDataUrl = Url.Content($"~/service/{machine.ServiceManualPath}"),
+                UserManualUrl = Url.Content("~/manuals/user/Usuario.pdf"),
+                MachineManualUrl = Url.Content($"~/manuals/machines/{machine.ManualPath}"),
+                ServiceDataUrl = Url.Content($"~/manuals/servicesData/{machine.ServiceManualPath}"),
                 QrContentUrl = Url.Action("Details", "QrCodes", new { customerId, machineId }, Request.Scheme),
                 QrImageBase64 = GenerateQrCodeAsBase64(Url.Action("Details", "QrCodes", new { customerId, machineId }, Request.Scheme))
             };
@@ -89,9 +89,9 @@ namespace Control_Machine_Sistem.Controllers
             var model = new QrCode
             {
                 ClientName = customer.Name,
-                UserManualUrl = Url.Content("~/manuals/user-manual.pdf"),
-                MachineManualUrl = Url.Content($"~/manuals/{machine.ManualPath}"),
-                ServiceDataUrl = Url.Content($"~/service/{machine.ServiceManualPath}")
+                UserManualUrl = Url.Content("~/manuals/user/Usuario.pdf"),
+                MachineManualUrl = Url.Content($"~/manuals/machines/{machine.ManualPath}"),
+                ServiceDataUrl = Url.Content($"~/manuals/servicesData/{machine.ServiceManualPath}")
             };
 
             return View(model);
