@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Control_Machine_Sistem.Models;
+using Control_Machine_Sistem.ViewModels;
 
 namespace Control_Machine_Sistem.Controllers
 {
@@ -165,5 +166,6 @@ namespace Control_Machine_Sistem.Controllers
         {
             return _context.Machines.Any(e => e.CustomerId == id);
         }
+
     }
 }

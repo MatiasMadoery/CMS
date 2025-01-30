@@ -10,13 +10,9 @@
     <ul>
         @if (Model.ManualUrl != "No manual available")
         {
-            <li>
-                <button onclick="openManuals()">Abrir Manuales</button>
-            </li>
-        }
-        else
-        {
-            <p>No hay manuales disponibles.</p>
+            <a href="@Url.Action("ManualList", "QrCodes", new { urls = Model.ManualUrl })" class="btn btn-primary">
+                Ver Manuales
+            </a>
         }
     </ul>
     <li>
@@ -26,19 +22,3 @@
         <a href="" target="_blank" class="btn btn-info">Descargar Datos del Servicio Técnico</a>
     </li>
 </ul>
-
-
-<script>
-    function openManuals() {
-        var urls = "@Model.ManualUrl".split(",");
-
-        console.log(urls);
-
-        for (var i = 0; i < urls.length; i++) {
-            var url = urls[i].trim();
-            if (url) {
-                window.open(url, "_blank");
-            }
-        }
-    }
-</script>

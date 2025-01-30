@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using QRCoder;
 using Control_Machine_Sistem.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Control_Machine_Sistem.Controllers
 {
@@ -29,9 +30,9 @@ namespace Control_Machine_Sistem.Controllers
                 .Include(m => m.Customer)
                 .Include(m => m.Model)
                 .Select(m => new SelectListItem
-            {
-                Value = m.Id.ToString(),
-                Text = $"{m.Customer.Name} - {m.Model.Name}"
+                {
+                    Value = m.Id.ToString(),
+                    Text = $"{m.Customer.Name} - {m.Model.Name}"
                 }).ToListAsync();
 
             var model = new QrCodeIndexViewModel
@@ -57,7 +58,7 @@ namespace Control_Machine_Sistem.Controllers
                 return NotFound();
             }
 
-            var customer = machine.Customer; 
+            var customer = machine.Customer;
             var manualUrls = machine.Model.ManualUrls ?? new List<string>();
             var manualUrl = manualUrls.Any()
                 ? string.Join(", ", manualUrls)
@@ -116,6 +117,27 @@ namespace Control_Machine_Sistem.Controllers
             };
 
             return View(model);
+        }
+
+        // Acción para mostrar los manuales
+        public IActionResult ManualList(string urls)
+        {
+            var urlArray = urls.Split(',');
+
+            if (!urlArray.Any())
+            {
+                return NotFound();
+            }
+
+            var manuals = urlArray.Select(url => new ManualViewModel
+            {
+
+                OriginalName = Path.GetFileName(url),
+
+                DisplayName = Path.GetFileName(url).Split('_').Last()
+            }).ToList();
+
+            return View("ManualList", manuals);
         }
 
     }
