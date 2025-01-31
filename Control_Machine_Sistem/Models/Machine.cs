@@ -25,13 +25,8 @@ namespace Control_Machine_Sistem.Models
         public DateTime? DeliveryDate { get; set; }
 
         [Display(Name = "Fecha vencimiento garantia")]
-        public DateTime? WarrantyExpirationDate { get; set; }
-
-       
-
-        ////Referring to the manuals
-        //public string? ManualPath { get; set; }
-        //public string? ServiceManualPath { get; set; }        
+        public DateTime? WarrantyExpirationDate { get; set; }     
+                
        
     }
 }

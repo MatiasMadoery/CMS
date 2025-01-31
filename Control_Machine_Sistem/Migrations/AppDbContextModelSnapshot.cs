@@ -67,14 +67,17 @@ namespace Control_Machine_Sistem.Migrations
 
             modelBuilder.Entity("Control_Machine_Sistem.Models.Machine", b =>
                 {
-                    b.Property<int>("CustomerId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("ModelId")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ChasisNumber")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DeliveryDate")
                         .HasColumnType("datetime2");
@@ -82,13 +85,15 @@ namespace Control_Machine_Sistem.Migrations
                     b.Property<string>("EngineNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Id")
+                    b.Property<int?>("ModelId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("WarrantyExpirationDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("CustomerId", "ModelId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
 
                     b.HasIndex("ModelId");
 
@@ -145,15 +150,11 @@ namespace Control_Machine_Sistem.Migrations
                 {
                     b.HasOne("Control_Machine_Sistem.Models.Customer", "Customer")
                         .WithMany("Machines")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CustomerId");
 
                     b.HasOne("Control_Machine_Sistem.Models.Model", "Model")
                         .WithMany("Machines")
-                        .HasForeignKey("ModelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ModelId");
 
                     b.Navigation("Customer");
 
