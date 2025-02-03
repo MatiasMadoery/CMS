@@ -1,24 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS_QrGenerator\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|c:\\users\\matim\\onedrive\\escritorio\\cms_qrgenerator\\control_machine_sistem\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|solutionrelative:control_machine_sistem\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|c:\\users\\matim\\onedrive\\escritorio\\cms_qrgenerator\\control_machine_sistem\\views\\userslogin\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|solutionrelative:control_machine_sistem\\views\\userslogin\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|c:\\users\\matim\\onedrive\\escritorio\\cms_qrgenerator\\control_machine_sistem\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|solutionrelative:control_machine_sistem\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|c:\\users\\matim\\onedrive\\escritorio\\cms_qrgenerator\\control_machine_sistem\\wwwroot\\css\\login.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|solutionrelative:control_machine_sistem\\wwwroot\\css\\login.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -26,7 +9,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -39,58 +22,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Login.cshtml",
-              "DocumentMoniker": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS_QrGenerator\\Control_Machine_Sistem\\Views\\UsersLogin\\Login.cshtml",
-              "RelativeDocumentMoniker": "Control_Machine_Sistem\\Views\\UsersLogin\\Login.cshtml",
-              "ToolTip": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS_QrGenerator\\Control_Machine_Sistem\\Views\\UsersLogin\\Login.cshtml",
-              "RelativeToolTip": "Control_Machine_Sistem\\Views\\UsersLogin\\Login.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAVAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-02-03T16:11:52.077Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "_Layout.cshtml",
-              "DocumentMoniker": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS_QrGenerator\\Control_Machine_Sistem\\Views\\Shared\\_Layout.cshtml",
-              "RelativeDocumentMoniker": "Control_Machine_Sistem\\Views\\Shared\\_Layout.cshtml",
-              "ToolTip": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS_QrGenerator\\Control_Machine_Sistem\\Views\\Shared\\_Layout.cshtml",
-              "RelativeToolTip": "Control_Machine_Sistem\\Views\\Shared\\_Layout.cshtml",
-              "ViewState": "AgIAAB4AAAAAAAAAAAAAADYAAABIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-02-03T16:10:32.023Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "site.css",
-              "DocumentMoniker": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS_QrGenerator\\Control_Machine_Sistem\\wwwroot\\css\\site.css",
-              "RelativeDocumentMoniker": "Control_Machine_Sistem\\wwwroot\\css\\site.css",
-              "ToolTip": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS_QrGenerator\\Control_Machine_Sistem\\wwwroot\\css\\site.css",
-              "RelativeToolTip": "Control_Machine_Sistem\\wwwroot\\css\\site.css",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAAeAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2025-02-03T16:09:26.588Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "login.css",
-              "DocumentMoniker": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS_QrGenerator\\Control_Machine_Sistem\\wwwroot\\css\\login.css",
-              "RelativeDocumentMoniker": "Control_Machine_Sistem\\wwwroot\\css\\login.css",
-              "ToolTip": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS_QrGenerator\\Control_Machine_Sistem\\wwwroot\\css\\login.css",
-              "RelativeToolTip": "Control_Machine_Sistem\\wwwroot\\css\\login.css",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2025-02-03T16:06:59.646Z",
-              "EditorCaption": ""
             }
           ]
         }

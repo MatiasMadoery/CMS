@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Control_Machine_Sistem.Models;
 using Control_Machine_Sistem.ViewModels;
+using System.Drawing.Printing;
 
 namespace Control_Machine_Sistem.Controllers
 {
@@ -20,10 +21,37 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Machines
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, int page = 1, int pageSize = 5)
         {
-            var appDbContext = _context.Machines.Include(m => m.Customer).Include(m => m.Model);
-            return View(await appDbContext.ToListAsync());
+            //var appDbContext = _context.Machines.Include(m => m.Customer).Include(m => m.Model);
+            //return View(await appDbContext.ToListAsync());
+            var machine = from m in _context.Machines!
+                          .Include(m => m.Customer)
+                          .Include(m => m.Model)
+                          select m;
+
+            //Filter by search text if provided
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                machine = machine.Where(s => s.Customer!.Name!.Contains(searchString) || s.Customer.LastName!.Contains(searchString) || 
+                s.Model!.Name!.Contains(searchString));
+            }
+
+            // Get total machines 
+            var totalMachines = await machine.CountAsync();
+
+            // Apply pagination
+            var machinePager = await machine
+                           .Skip((page - 1) * pageSize)
+                           .Take(pageSize)
+                           .ToListAsync();
+
+            // Create the paginator with the paginated list
+            var pager = new Pager<Machine>(machinePager, totalMachines, page, pageSize);
+
+            //To maintain the value of the lookup field when the user changes pages
+            ViewData["searchString"] = searchString;
+            return View(pager);
         }
 
         // GET: Machines/Details/5

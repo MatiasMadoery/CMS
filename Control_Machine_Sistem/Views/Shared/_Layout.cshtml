@@ -6,8 +6,7 @@
     <title>@ViewData["Title"] - CMS</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Control_Machine_Sistem.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/login.css" />
+    <link rel="stylesheet" href="~/Control_Machine_Sistem.styles.css" asp-append-version="true" />   
 </head>
 <body>
     <header>
@@ -24,7 +23,7 @@
                     <ul class="navbar-nav flex-grow-1">
                         @if (User.Identity!.IsAuthenticated)
                         {
-                            <ul class="navbar-nav me-auto">
+                            
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Customers" asp-action="Index">Clientes</a>
                                 </li>
@@ -43,12 +42,12 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="QrCodes" asp-action="Index">QRs</a>
                                 </li>
-                            </ul>
+                            
                             <li class="nav-item">
                                 <a class="nav-link" id="logout" asp-controller="UsersLogin" asp-action="Logout">Cerrar Sesión</a>
                             </li>
                         }
-                        else
+                     @*    else
                         {
                             <li class="nav-item">
                                 <a class="nav-link" asp-controller="UsersLogin" asp-action="Login">
@@ -56,7 +55,7 @@
                                     Iniciar Sesión
                                 </a>
                             </li>
-                        }                      
+                        }   *@                    
                     </ul>
                 </div>
             </div>

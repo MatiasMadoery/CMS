@@ -35,6 +35,7 @@ namespace Control_Machine_Sistem.Models
         
         public ICollection<Machine>? Machines { get; set; } = new List<Machine>();
 
+        [Display(Name = "Cliente")]
         public string FullName => $"{Name} {LastName}";
     }
 }
