@@ -4,27 +4,51 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
-
 <div>
-    <h4>Model</h4>
-    <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Manuals)
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ManualUrls)  <!-- Asumí que es ManualUrls y no Manuals -->
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Manuals)
+        <dd class="col-sm-10">
+            @if (Model.ManualUrls != null && Model.ManualUrls.Any())
+            {
+                <ul>
+                    @foreach (var manual in Model.ManualUrls)
+                    {
+                        <li class="manual-name" data-url="@manual">
+                            <a href="@manual" download>@manual</a>  <!-- Aquí se generarán los enlaces -->
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <span>No hay manuales</span>
+            }
         </dd>
     </dl>
 </div>
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Editar</a> |
+    <a asp-action="Index">Volver al listado</a>
 </div>
+
+<!-- Referencia al archivo JS -->
+<script src="~/js/cleanNameFile.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".manual-name a").forEach(function (element) {
+            const originalUrl = element.getAttribute("href");
+            element.textContent = getCleanFileName(originalUrl);  // Aquí se aplica la función
+        });
+    });
+</script>

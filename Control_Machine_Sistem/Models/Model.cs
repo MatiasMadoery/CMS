@@ -9,8 +9,10 @@ namespace Control_Machine_Sistem.Models
     {
         public int Id { get; set; }
         [Required]
+        [Display(Name = "Nombre")]
         public string? Name { get; set; }
         [NotMapped]
+        [Display(Name = "Manuales")]
         public IEnumerable<IFormFile> Manuals { get; set; }
         public List<string> ManualUrls { get; set; } = new List<string>();
         public ICollection<Machine>? Machines { get; set; } = new List<Machine>();
