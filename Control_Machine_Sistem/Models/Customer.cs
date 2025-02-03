@@ -24,7 +24,7 @@ namespace Control_Machine_Sistem.Models
         [Display(Name = "Ciudad")]
         public string? City { get; set; }
 
-        [Display(Name = "Codigo postañ")]
+        [Display(Name = "Codigo postal")]
         public string? PostalCode { get; set; }
 
         [Display(Name = "Provincia")]

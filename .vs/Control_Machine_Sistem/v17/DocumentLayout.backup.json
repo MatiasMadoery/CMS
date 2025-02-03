@@ -3,20 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS_QrGenerator\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|c:\\users\\matim\\onedrive\\escritorio\\cms_qrgenerator\\control_machine_sistem\\models\\customer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|solutionrelative:control_machine_sistem\\models\\customer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|c:\\users\\matim\\onedrive\\escritorio\\cms_qrgenerator\\control_machine_sistem\\views\\customers\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|solutionrelative:control_machine_sistem\\views\\customers\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|c:\\users\\matim\\onedrive\\escritorio\\cms_qrgenerator\\control_machine_sistem\\controllers\\customerscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|solutionrelative:control_machine_sistem\\controllers\\customerscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|c:\\users\\matim\\onedrive\\escritorio\\cms_qrgenerator\\control_machine_sistem\\models\\pager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|solutionrelative:control_machine_sistem\\models\\pager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|c:\\users\\matim\\onedrive\\escritorio\\cms_qrgenerator\\control_machine_sistem\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|solutionrelative:control_machine_sistem\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,7 +14,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -42,54 +30,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "CustomersController.cs",
-              "DocumentMoniker": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS_QrGenerator\\Control_Machine_Sistem\\Controllers\\CustomersController.cs",
-              "RelativeDocumentMoniker": "Control_Machine_Sistem\\Controllers\\CustomersController.cs",
-              "ToolTip": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS_QrGenerator\\Control_Machine_Sistem\\Controllers\\CustomersController.cs",
-              "RelativeToolTip": "Control_Machine_Sistem\\Controllers\\CustomersController.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAUwCsAAABTAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-31T13:07:14.13Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Pager.cs",
-              "DocumentMoniker": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS_QrGenerator\\Control_Machine_Sistem\\Models\\Pager.cs",
-              "RelativeDocumentMoniker": "Control_Machine_Sistem\\Models\\Pager.cs",
-              "ToolTip": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS_QrGenerator\\Control_Machine_Sistem\\Models\\Pager.cs",
-              "RelativeToolTip": "Control_Machine_Sistem\\Models\\Pager.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAgAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-31T12:59:20.878Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Customer.cs",
-              "DocumentMoniker": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS_QrGenerator\\Control_Machine_Sistem\\Models\\Customer.cs",
-              "RelativeDocumentMoniker": "Control_Machine_Sistem\\Models\\Customer.cs",
-              "ToolTip": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS_QrGenerator\\Control_Machine_Sistem\\Models\\Customer.cs",
-              "RelativeToolTip": "Control_Machine_Sistem\\Models\\Customer.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAmwCYAAAAFAAAAAAAAAA==",
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS_QrGenerator\\Control_Machine_Sistem\\Program.cs",
+              "RelativeDocumentMoniker": "Control_Machine_Sistem\\Program.cs",
+              "ToolTip": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS_QrGenerator\\Control_Machine_Sistem\\Program.cs",
+              "RelativeToolTip": "Control_Machine_Sistem\\Program.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAAADUAAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-31T12:56:33.559Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS_QrGenerator\\Control_Machine_Sistem\\Views\\Customers\\Index.cshtml",
-              "RelativeDocumentMoniker": "Control_Machine_Sistem\\Views\\Customers\\Index.cshtml",
-              "ToolTip": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS_QrGenerator\\Control_Machine_Sistem\\Views\\Customers\\Index.cshtml",
-              "RelativeToolTip": "Control_Machine_Sistem\\Views\\Customers\\Index.cshtml",
-              "ViewState": "AgIAADUAAAAAAAAAAAAAAEYAAAAGAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-01-31T12:40:21.455Z",
+              "WhenOpened": "2025-02-03T15:46:40.939Z",
               "EditorCaption": ""
             }
           ]
