@@ -17,10 +17,8 @@ namespace Control_Machine_Sistem.Models
             //    .WithMany(c => c.Machines)
             //    .HasForeignKey(p => p.CustomerId);
 
-
-
-            modelBuilder.Entity<Machine>()
-              .HasKey(ac => new { ac.CustomerId, ac.ModelId });
+            //modelBuilder.Entity<Machine>()
+            //  .HasKey(ac => new { ac.CustomerId, ac.ModelId });
 
             modelBuilder.Entity<Machine>()
                 .HasOne(ac => ac.Customer)
@@ -36,7 +34,7 @@ namespace Control_Machine_Sistem.Models
         public DbSet<Customer> Customers{ get; set; } = default!;
         public DbSet<Machine> Machines { get; set; } = default!;        
         public DbSet<Model> Models { get; set; } = default!;      
-        public DbSet<User> Users { get; set; } = default!;
+        public DbSet<User> Users { get; set; } = default!;        
 
     }
 }
