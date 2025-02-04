@@ -4,14 +4,14 @@
     ViewData["Title"] = "Generar QR";
 }
 
-<h1>Generar QR</h1>
-
+<h1>Generar codigo QR</h1>
+<hr/>
 <form method="post" asp-action="GenerateQr">
     <div class="form-group">
-        <label for="machine">Selecciona una Máquina:</label>
+        <label for="machine">Seleccione una Máquina:</label>
         <select class="form-control" id="machine" name="machineId">
-            <option value="">Seleccione una máquina</option>
-            @foreach (var machine in Model.Machines)
+            <option value="">Máquina</option>
+            @foreach (var machine in Model.Machines!)
             {
                 <option value="@machine.Value">
                     @machine.Text
@@ -19,6 +19,6 @@
             }
         </select>
     </div>
-
-    <button type="submit" class="btn btn-primary">Generar QR</button>
+    <br />
+    <button type="submit" class="btn btn-success">Generar QR</button>
 </form>
