@@ -5,6 +5,7 @@
         public string? ClientName { get; set; }
         public string? MachineModel { get; set; }
         public string? ManualUrl { get; set; }
+        public DateTime? DeliveryDate { get; set; }
 
         // Properties for printing
         public string? QrImageBase64 { get; set; }

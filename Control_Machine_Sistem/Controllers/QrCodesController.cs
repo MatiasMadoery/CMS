@@ -113,7 +113,8 @@ namespace Control_Machine_Sistem.Controllers
             {
                 ClientName = machine.Customer.Name,
                 MachineModel = machine.Model.Name,
-                ManualUrl = manualUrl
+                ManualUrl = manualUrl,
+                DeliveryDate = machine.DeliveryDate
             };
 
             return View(model);
