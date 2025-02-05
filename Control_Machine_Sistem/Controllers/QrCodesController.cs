@@ -17,35 +17,8 @@ namespace Control_Machine_Sistem.Controllers
             _context = context;
         }
 
-        // Customer and machine selection page
-        public async Task<IActionResult> Index()
-        {
-            var customers = await _context.Customers.Select(c => new SelectListItem
-            {
-                Value = c.Id.ToString(),
-                Text = c.Name
-            }).ToListAsync();
-
-            var machines = await _context.Machines
-                .Include(m => m.Customer)
-                .Include(m => m.Model)
-                .Select(m => new SelectListItem
-                {
-                    Value = m.Id.ToString(),
-                    Text = $"{m.Customer.Name} - {m.Model.Name}"
-                }).ToListAsync();
-
-            var model = new QrCodeIndexViewModel
-            {
-                Clients = customers,
-                Machines = machines
-            };
-
-            return View(model);
-        }
-
-        // QR generation
-        [HttpPost]
+        // GET: QrCodes/GenerateQr/5
+        [HttpGet]
         public async Task<IActionResult> GenerateQr(int machineId)
         {
             var machine = await _context.Machines
@@ -66,11 +39,75 @@ namespace Control_Machine_Sistem.Controllers
 
             var qrContentUrl = Url.Action("Details", "QrCodes", new { machineId }, Request.Scheme);
 
-            var qrImageBase64 = GenerateQrCodeAsBase64(qrContentUrl);
+            var qrImageBase64 = GenerateQrCodeAsBase64(qrContentUrl!);
 
             var model = new QrCode
             {
-                ClientName = customer.Name,
+                ClientName = customer.FullName,
+                MachineModel = machine.Model.Name,
+                ManualUrl = manualUrl,
+                QrContentUrl = qrContentUrl,
+                QrImageBase64 = qrImageBase64
+            };
+
+            return View(model);
+        }
+
+
+        // Customer and machine selection page
+        public async Task<IActionResult> Index()
+        {
+            var customers = await _context.Customers.Select(c => new SelectListItem
+            {
+                Value = c.Id.ToString(),
+                Text = c.Name
+            }).ToListAsync();
+
+            var machines = await _context.Machines
+                .Include(m => m.Customer)
+                .Include(m => m.Model)
+                .Select(m => new SelectListItem
+                {
+                    Value = m.Id.ToString(),
+                    Text = $"{m.Customer!.Name} - {m.Model!.Name}"
+                }).ToListAsync();
+
+            var model = new QrCodeIndexViewModel
+            {
+                Clients = customers,
+                Machines = machines
+            };
+
+            return View(model);
+        }
+
+        // QR generation
+        [HttpPost]
+        public async Task<IActionResult> postGenerateQr(int machineId)
+        {
+            var machine = await _context.Machines
+                .Include(m => m.Customer)
+                .Include(m => m.Model)
+                .FirstOrDefaultAsync(m => m.Id == machineId);
+
+            if (machine == null || machine.Model == null || machine.Customer == null)
+            {
+                return NotFound();
+            }
+
+            var customer = machine.Customer;
+            var manualUrls = machine.Model.ManualUrls ?? new List<string>();
+            var manualUrl = manualUrls.Any()
+                ? string.Join(", ", manualUrls)
+                : "No manual available";
+
+            var qrContentUrl = Url.Action("Details", "QrCodes", new { machineId }, Request.Scheme);
+
+            var qrImageBase64 = GenerateQrCodeAsBase64(qrContentUrl!);
+
+            var model = new QrCode
+            {
+                ClientName = customer.FullName,
                 MachineModel = machine.Model.Name,
                 ManualUrl = manualUrl,
                 QrContentUrl = qrContentUrl,
