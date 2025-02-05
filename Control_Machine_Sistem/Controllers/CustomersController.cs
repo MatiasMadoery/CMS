@@ -160,13 +160,25 @@ namespace Control_Machine_Sistem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var customer = await _context.Customers.FindAsync(id);
-            if (customer != null)
+            var customer = await _context.Customers
+            .Include(c => c.Machines)
+            .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (customer == null)
             {
-                _context.Customers.Remove(customer);
+                return NotFound();
             }
 
+            if (customer.Machines.Any())
+            {
+                TempData["ErrorMessage"] = "No se puede eliminar el cliente porque tiene máquinas asociadas.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            _context.Customers.Remove(customer);
             await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Cliente eliminado correctamente.";
             return RedirectToAction(nameof(Index));
         }
 
