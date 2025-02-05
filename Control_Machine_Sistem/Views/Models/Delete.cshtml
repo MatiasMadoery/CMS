@@ -6,10 +6,11 @@
 
 <h1>Eliminar</h1>
 
-<h3>¿Estás seguro que lo quieres eliminar?</h3>
 <div>
-    <dl class="row">
-        <dt class="col-sm-2">
+    <hr />
+    <br />
+    <dl class="row">        
+        <dt class="col-sm-2">           
             @Html.DisplayNameFor(model => model.Name)
         </dt>
         <dd class="col-sm-10">
@@ -33,16 +34,17 @@
             }
             else
             {
-                <span>No hay manuales</span>
+                <span>No se encontraron manuales</span>
             }
         </dd>
     </dl>
-
-    <!-- Formulario para eliminar -->
+    <br />
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
-        <a asp-action="Index">Volver al listado</a>
+        <div class="form-group">
+            <input type="submit" value="Eliminar" class="btn btn-danger" /> |
+            <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
+        </div>
     </form>
 </div>
 

@@ -4,22 +4,25 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>Machine</h4>
+<h1>Editar</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<<<<<<< HEAD
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Id" class="control-label"></label>
+=======
+           @*  <div class="form-group">
+                <label asp-for="Model!.Name" class="control-label"></label>
+>>>>>>> Develop
                 <input asp-for="Id" class="form-control" />
                 <span asp-validation-for="Id" class="text-danger"></span>
             </div>
             <input type="hidden" asp-for="CustomerId" />
-            <input type="hidden" asp-for="ModelId" />
+            <input type="hidden" asp-for="ModelId" /> *@
             <div class="form-group">
                 <label asp-for="ChasisNumber" class="control-label"></label>
                 <input asp-for="ChasisNumber" class="form-control" />
@@ -40,13 +43,14 @@
                 <input asp-for="WarrantyExpirationDate" class="form-control" />
                 <span asp-validation-for="WarrantyExpirationDate" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Guardar" class="btn btn-success" />
             </div>
         </form>
     </div>
 </div>
-
+<br />
 <div>
     <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
 </div>

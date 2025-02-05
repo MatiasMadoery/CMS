@@ -3,20 +3,23 @@
 @{
     ViewData["Title"] = "Details";
 }
-
+<h1>Detalle</h1>
 <div>
+    <hr />
+    <br />
     <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
-        </dd>
-
+        </dd>        
         <dt class="col-sm-2">
+            <br />
             @Html.DisplayNameFor(model => model.ManualUrls)  <!-- Asumí que es ManualUrls y no Manuals -->
         </dt>
         <dd class="col-sm-10">
+            <br />
             @if (Model.ManualUrls != null && Model.ManualUrls.Any())
             {
                 <ul>
@@ -30,15 +33,16 @@
             }
             else
             {
-                <span>No hay manuales</span>
+                <span>No se encontraron manuales</span>
             }
         </dd>
     </dl>
 </div>
-
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Editar</a> |
-    <a asp-action="Index">Volver al listado</a>
+<br />
+<div class="mt-3">
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Editar</a> |
+    <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a> |
+    <a asp-action="Delete" asp-route-id="@Model?.Id" class="btn btn-danger">Eliminar</a>
 </div>
 
 <!-- Referencia al archivo JS -->

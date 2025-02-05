@@ -4,8 +4,10 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Nuevo Modelo</h1>
+<h1>Crear</h1>
 
+<h4>Modelo</h4>
+<hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create" enctype="multipart/form-data">
@@ -16,22 +18,23 @@
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-
+            <br />
             <div class="form-group">
                 <label asp-for="Manuals" class="control-label"></label>
                 <input type="file" asp-for="Manuals" class="form-control" multiple />
                 <span asp-validation-for="Manuals" class="text-danger"></span>
             </div>
-
+            <br />
             <div class="form-group">
-                <input type="submit" value="Crear" class="btn btn-primary" />
+                <br />
+                <input type="submit" value="Crear modelo" class="btn btn-success" />
             </div>
         </form>
     </div>
 </div>
-
+<br />
 <div>
-    <a asp-action="Index">Volver al listado</a>
+    <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
 </div>
 
 @section Scripts {
