@@ -23,12 +23,14 @@ namespace Control_Machine_Sistem.Models
             modelBuilder.Entity<Machine>()
                 .HasOne(ac => ac.Customer)
                 .WithMany(p => p.Machines)
-                .HasForeignKey(ac => ac.CustomerId);
+                .HasForeignKey(ac => ac.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Machine>()
                 .HasOne(ac => ac.Model)
                 .WithMany(a => a.Machines)
-                .HasForeignKey(ac => ac.ModelId);
+                .HasForeignKey(ac => ac.ModelId)
+                .OnDelete(DeleteBehavior.Restrict);
 
         }
         public DbSet<Customer> Customers{ get; set; } = default!;

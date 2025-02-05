@@ -28,3 +28,6 @@ ehthumbs.db
 
 # Logs
 *.log
+
+Control_Machine_Sistem/Migrations/*.Designer.cs
+Control_Machine_Sistem/Migrations/*.cs

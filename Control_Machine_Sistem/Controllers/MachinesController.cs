@@ -65,7 +65,7 @@ namespace Control_Machine_Sistem.Controllers
             var machine = await _context.Machines
                 .Include(m => m.Customer)
                 .Include(m => m.Model)
-                .FirstOrDefaultAsync(m => m.CustomerId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (machine == null)
             {
                 return NotFound();
@@ -107,8 +107,8 @@ namespace Control_Machine_Sistem.Controllers
             {
                 return NotFound();
             }
-
             var machine = await _context.Machines.FindAsync(id);
+
             if (machine == null)
             {
                 return NotFound();
@@ -125,7 +125,7 @@ namespace Control_Machine_Sistem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int? id, [Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,WarrantyExpirationDate")] Machine machine)
         {
-            if (id != machine.CustomerId)
+            if (id != machine.Id)
             {
                 return NotFound();
             }
@@ -139,7 +139,7 @@ namespace Control_Machine_Sistem.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MachineExists(machine.CustomerId))
+                    if (!MachineExists(machine.Id))
                     {
                         return NotFound();
                     }
@@ -166,7 +166,7 @@ namespace Control_Machine_Sistem.Controllers
             var machine = await _context.Machines
                 .Include(m => m.Customer)
                 .Include(m => m.Model)
-                .FirstOrDefaultAsync(m => m.CustomerId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (machine == null)
             {
                 return NotFound();
@@ -190,9 +190,9 @@ namespace Control_Machine_Sistem.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool MachineExists(int? id)
+        private bool MachineExists(int id)
         {
-            return _context.Machines.Any(e => e.CustomerId == id);
+            return _context.Machines.Any(e => e.Id == id);
         }
 
     }
