@@ -19,12 +19,20 @@ body {
     width: 300px;
 }
 
-.navbar {
-    background-color: #0d0d0d;
+.navbar {    
+    display: flex;
+    justify-content:flex-end;
+    width: 100%;
 }
 
 .navbar-brand, .nav-link {
     color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: bold;    
+}
+
+.nav-item {    
+    margin-left: 15px;
 }
 
 #logout {
