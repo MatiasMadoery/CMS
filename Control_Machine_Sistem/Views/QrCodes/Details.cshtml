@@ -7,15 +7,14 @@
 <h3>Sr @Model.ClientName</h3>
 <h4>Modelo de Máquina: @Model.MachineModel</h4>
 <h4>Fecha de Entrega:  @Model.DeliveryDate?.ToString("dd/MM/yyyy")</h4>
-<ul>
-    <ul>
-        @if (Model.ManualUrl != "No manual available")
+<ul>    
+     @if (Model.ManualUrl != "No manual available")
         {
             <a href="@Url.Action("ManualList", "QrCodes", new { urls = Model.ManualUrl })" class="btn btn-primary">
                 Ver Manuales
             </a>
         }
-    </ul>
+    
     <li>
         <a href="" target="_blank" class="btn btn-info">Descargar Documentación</a>
     </li>
