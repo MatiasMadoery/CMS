@@ -1,56 +1,114 @@
-﻿body {
-    background-image: url("../img/images/fondo.jpg");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    position: center;
+﻿
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #FBC107, #FFEB3B);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
 }
 
-    body::before {
-        content: "";
-        position: fixed;
-        top: 0;
-        left: 0;
+.login-container {
+    display: flex;
+    width: 1200px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.image-container {
+    width: 50%;
+}
+
+    .image-container img {
         width: 100%;
         height: 100%;
-        background: rgba(255, 255, 255, 0.5); /* Aumentar la transparencia ajustando el valor alfa (0.3 por ejemplo) */
-        z-index: -1; /* Imagen de fondo detrás de todo el contenido*/ 
+        object-fit: cover;
     }
 
-.card-header {
-    color: #EABE2E;
+.form-container {
+    width: 50%;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-.btn {
-    background-color: #EABE2E;
+h2 {
+    text-align: center;
+    font-size: 24px;
 }
 
-.container {
-    max-width: 100%;
-    padding: 5px;
+.form-group {
+    margin-bottom: 15px;
 }
 
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
 
-@media (min-width: 576px) {
-    .container {
-        max-width: 540px;
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #FBC107;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+    button:hover {
+        background-color: #2F5AD5;
     }
+
+a {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    color: #555;
+    text-decoration: none;
 }
 
-@media (min-width: 768px) {
-    .container {
-        max-width: 720px;
+    a:hover {
+        text-decoration: underline;
     }
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
 }
 
-@media (min-width: 992px) {
-    .container {
-        max-width: 960px;
+.checkbox-container input {
+        margin-right: 5px;
+}
+
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+        width: 90%;
     }
-}
 
-@media (min-width: 1200px) {
-    .container {
-        max-width: 1140px;
+    .image-container {
+        width: 100%;
+        height: 200px;
+    }
+
+    .form-container {
+        width: 100%;
     }
 }
