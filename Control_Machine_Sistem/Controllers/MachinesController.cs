@@ -77,8 +77,23 @@ namespace Control_Machine_Sistem.Controllers
         // GET: Machines/Create
         public IActionResult Create()
         {
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Id");
-            ViewData["ModelId"] = new SelectList(_context.Models, "Id", "Id");
+            //ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Id");
+            //ViewData["ModelId"] = new SelectList(_context.Models, "Id", "Id");
+
+            var customers = _context.Customers.Select(c => new
+            {
+                Id = c.Id,
+                FullName = c.FullName
+            }).ToList();
+            ViewData["CustomerId"] = new SelectList(customers, "Id", "FullName");
+
+            var models = _context.Models.Select(m => new
+            {
+                Id = m.Id,
+                Name = m.Name
+            }).ToList();
+            ViewData["ModelId"] = new SelectList(models, "Id", "Name");
+
             return View();
         }
 

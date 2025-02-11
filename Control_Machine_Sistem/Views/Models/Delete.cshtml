@@ -18,7 +18,7 @@
         </dd>
 
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ManualUrls)  <!-- Asegúrate de que el nombre sea correcto -->
+            @Html.DisplayNameFor(model => model.ManualUrls)  
         </dt>
         <dd class="col-sm-10">
             @if (Model.ManualUrls != null && Model.ManualUrls.Any())
@@ -27,7 +27,7 @@
                     @foreach (var manual in Model.ManualUrls)
                     {
                         <li class="manual-name" data-url="@manual">
-                            <a href="@manual" download>@manual</a>  <!-- Aquí se generarán los enlaces -->
+                            <a href="@manual" download>@manual</a> 
                         </li>
                     }
                 </ul>

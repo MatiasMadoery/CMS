@@ -169,7 +169,7 @@ namespace Control_Machine_Sistem.Controllers
                 return NotFound();
             }
 
-            if (customer.Machines.Any())
+            if (customer.Machines!.Any())
             {
                 TempData["ErrorMessage"] = "No se puede eliminar el cliente porque tiene máquinas asociadas.";
                 return RedirectToAction(nameof(Index));

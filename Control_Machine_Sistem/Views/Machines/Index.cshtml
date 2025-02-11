@@ -1,16 +1,16 @@
 ﻿@model Pager<Control_Machine_Sistem.Models.Machine>
 
 @{
-    ViewData["Title"] = "Maquinas";
+    ViewData["Title"] = "Máquinas";
 }
 
-<h1 class="mb-4">Maquinas</h1>
+<h1 class="mb-4">Máquinas</h1>
 
 <!-- Search form -->
 <form method="get" id="filter-form" class="mb-4">
     <div class="row">
         <div class="col-8 col-sm-8 col-md-4">
-            <input type="text" name="searchString" class="form-control" placeholder="Buscar cliente o maquina..." value="@ViewData["searchString"]" />
+            <input type="text" name="searchString" class="form-control" placeholder="Buscar cliente o máquina..." value="@ViewData["searchString"]" />
         </div>
         <div class="col-1 col-md-4">
             <button type="submit" class="btn btn-primary">Buscar</button>
@@ -19,7 +19,7 @@
 </form>
 
 <div class="mb-3">
-    <a asp-action="Create" class="btn btn-success">Cargar nueva maquina</a>
+    <a asp-action="Create" class="btn btn-success">Cargar nueva máquina</a>
 </div>
 
 <hr />

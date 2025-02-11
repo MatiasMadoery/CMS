@@ -15,21 +15,75 @@ body {
     margin-bottom: 110px;
 }
 
-.articulo-select {
-    width: 300px;
+/* Alinear el botón de Cerrar Sesión a la derecha */
+.navbar-nav {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;   
 }
 
+    .navbar-nav .logout-item {
+        margin-left: auto; /* Mueve el elemento a la derecha */ 
+        font-size:larger;        
+    }
+
+/* Ajustar la barra de navegación para que el logo tenga más espacio */
 .navbar {
-    background-color: #0d0d0d;
+    height: 80px; /* Aumentar la altura para que no se superponga */
+    display: flex;
+    align-items: center;   
 }
 
-.navbar-brand, .nav-link {
-    color: #ffffff;
+.nav-link {
+    font-weight: bold; /* Aplica negrita a los enlaces del navbar */
 }
 
-#logout {
-    color: #EABE2E !important;
+
+/* Ajuste del logo */
+.navbar-icon {
+    width: 130px; /* Aumentar el tamaño del logo si es necesario */
+    margin-left: 5px;
 }
+
+/* Estilos de la barra lateral */
+.sidebar {
+    position: fixed;
+    top: 0px; /* Ajustar para que no se superponga con la barra de navegación */
+    left: 0;
+    width: 145px;
+    height: calc(100% - 90px); /* Evita que la barra lateral se extienda sobre la navbar */
+    background-color: #EABE2E;
+    padding-top: 5px;
+}
+
+    .sidebar .nav {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .sidebar .nav-item {
+        padding: 10px 12px;
+    }
+
+    .sidebar .nav-link {
+        color: #0d0d0d;
+        text-decoration: none;
+        display: block;
+        border-radius: 5px;
+    }
+
+        .sidebar .nav-link:hover {
+            background-color: #0d0d0d;
+            color: #EABE2E;
+            border-radius: 5px;
+        }
+
+/* Ajustar el contenido principal para que no quede debajo de la barra lateral */
+.content {
+    margin-left: 160px; /* Mismo ancho de la barra + margen */
+    padding: 20px;
+}
+
 
 .footer {
     background-color: #0d0d0d;

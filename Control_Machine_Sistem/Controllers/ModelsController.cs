@@ -19,9 +19,24 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Models
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
         {
-            return View(await _context.Models.ToListAsync());
+            var models = from m in _context.Models select m;
+
+            // Get total models 
+            var totalModels = await models.CountAsync();
+
+            // Apply pagination
+            var modelsPager = await models
+                                         .Skip((page - 1) * pageSize)
+                                         .Take(pageSize)
+                                         .ToListAsync();
+
+            // Create the paginator with the paginated list
+            var pager = new Pager<Model>(modelsPager, totalModels, page, pageSize);
+
+            //To maintain the value of the lookup field when the user changes pages           
+            return View(pager);
         }
 
         // GET: Models/Details/5
@@ -179,7 +194,7 @@ namespace Control_Machine_Sistem.Controllers
                 return NotFound();
             }
 
-            if (model.Machines.Any())
+            if (model.Machines!.Any())
             {
                 TempData["ErrorMessage"] = "No se puede eliminar el modelo porque tiene máquinas asociadas.";
                 return RedirectToAction(nameof(Index));
