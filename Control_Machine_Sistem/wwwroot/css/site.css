@@ -1,6 +1,3 @@
-html {
-    font-size: 14px;
-}
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
@@ -9,60 +6,74 @@ html {
 html {
     position: relative;
     min-height: 100%;
+    font-size: 14px;
+}
+
+header {
+    background-color: black;
 }
 
 body {
     margin-bottom: 110px;
 }
 
-/* Alinear el botón de Cerrar Sesión a la derecha */
+
+ /*alinear el botón de cerrar sesión a la derecha */
 .navbar-nav {
     width: 100%;
     display: flex;
     justify-content: space-between;   
 }
 
-    .navbar-nav .logout-item {
-        margin-left: auto; /* Mueve el elemento a la derecha */ 
-        font-size:larger;        
+    .navbar-nav .logout-item  {
+        margin-left: auto;  /*mueve el elemento a la derecha */
+        font-size: medium;        
     }
 
-/* Ajustar la barra de navegación para que el logo tenga más espacio */
+
+ /*ajustar la barra de navegación para que el logo tenga más espacio */
 .navbar {
-    height: 80px; /* Aumentar la altura para que no se superponga */
+    height: 45px;  /*aumentar la altura para que no se superponga */
     display: flex;
     align-items: center;   
 }
 
 .nav-link {
-    font-weight: bold; /* Aplica negrita a los enlaces del navbar */
+    color: #eabe2e;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 5px;
 }
 
+    .nav-link:hover {
+        color: white;
+    }
 
-/* Ajuste del logo */
+
+/* ajuste del logo */
 .navbar-icon {
-    width: 130px; /* Aumentar el tamaño del logo si es necesario */
+    width: 130px;  /*aumentar el tamaño del logo si es necesario */
     margin-left: 5px;
 }
 
-/* Estilos de la barra lateral */
+/* estilos de la barra lateral */
 .sidebar {
     position: fixed;
-    top: 0px; /* Ajustar para que no se superponga con la barra de navegación */
-    left: 0;
+    top: 0px;  /*ajustar para que no se superponga con la barra de navegación */
+    left: 0px;
     width: 145px;
-    height: calc(100% - 90px); /* Evita que la barra lateral se extienda sobre la navbar */
-    background-color: #EABE2E;
+    height: calc(100% - 100px);  /*evita que la barra lateral se extienda sobre la navbar */
+    background-color: #eabe2e;
     padding-top: 5px;
 }
 
     .sidebar .nav {
         list-style: none;
-        padding-left: 0;
+        padding-left: 0px;
     }
 
     .sidebar .nav-item {
-        padding: 10px 12px;
+        padding: 15px 20px;
     }
 
     .sidebar .nav-link {
@@ -70,24 +81,26 @@ body {
         text-decoration: none;
         display: block;
         border-radius: 5px;
+        width: 134px;
+        margin-left: -15px
     }
 
         .sidebar .nav-link:hover {
             background-color: #0d0d0d;
-            color: #EABE2E;
-            border-radius: 5px;
+            color: #eabe2e;
+            border-radius: 5px;            
         }
 
-/* Ajustar el contenido principal para que no quede debajo de la barra lateral */
-.content {
-    margin-left: 160px; /* Mismo ancho de la barra + margen */
+/* ajustar el contenido principal para que no quede debajo de la barra lateral */
+*.content {
+    margin-left: 160px;  /*mismo ancho de la barra + margen */
     padding: 20px;
 }
 
 
 .footer {
     background-color: #0d0d0d;
-    color: #ffffff;
+    color: gray;
     padding: 10px 0;
     text-align: center;
 }
@@ -126,52 +139,9 @@ body {
     max-width: 1200px;
 }
 
-.card-custom {
-    margin-top: 2rem;
-    padding: 2rem;
-    border: 1px solid #dee2e6;
-    border-radius: .5rem;
-}
-
 .banner {
     max-width: 100%;
     height: auto;
-}
-
-.contact-section {
-    background-color: #f8f9fa;
-    padding: 2rem 0;
-}
-
-    .contact-section h2, .contact-section h5 {
-        color: #343a40;
-    }
-
-    .contact-section p {
-        color: #343a40;
-    }
-
-    .contact-section a {
-        color: #343a40;
-    }
-
-.contact-icon {
-    width: 24px;
-    height: auto;
-    vertical-align: middle;
-    margin-right: 10px;
-}
-
-.social-icon {
-    width: 32px;
-    height: auto;
-}
-
-.icono-secion {
-    width: 20px;
-    height: 20px;
-    vertical-align: middle;
-    margin-right: 5px;
 }
 
 @media (min-width: 768px) {
