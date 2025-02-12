@@ -10,7 +10,7 @@ html {
 }
 
 header {
-    background-color: black;
+    background-color: #0d0d0d;
 }
 
 body {
@@ -62,7 +62,7 @@ body {
     top: 0px; /*ajustar para que no se superponga con la barra de navegación */
     left: 0px;
     width: 145px;
-    height: calc(100% - 100px); /*evita que la barra lateral se extienda sobre la navbar */
+    height: 100%; /*evita que la barra lateral se extienda sobre la navbar */
     background-color: #eabe2e;
     padding-top: 5px;
 }
