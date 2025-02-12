@@ -1,4 +1,8 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿function openMenu() {
+    var menu = document.getElementById("menuQuery");
 
-// Write your JavaScript code.
+    if (menu) {
+        menu.classList.toggle("menuMobile-Visible");
+        menu.classList.toggle("menuMobile-Invisible");
+    }
+}

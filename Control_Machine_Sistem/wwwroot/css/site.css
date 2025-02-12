@@ -3,6 +3,10 @@
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
+html, body {
+    overflow-x: hidden;
+}
+
 html {
     position: relative;
     min-height: 100%;
@@ -144,8 +148,59 @@ body {
     height: auto;
 }
 
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
+/*TEST MENU HAMBUR*/
+#menuHambur{
+    display:none;
+}
+.menuMobile{
+    display: none;
+}
+.menuMobile-Invisible {
+    display: none;
+}
+
+
+
+@media (max-width: 768px) {
+
+    .sidebar {
+        display:none;
+    }
+
+    /*TEST MENU HAMBUR*/
+    #menuHambur{
+        display: flex;
+        justify-content: flex-end;
+        margin-left: auto;
+        position: absolute;
+        top: 25px;
+        right: 325px;
+    }
+
+    #menuHambur button{
+        padding: 3px 20px;
+        font-size: 25px;
+        margin: 5px;
+        border-radius: 20px;
+        background-color: rgb(218, 215, 215);
+        text-decoration: none;
+        color: black;
+        z-index: 1;
+    }
+    .menuMobile-Visible {
+        display: grid;
+        position: absolute;
+        width: 200px;
+        background-color: rgb(218, 215, 215);
+        top: 80px;
+        left: 25px;
+        border: 1px solid black;
+        border-radius: 10%;
+        color: rgb(29, 117, 189);
+        box-shadow: 0px 3px 5px 3px rgba(0, 0, 0, 0.5);
+    }
+
+    .menuMobile {
+        display: block;
     }
 }
