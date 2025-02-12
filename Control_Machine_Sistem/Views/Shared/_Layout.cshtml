@@ -12,29 +12,27 @@
     @if (User.Identity!.IsAuthenticated)
     {
         <header>
-            <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
-                <div class="container-fluid">
-                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                        <ul class="navbar-nav flex-grow-1">
-                            @if (User.Identity!.IsAuthenticated)
-                            {
-                                <li class="nav-item logout-item">
-                                    <a class="nav-link" id="logout" asp-controller="UsersLogin" asp-action="Logout">Cerrar Sesión</a>
-                                </li>
+            <nav class="navbar">
+                <div class="container">
+                    <ul class="navbar-nav">
+                        @if (User.Identity!.IsAuthenticated)
+                        {
+                            <li class="nav-item logout-item">
+                                <a class="nav-link" id="logout" asp-controller="UsersLogin" asp-action="Logout">Cerrar Sesión</a>
+                            </li>
 
-                            }
-                        </ul>
-                    </div>
+                        }
+                    </ul>
                 </div>
             </nav>
         </header>
     }
+    
 
-    <!-- Side Bar -->
     @if (User.Identity!.IsAuthenticated)
     {
         <div class="sidebar">
-            <ul class="nav flex-column">
+            <ul class="nav">
 
                 <img src="~/img/images/Logo.jpg" alt="Logo" class="navbar-icon" />
 
@@ -62,11 +60,16 @@
 
     @if (User.Identity!.IsAuthenticated)
     {
-        <footer class="border-top footer text-muted">
+        <footer class="footer">
             <div class="container">
                 &copy; 2025 - Todos los derechos reservados -
             </div>
         </footer>
     }
+    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
