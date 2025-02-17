@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Control_Machine_Sistem.Models
 {
@@ -15,18 +17,23 @@ namespace Control_Machine_Sistem.Models
         public int? ModelId { get; set; }
         public Model? Model { get; set; }
 
-        [Display(Name = "Numero de chasis")]
+        [Display(Name = "Número de chasis")]
         public string? ChasisNumber { get; set; }
 
-        [Display(Name = "Numero de motor")]
+        [Display(Name = "Número de motor")]
         public string? EngineNumber { get; set; }
 
         [Display(Name = "Fecha de entrega")]        
         public DateTime? DeliveryDate { get; set; }
 
         [Display(Name = "Fecha vencimiento garantia")]
-        public DateTime? WarrantyExpirationDate { get; set; }     
-                
-       
+        public DateTime? WarrantyExpirationDate { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Documentación")]
+        public IEnumerable<IFormFile>? Documentations { get; set; }
+        public List<string> DocUrls { get; set; } = new List<string>();
+
+
     }
 }

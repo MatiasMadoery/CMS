@@ -38,6 +38,8 @@ else
                 <th>@Html.DisplayNameFor(model => model.Elements.First().Model!.Name)</th>
                 <th>@Html.DisplayNameFor(model => model.Elements.First().DeliveryDate)</th>
                 <th>@Html.DisplayNameFor(model => model.Elements.First().WarrantyExpirationDate)</th>
+
+                <th>Documentación</th>
             </tr>
         </thead>
         <tbody>
@@ -49,8 +51,25 @@ else
                     <td>@Html.DisplayFor(modelItem => item.DeliveryDate)</td>
                     <td>@Html.DisplayFor(modelItem => item.WarrantyExpirationDate)</td>
                     <td>
+                        @if (item.DocUrls != null && item.DocUrls.Any())
+                        {
+                            <ul>
+                                @foreach (var doc in item.DocUrls)
+                                {
+                                    <li class="doc-name" data-url="@doc">
+                                        <a href="@doc" download>@doc</a>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <span>Sin documentos asociados </span>
+                        }
+                    </td>
+                    <td>
                         <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Detalle</a>
-                        <a asp-action="GenerateQr" asp-controller="QrCodes" asp-route-machineId="@item.Id" class="btn btn-warning btn-sm">Genrear Qr</a>
+                        <a asp-action="GenerateQr" asp-controller="QrCodes" asp-route-machineId="@item.Id" class="btn btn-warning btn-sm">Generear Qr</a>
                     </td>
                 </tr>
             }
@@ -71,3 +90,14 @@ else
         <a asp-action="Index" asp-route-pagina="@(Model.CurrentPage + 1)" asp-route-searchString="@ViewData["searchString"]" class="btn btn-secondary btn-sm">Siguiente</a>
     }
 </div>
+
+<script src="~/js/cleanNameFile.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".doc-name a").forEach(function (element) {
+            const originalUrl = element.getAttribute("href");
+            element.textContent = getCleanFileName(originalUrl);
+        });
+    });
+</script> 

@@ -11,14 +11,6 @@ namespace Control_Machine_Sistem.Models
         //Relationships between tables
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            ////One to many relationship between Machine and Customer
-            //modelBuilder.Entity<Machine>()
-            //    .HasOne(p => p.Customer)
-            //    .WithMany(c => c.Machines)
-            //    .HasForeignKey(p => p.CustomerId);
-
-            //modelBuilder.Entity<Machine>()
-            //  .HasKey(ac => new { ac.CustomerId, ac.ModelId });
 
             modelBuilder.Entity<Machine>()
                 .HasOne(ac => ac.Customer)

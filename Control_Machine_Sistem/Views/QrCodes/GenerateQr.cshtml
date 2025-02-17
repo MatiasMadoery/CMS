@@ -1,22 +1,4 @@
-﻿@* @model Control_Machine_Sistem.Models.QrCode
-@{
-    ViewData["Title"] = "QR Generado";
-}
-
-<h1> Cliente: @Model.ClientName</h1>
-<h1> Maquina: @Model.MachineModel</h1>
-
-<div>
-    <h3>Escanee el siguiente código QR para acceder a la información:</h3>
-    <img src="@Model.QrImageBase64" alt="QR Code" />
-</div>
-
-<div>
-    <button onclick="window.print()">Imprimir QR</button>
-</div>
- *@
-
- @model Control_Machine_Sistem.Models.QrCode
+﻿ @model Control_Machine_Sistem.Models.QrCode
 @{
     ViewData["Title"] = "QR Generado";
     Layout = null;
@@ -46,7 +28,7 @@
         <br/>
 
         <div>
-            <a asp-controller="Machines" asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
+            <a asp-controller="Machines" asp-action="Index" class="btn btn-secondary no-print">Volver a la lista</a>
         </div>
 
         <div class="print-only">

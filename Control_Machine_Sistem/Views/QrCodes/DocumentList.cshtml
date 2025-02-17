@@ -1,0 +1,18 @@
+﻿@using Control_Machine_Sistem.ViewModels
+@model List<DocumentationViewModel>
+
+<h2>Documentación de la Máquina</h2>
+
+<ul>
+    @foreach (var doc in Model)
+    {
+
+        var fileUrl = Url.Content("~/documentations/machines/" + doc.OriginalName);
+
+        <li>
+            <a href="@fileUrl" target="_blank">
+                Descargar @doc.DisplayName
+            </a>
+        </li>
+    }
+</ul>

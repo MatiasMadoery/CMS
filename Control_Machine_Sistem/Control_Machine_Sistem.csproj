@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\documentations\machines\" />
     <Folder Include="wwwroot\img\images\" />
     <Folder Include="wwwroot\manuals\models\" />
   </ItemGroup>

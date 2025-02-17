@@ -55,7 +55,7 @@
     document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll(".manual-name a").forEach(function (element) {
             const originalUrl = element.getAttribute("href");
-            element.textContent = getCleanFileName(originalUrl);  // Aquí se aplica la función
+            element.textContent = getCleanFileName(originalUrl);
         });
     });
 </script>
