@@ -43,11 +43,21 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
-app.UseAuthentication();
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
+
+app.Use(async (context, next) =>
+{
+    if (context.User.Identity!.IsAuthenticated && context.Request.Path == "/UsersLogin/Login")
+    {
+        context.Response.Redirect("/Home/Index");
+    }
+    else
+    {
+        await next();
+    }
+});
 
 app.MapControllerRoute(
     name: "default",
