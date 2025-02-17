@@ -1,6 +1,6 @@
-﻿@model Control_Machine_Sistem.Models.QrCode
+﻿@* @model Control_Machine_Sistem.Models.QrCode
 
-@{
+@{    
     ViewData["Title"] = "Detalles de la Máquina";
 }
 
@@ -12,4 +12,37 @@
     <a href="@Url.Action("ManualList", "QrCodes", new { urls = Model.ManualUrl })" class="btn btn-primary">Descargar Manuales</a>
     <a href="@Url.Action("DocumentList", "QrCodes", new { urls = Model.DocUrl })" class="btn btn-primary">Descargar Documentación</a>
     <a href="#" class="btn btn-primary">Descargar Datos del Servicio Técnico</a>
-</ul>
+</ul> *@
+
+@model Control_Machine_Sistem.Models.QrCode
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Detalles de la Máquina";
+}
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h3>Sr @Model.ClientName</h3>
+        </div>
+        <div class="card-body">
+            <h4>Modelo de Máquina: @Model.MachineModel</h4>
+            <h4>Fecha de Entrega: @Model.DeliveryDate?.ToString("dd/MM/yyyy")</h4>
+            <ul class="list-unstyled mt-3">
+                <li>
+                    <a href="@Url.Action("ManualList", "QrCodes", new { urls = Model.ManualUrl })" class="btn btn-primary mb-2">Descargar Manuales</a>
+                </li>
+                <li>
+                    <a href="@Url.Action("DocumentList", "QrCodes", new { urls = Model.DocUrl })" class="btn btn-primary mb-2">Descargar Documentación</a>
+                </li>
+                <li>
+                    <a href="#" class="btn btn-primary mb-2">Descargar Datos del Servicio Técnico</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -166,11 +166,11 @@ namespace Control_Machine_Sistem.Controllers
 
             var model = new QrCode
             {
-                ClientName = machine.Customer.Name,
+                ClientName = machine.Customer.FullName,
                 MachineModel = machine.Model.Name,
                 ManualUrl = manualUrl,
                 DocUrl = docUrl,
-                DeliveryDate = machine.DeliveryDate
+                DeliveryDate = machine.DeliveryDate,                
             };
 
             return View(model);
@@ -212,8 +212,8 @@ namespace Control_Machine_Sistem.Controllers
                 OriginalName = Path.GetFileName(url),
 
                 DisplayName = Path.GetFileName(url).Split('_').Last()
-            }).ToList();
-
+            }).ToList();      
+                      
             return View("DocumentList", documents);
         }
 

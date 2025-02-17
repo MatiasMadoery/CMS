@@ -2,7 +2,7 @@
 {
     public class ManualViewModel
     {
-        public string OriginalName { get; set; }
-        public string DisplayName { get; set; }
+        public string? OriginalName { get; set; }
+        public string? DisplayName { get; set; }
     }
 }

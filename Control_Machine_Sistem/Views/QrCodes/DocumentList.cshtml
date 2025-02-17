@@ -1,18 +1,39 @@
 ﻿@using Control_Machine_Sistem.ViewModels
 @model List<DocumentationViewModel>
 
-<h2>Documentación de la Máquina</h2>
-
-<ul>
-    @foreach (var doc in Model)
-    {
-
-        var fileUrl = Url.Content("~/documentations/machines/" + doc.OriginalName);
-
-        <li>
-            <a href="@fileUrl" target="_blank">
-                Descargar @doc.DisplayName
-            </a>
-        </li>
+    @{
+        Layout = null;        
     }
-</ul>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h2>Documentación de la Máquina</h2>
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                @foreach (var doc in Model)
+                {
+
+                    var fileUrl = Url.Content("~/documentations/machines/" + doc.OriginalName);
+
+                    <li class="list-group-item">
+                        Descargar:
+                        <a href="@fileUrl" target="_blank">
+                           @doc.DisplayName
+                        </a>
+                    </li>
+                }
+            </ul>
+            <br />
+            <a href="javascript:history.back();" class="btn btn-secondary">
+                Volver al menú principal
+            </a>
+        </div>
+    </div>
+</div>
+
+
+
