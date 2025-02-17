@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="CustomerId" class="control-label"></label>
@@ -39,6 +39,11 @@
                 <label asp-for="WarrantyExpirationDate" class="control-label"></label>
                 <input asp-for="WarrantyExpirationDate" class="form-control" />
                 <span asp-validation-for="WarrantyExpirationDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Documentations" class="control-label"></label>
+                <input type="file" asp-for="Documentations" class="form-control" multiple />
+                <span asp-validation-for="Documentations" class="text-danger"></span>
             </div>
             <br />
             <div class="form-group">

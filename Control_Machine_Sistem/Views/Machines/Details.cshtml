@@ -45,6 +45,28 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.WarrantyExpirationDate)
         </dd>
+        <dt class="col-sm-2">
+            <br />
+            @Html.DisplayNameFor(model => model.DocUrls)
+        </dt>
+        <dd class="col-sm-10">
+            <br />
+            @if (Model.DocUrls != null && Model.DocUrls.Any())
+            {
+                <ul>
+                    @foreach (var document in Model.DocUrls)
+                    {
+                        <li class="document-name" data-url="@document">
+                            <a href="@document" download>@document</a>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <span>No se encontró documentación</span>
+            }
+        </dd>
     </dl>
 </div>
 <div class="mt-3">
@@ -53,3 +75,13 @@
     <a asp-action="Delete" asp-route-id="@Model?.Id" class="btn btn-danger">Eliminar</a>
 </div>
 
+<script src="~/js/cleanNameFile.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".document-name a").forEach(function (element) {
+            const originalUrl = element.getAttribute("href");
+            element.textContent = getCleanFileName(originalUrl);
+        });
+    });
+</script>

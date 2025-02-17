@@ -35,7 +35,12 @@ namespace Control_Machine_Sistem.Controllers
             var manualUrls = machine.Model.ManualUrls ?? new List<string>();
             var manualUrl = manualUrls.Any()
                 ? string.Join(", ", manualUrls)
-                : "No manual available";
+                : "No hay manuales disponibles";
+
+            var docUrls = machine.DocUrls ?? new List<string>();
+            var docUrl = docUrls.Any()
+                ? string.Join(", ", docUrls)
+                : "No hay documentación disponible";
 
             var qrContentUrl = Url.Action("Details", "QrCodes", new { machineId }, Request.Scheme);
 
@@ -46,6 +51,7 @@ namespace Control_Machine_Sistem.Controllers
                 ClientName = customer.FullName,
                 MachineModel = machine.Model.Name,
                 ManualUrl = manualUrl,
+                DocUrl = docUrl,
                 QrContentUrl = qrContentUrl,
                 QrImageBase64 = qrImageBase64
             };
@@ -99,7 +105,12 @@ namespace Control_Machine_Sistem.Controllers
             var manualUrls = machine.Model.ManualUrls ?? new List<string>();
             var manualUrl = manualUrls.Any()
                 ? string.Join(", ", manualUrls)
-                : "No manual available";
+                : "No hay manuales disponibles";
+
+            var docUrls = machine.DocUrls ?? new List<string>();
+            var docUrl = docUrls.Any()
+                ? string.Join(", ", docUrls)
+                : "No hay documentación disponible";
 
             var qrContentUrl = Url.Action("Details", "QrCodes", new { machineId }, Request.Scheme);
 
@@ -110,6 +121,7 @@ namespace Control_Machine_Sistem.Controllers
                 ClientName = customer.FullName,
                 MachineModel = machine.Model.Name,
                 ManualUrl = manualUrl,
+                DocUrl = docUrl,
                 QrContentUrl = qrContentUrl,
                 QrImageBase64 = qrImageBase64
             };
@@ -144,13 +156,20 @@ namespace Control_Machine_Sistem.Controllers
 
             var manualUrl = manualUrls?.Any() == true
             ? string.Join(", ", manualUrls)
-            : "No manual available";
+            : "No hay manuales disponibles";
+
+            var docUrls = machine.DocUrls ?? new List<string>();
+
+            var docUrl = docUrls?.Any() == true
+                ? string.Join(", ", docUrls)
+                : "No hay documentación disponible";
 
             var model = new QrCode
             {
                 ClientName = machine.Customer.Name,
                 MachineModel = machine.Model.Name,
                 ManualUrl = manualUrl,
+                DocUrl = docUrl,
                 DeliveryDate = machine.DeliveryDate
             };
 
@@ -176,6 +195,26 @@ namespace Control_Machine_Sistem.Controllers
             }).ToList();
 
             return View("ManualList", manuals);
+        }
+
+        public IActionResult DocumentList(string urls)
+        {
+            var urlArray = urls.Split(',');
+
+            if (!urlArray.Any())
+            {
+                return NotFound();
+            }
+
+            var documents = urlArray.Select(url => new DocumentationViewModel
+            {
+
+                OriginalName = Path.GetFileName(url),
+
+                DisplayName = Path.GetFileName(url).Split('_').Last()
+            }).ToList();
+
+            return View("DocumentList", documents);
         }
 
     }

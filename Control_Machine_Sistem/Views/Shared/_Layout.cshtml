@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Control_Machine_Sistem.styles.css" asp-append-version="true" />
+
+    <script src="https://kit.fontawesome.com/88381571ec.js" crossorigin="anonymous"></script>
 </head>
 <body>
     @if (User.Identity!.IsAuthenticated)
@@ -50,9 +52,21 @@
                 </li>
             </ul>
         </div>
+
+        <div id="menuHambur">
+            <button id="btnMenuMobile" onclick="openMenu()"><i class="fa-solid fa-bars"></i></button>
+        </div>
+        <nav class="menuMobile">
+            <div class="menuMobile-Invisible" id="menuQuery">
+                <a class="nav-link" asp-controller="Customers" asp-action="Index">Clientes</a>
+                <a class="nav-link" asp-controller="Models" asp-action="Index">Modelos</a>
+                <a class="nav-link" asp-controller="Machines" asp-action="Index">Máquinas</a>
+                <a class="nav-link" asp-controller="Services" asp-action="Index">Services</a>
+            </div>
+        </nav>
     }
 
-    <div class="container content">
+    <div class="content">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

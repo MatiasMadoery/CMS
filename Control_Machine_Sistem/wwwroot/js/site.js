@@ -1,13 +1,9 @@
-﻿document.addEventListener('DOMContentLoaded', function () {
-    var toggler = document.querySelector('.navbar-toggler');
-    var navbarNav = document.getElementById('navbarNav');
+function openMenu() {
+    var menu = document.getElementById("menuQuery");
 
-    toggler.addEventListener('click', function () {
-        if (navbarNav.style.display === "block") {
-            navbarNav.style.display = "none";
-        } else {
-            navbarNav.style.display = "block";
-        }
-    });
-});
+    if (menu) {
+        menu.classList.toggle("menuMobile-Visible");
+        menu.classList.toggle("menuMobile-Invisible");
+    }
+}
 
