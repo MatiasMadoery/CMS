@@ -76,10 +76,7 @@ namespace Control_Machine_Sistem.Controllers
 
         // GET: Machines/Create
         public IActionResult Create()
-        {
-            //ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Id");
-            //ViewData["ModelId"] = new SelectList(_context.Models, "Id", "Id");
-
+        {         
             var customers = _context.Customers.Select(c => new
             {
                 Id = c.Id,
@@ -99,7 +96,7 @@ namespace Control_Machine_Sistem.Controllers
 
         // POST: Machines/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.    
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,WarrantyExpirationDate,Documentations")] Machine machine)
@@ -113,9 +110,9 @@ namespace Control_Machine_Sistem.Controllers
                     string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "documentations", "machines");
                     Directory.CreateDirectory(uploadsFolder);
 
-                    foreach(var documentation in machine.Documentations)
+                    foreach (var documentation in machine.Documentations)
                     {
-                        if(documentation.Length > 0)
+                        if (documentation.Length > 0)
                         {
                             string uniqueFileName = $"{Guid.NewGuid()}_{documentation.FileName}";
                             string filePath = Path.Combine(uploadsFolder, uniqueFileName);
@@ -143,10 +140,11 @@ namespace Control_Machine_Sistem.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Id", machine.CustomerId);
-            ViewData["ModelId"] = new SelectList(_context.Models, "Id", "Id", machine.ModelId);
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "FullName", machine.CustomerId);
+            ViewData["ModelId"] = new SelectList(_context.Models, "Id", "Name", machine.ModelId);
             return View(machine);
         }
+
 
         // GET: Machines/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -161,17 +159,17 @@ namespace Control_Machine_Sistem.Controllers
             {
                 return NotFound();
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Id", machine.CustomerId);
-            ViewData["ModelId"] = new SelectList(_context.Models, "Id", "Id", machine.ModelId);
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "FullName", machine.CustomerId);
+            ViewData["ModelId"] = new SelectList(_context.Models, "Id", "Name", machine.ModelId);
             return View(machine);
         }
 
         // POST: Machines/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.     
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int? id, [Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,WarrantyExpirationDate,Documentations")] Machine machine)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,WarrantyExpirationDate")] Machine machine, List<string> ExistingDocs, List<IFormFile> Documentations)
         {
             if (id != machine.Id)
             {
@@ -182,7 +180,48 @@ namespace Control_Machine_Sistem.Controllers
             {
                 try
                 {
-                    _context.Update(machine);
+                    var existingMachine = await _context.Machines.FindAsync(id);
+
+                    if (existingMachine == null)
+                    {
+                        return NotFound();
+                    }
+                    
+                    existingMachine.CustomerId = machine.CustomerId;
+                    existingMachine.ModelId = machine.ModelId;
+                    existingMachine.ChasisNumber = machine.ChasisNumber;
+                    existingMachine.EngineNumber = machine.EngineNumber;
+                    existingMachine.DeliveryDate = machine.DeliveryDate;
+                    existingMachine.WarrantyExpirationDate = machine.WarrantyExpirationDate;
+
+                    List<string> docUrls = ExistingDocs ?? new List<string>();
+
+                   
+                    if (Documentations != null && Documentations.Any())
+                    {
+                        string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "documentations", "machines");
+                        Directory.CreateDirectory(uploadsFolder);
+
+                        foreach (var documentation in Documentations)
+                        {
+                            if (documentation.Length > 0)
+                            {
+                                string uniqueFileName = $"{Guid.NewGuid()}_{documentation.FileName}";
+                                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                                {
+                                    await documentation.CopyToAsync(fileStream);
+                                }
+
+                                docUrls.Add($"/documentations/machines/{uniqueFileName}");
+                            }
+                        }
+                    }
+
+                    existingMachine.DocUrls = docUrls;
+
+                    _context.Update(existingMachine);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -202,6 +241,7 @@ namespace Control_Machine_Sistem.Controllers
             ViewData["ModelId"] = new SelectList(_context.Models, "Id", "Id", machine.ModelId);
             return View(machine);
         }
+
 
         // GET: Machines/Delete/5
         public async Task<IActionResult> Delete(int? id)

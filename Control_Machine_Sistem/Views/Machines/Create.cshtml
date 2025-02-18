@@ -9,8 +9,8 @@
 <h4>Máquina</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
+    <div class="col-md-6">
+        <form asp-action="Create" enctype="multipart/form-data" id="uploadForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="CustomerId" class="control-label"></label>
@@ -40,23 +40,46 @@
                 <input asp-for="WarrantyExpirationDate" class="form-control" />
                 <span asp-validation-for="WarrantyExpirationDate" class="text-danger"></span>
             </div>
+            <br />
+            <div id="fileUploadContainer">
+                <div class="form-group">
+                    <label asp-for="Documentations" class="control-label"></label>
+                    <input type="file" name="Documentations" class="form-control" multiple />
+                    <span asp-validation-for="Documentations" class="text-danger"></span>
+                    <br />
+                </div>
+            </div>            
             <div class="form-group">
-                <label asp-for="Documentations" class="control-label"></label>
-                <input type="file" asp-for="Documentations" class="form-control" multiple />
-                <span asp-validation-for="Documentations" class="text-danger"></span>
+                <button type="button" class="btn btn-primary" onclick="addMoreFiles()">Agregar otro archivo</button>
             </div>
             <br />
+            <br />
             <div class="form-group">
-                <input type="submit" value="Crear máquina" class="btn btn-success" />
+                <input type="submit" value="Crear máquina" class="btn btn-success" /> |
+                <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
             </div>
         </form>
     </div>
 </div>
-<br />
-<div>
-    <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
-</div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function addMoreFiles() {
+            var container = document.getElementById('fileUploadContainer');
+            var input = document.createElement('input');
+            input.type = 'file';
+            input.name = 'Documentations';
+            input.className = 'form-control';
+            container.appendChild(input);
+            container.appendChild(document.createElement('br'));
+        }     
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+
+
+
+
+

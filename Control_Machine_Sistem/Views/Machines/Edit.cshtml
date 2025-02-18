@@ -7,12 +7,18 @@
 <h1>Editar</h1>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" enctype="multipart/form-data">
+    <div class="col-md-6">
+        <form asp-action="Edit" enctype="multipart/form-data" id="uploadForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+
             <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
+                <label asp-for="CustomerId" class="control-label"></label>
+                <select asp-for="CustomerId" class="form-control" asp-items="ViewBag.CustomerId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ModelId" class="control-label"></label>
+                <select asp-for="ModelId" class="form-control" asp-items="ViewBag.ModelId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="ChasisNumber" class="control-label"></label>
@@ -34,23 +40,80 @@
                 <input asp-for="WarrantyExpirationDate" class="form-control" />
                 <span asp-validation-for="WarrantyExpirationDate" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Documentations" class="control-label"></label>
-                <input type="file" asp-for="Documentations" class="form-control" multiple />
-                <span asp-validation-for="Documentations" class="text-danger"></span>
-            </div>
             <br />
             <div class="form-group">
-                <input type="submit" value="Guardar" class="btn btn-success" />
+                <label>Archivos cargados</label>
+                <table class="table table-bordered">                   
+                    <tbody id="existingFiles">
+                        @if (Model.DocUrls != null && Model.DocUrls.Any())
+                        {
+                            @for (int i = 0; i < Model.DocUrls.Count; i++)
+                            {
+                                <tr>
+                                    <td>
+                                        <a href="@Model.DocUrls[i]" target="_blank">@Model.DocUrls[i]</a>
+                                        <input type="hidden" name="ExistingDocs" value="@Model.DocUrls[i]" />
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="removeFile(@i)">Eliminar</button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="2">No hay archivos cargados.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <br />
+
+            <div id="fileUploadContainer">
+                <div class="form-group">
+                    <label asp-for="Documentations" class="control-label"></label>
+                    <input type="file" name="Documentations" class="form-control" multiple />
+                    <span asp-validation-for="Documentations" class="text-danger"></span>
+                    <br />
+                </div>
+            </div>          
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="addMoreFiles()">Agregar otro archivo</button>
+            </div>
+            <br />
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-success" /> |
+                <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
             </div>
         </form>
     </div>
 </div>
-<br />
-<div>
-    <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
-</div>
+
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function addMoreFiles() {
+            var container = document.getElementById('fileUploadContainer');
+            var input = document.createElement('input');
+            input.type = 'file';
+            input.name = 'Documentations';
+            input.className = 'form-control';
+            container.appendChild(input);
+            container.appendChild(document.createElement('br'));
+        }
+
+        function removeFile(index) {
+            var row = document.querySelector(`#existingFiles tr:nth-child(${index + 1})`);
+            if (row) {
+                row.remove();
+            }
+        }
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+

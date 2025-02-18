@@ -129,39 +129,7 @@ namespace Control_Machine_Sistem.Controllers
 
         //// POST: Models/Edit/5
         //// To protect from overposting attacks, enable the specific properties you want to bind to.
-        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Manual")] Model model)
-        //{
-        //    if (id != model.Id)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(model);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!ModelExists(model.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(model);
-        //}
-
+        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.   
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Model model, List<string> ExistingManuals, List<IFormFile> Manuals)
@@ -181,13 +149,11 @@ namespace Control_Machine_Sistem.Controllers
                     {
                         return NotFound();
                     }
-
-                    // Actualizamos las propiedades del modelo existente
+                    
                     existingModel.Name = model.Name;
 
                     List<string> manualUrls = ExistingManuals ?? new List<string>();
-
-                    // Si se cargan nuevos archivos, los añadimos a la lista de manualUrls
+                  
                     if (Manuals != null && Manuals.Any())
                     {
                         string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "manuals", "models");
@@ -230,8 +196,6 @@ namespace Control_Machine_Sistem.Controllers
             }
             return View(model);
         }
-
-
 
 
         // GET: Models/Delete/5
