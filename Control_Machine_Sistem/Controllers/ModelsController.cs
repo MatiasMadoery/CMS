@@ -127,12 +127,44 @@ namespace Control_Machine_Sistem.Controllers
             return View(model);
         }
 
-        // POST: Models/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //// POST: Models/Edit/5
+        //// To protect from overposting attacks, enable the specific properties you want to bind to.
+        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Manual")] Model model)
+        //{
+        //    if (id != model.Id)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            _context.Update(model);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!ModelExists(model.Id))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    return View(model);
+        //}
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Manual")] Model model)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Model model, List<string> ExistingManuals, List<IFormFile> Manuals)
         {
             if (id != model.Id)
             {
@@ -143,7 +175,44 @@ namespace Control_Machine_Sistem.Controllers
             {
                 try
                 {
-                    _context.Update(model);
+                    var existingModel = await _context.Models.FindAsync(id);
+
+                    if (existingModel == null)
+                    {
+                        return NotFound();
+                    }
+
+                    // Actualizamos las propiedades del modelo existente
+                    existingModel.Name = model.Name;
+
+                    List<string> manualUrls = ExistingManuals ?? new List<string>();
+
+                    // Si se cargan nuevos archivos, los añadimos a la lista de manualUrls
+                    if (Manuals != null && Manuals.Any())
+                    {
+                        string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "manuals", "models");
+                        Directory.CreateDirectory(uploadsFolder);
+
+                        foreach (var manual in Manuals)
+                        {
+                            if (manual.Length > 0)
+                            {
+                                string uniqueFileName = $"{Guid.NewGuid()}_{manual.FileName}";
+                                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                                {
+                                    await manual.CopyToAsync(fileStream);
+                                }
+
+                                manualUrls.Add($"/manuals/models/{uniqueFileName}");
+                            }
+                        }
+                    }
+
+                    existingModel.ManualUrls = manualUrls;
+
+                    _context.Update(existingModel);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -161,6 +230,9 @@ namespace Control_Machine_Sistem.Controllers
             }
             return View(model);
         }
+
+
+
 
         // GET: Models/Delete/5
         public async Task<IActionResult> Delete(int? id)

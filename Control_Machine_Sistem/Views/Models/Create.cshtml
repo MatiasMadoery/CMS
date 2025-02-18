@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
+        <form asp-action="Create" enctype="multipart/form-data" id="uploadForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
@@ -19,24 +19,40 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <br />
+            <div id="fileUploadContainer">
+                <div class="form-group">
+                    <label asp-for="Manuals" class="control-label"></label>
+                    <input type="file" name="Manuals" class="form-control" />
+                    <span asp-validation-for="Manuals" class="text-danger"></span>
+                    <br/>
+                </div>
+            </div>            
             <div class="form-group">
-                <label asp-for="Manuals" class="control-label"></label>
-                <input type="file" asp-for="Manuals" class="form-control" multiple />
-                <span asp-validation-for="Manuals" class="text-danger"></span>
+                <button type="button" class="btn btn-primary" onclick="addMoreFiles()">Agregar otro archivo</button>
             </div>
             <br />
+            <br />
             <div class="form-group">
-                <br />
-                <input type="submit" value="Crear modelo" class="btn btn-success" />
+                <input type="submit" value="Crear modelo" class="btn btn-success" /> |
+                <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
             </div>
         </form>
     </div>
 </div>
-<br />
-<div>
-    <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
-</div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function addMoreFiles() {
+            var container = document.getElementById('fileUploadContainer');
+            var input = document.createElement('input');
+            input.type = 'file';
+            input.name = 'Manuals';
+            input.className = 'form-control';
+            container.appendChild(input);
+            container.appendChild(document.createElement('br'));
+        }       
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

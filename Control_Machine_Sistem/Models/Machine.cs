@@ -29,7 +29,8 @@ namespace Control_Machine_Sistem.Models
         [Display(Name = "Fecha vencimiento garantia")]
         public DateTime? WarrantyExpirationDate { get; set; }
 
-        [NotMapped]        
+        [NotMapped]
+        [Display(Name = "Documentación")]
         public IEnumerable<IFormFile>? Documentations { get; set; }
         [Display(Name = "Documentación")]
         public List<string> DocUrls { get; set; } = new List<string>();
