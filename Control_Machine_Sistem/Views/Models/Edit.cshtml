@@ -28,7 +28,7 @@
                             {
                                 <tr>
                                     <td>
-                                        <a href="@Model.ManualUrls[i]" target="_blank">@Model.ManualUrls[i]</a>
+                                        <a href="@Model.ManualUrls[i]" target="_blank" class="manual-name">@Model.ManualUrls[i]</a>
                                         <input type="hidden" name="ExistingManuals" value="@Model.ManualUrls[i]" />
                                     </td>
                                     <td>
@@ -44,6 +44,7 @@
                             </tr>
                         }
                     </tbody>
+
                 </table>
             </div>
             <br />
@@ -93,5 +94,13 @@
 }
 
 
+<script src="~/js/cleanNameFile.js"></script>
 
-
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".manual-name").forEach(function (element) {
+            const originalUrl = element.getAttribute("href");
+            element.textContent = getCleanFileName(originalUrl);
+        });
+    });
+</script> 

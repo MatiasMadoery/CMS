@@ -51,7 +51,7 @@
                             {
                                 <tr>
                                     <td>
-                                        <a href="@Model.DocUrls[i]" target="_blank">@Model.DocUrls[i]</a>
+                                        <a class="doc-name" href="@Model.DocUrls[i]" target="_blank">@Model.DocUrls[i]</a>
                                         <input type="hidden" name="ExistingDocs" value="@Model.DocUrls[i]" />
                                     </td>
                                     <td>
@@ -117,3 +117,13 @@
     }
 }
 
+<script src="~/js/cleanNameFile.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".doc-name").forEach(function (element) {
+            const originalUrl = element.getAttribute("href");
+            element.textContent = getCleanFileName(originalUrl);
+        });
+    });
+</script> 
