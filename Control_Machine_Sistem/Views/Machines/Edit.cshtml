@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Edit";
 }
-
+<script src="~/js/cleanNameFile.js"></script>
 <h1>Editar</h1>
 <hr />
 <div class="row">
@@ -111,7 +111,7 @@
                 row.remove();
             }
         }
-    </script>
+    </script>    
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
