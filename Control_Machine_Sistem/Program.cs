@@ -16,7 +16,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         // To mitigate the risk of session hijacking and XSS (Cross-Site Scripting) attacks.
         options.Cookie.HttpOnly = true;
-        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.None;
 
         options.LoginPath = "/UsersLogin/Login"; // Login path
         options.AccessDeniedPath = "/UsersLogin/AccessDenied"; // Denied path 

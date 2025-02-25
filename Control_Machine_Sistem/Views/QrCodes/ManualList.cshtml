@@ -5,32 +5,37 @@
     Layout = null;    
 }
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manuales de la Máquina</title>
+    <link rel="stylesheet" href="~/css/downloads.css" />
+</head>
+<body>
 
-<div class="container mt-5">
     <div class="card">
         <div class="card-header">
             <h2>Manuales de la Máquina</h2>
         </div>
         <div class="card-body">
-            <ul class="list-group">
+            <ul class="manual-list">
                 @foreach (var manual in Model)
                 {
-
                     var fileUrl = Url.Content("~/manuals/models/" + manual.OriginalName);
-
-                    <li class="list-group-item">
+                    <li class="manual-item">
                         Descargar:
-                        <a href="@fileUrl" target="_blank">
-                           @manual.DisplayName
+                        <a href="@fileUrl" target="_blank" class="manual-link">
+                            @manual.DisplayName
                         </a>
                     </li>
                 }
             </ul>
-            <br />
-            <a href="javascript:history.back();" class="btn btn-secondary">
-                Volver al menú principal
-            </a>
+
+            <a href="javascript:history.back();" class="btn btn-secondary">Volver al menú principal</a>
         </div>
     </div>
-</div>
+
+</body>
+</html>
