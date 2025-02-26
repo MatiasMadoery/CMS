@@ -19,7 +19,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Models
-        public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 5)
         {
             var models = from m in _context.Models select m;
 
