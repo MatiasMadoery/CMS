@@ -54,7 +54,8 @@
               "RelativeToolTip": "Control_Machine_Sistem\\Views\\Models\\Index.cshtml",
               "ViewState": "AgIAAB8AAAAAAAAAAAAMwDIAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-02-26T00:15:53.284Z"
+              "WhenOpened": "2025-02-26T00:15:53.284Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -66,7 +67,8 @@
               "RelativeToolTip": "Control_Machine_Sistem\\Views\\Machines\\Index.cshtml",
               "ViewState": "AgIAADwAAAAAAAAAAAAMwFIAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-02-26T00:15:20.522Z"
+              "WhenOpened": "2025-02-26T00:15:20.522Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -78,7 +80,8 @@
               "RelativeToolTip": "Control_Machine_Sistem\\Models\\Pager.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-25T23:49:33.181Z"
+              "WhenOpened": "2025-02-25T23:49:33.181Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -88,9 +91,10 @@
               "RelativeDocumentMoniker": "Control_Machine_Sistem\\Controllers\\CustomersController.cs",
               "ToolTip": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\CMS\\Control_Machine_Sistem\\Controllers\\CustomersController.cs",
               "RelativeToolTip": "Control_Machine_Sistem\\Controllers\\CustomersController.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAzwCEAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABAAAAAAAAAAAAAAwCEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-26T00:06:53.106Z"
+              "WhenOpened": "2025-02-26T00:06:53.106Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -100,7 +104,7 @@
               "RelativeDocumentMoniker": "Control_Machine_Sistem\\Views\\Customers\\Index.cshtml",
               "ToolTip": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\CMS\\Control_Machine_Sistem\\Views\\Customers\\Index.cshtml",
               "RelativeToolTip": "Control_Machine_Sistem\\Views\\Customers\\Index.cshtml",
-              "ViewState": "AgIAACoAAAAAAAAAAAAAAEMAAAAsAAAAAAAAAA==",
+              "ViewState": "AgIAACcAAAAAAAAAAAAAAD8AAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-02-25T23:52:57.031Z",
               "EditorCaption": ""
