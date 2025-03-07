@@ -35,6 +35,6 @@ namespace Control_Machine_Sistem.Models
         [Display(Name = "Documentación")]
         public List<string> DocUrls { get; set; } = new List<string>();
 
-
+        public ICollection<OwnerHistory>? OwnerHistories { get; set; }
     }
 }

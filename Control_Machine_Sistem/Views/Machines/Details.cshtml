@@ -69,6 +69,30 @@
         </dd>
     </dl>
 </div>
+<br />
+<hr />
+<div class="form-group">
+    <label><b>Historial de propietarios de la máquina: </b></label>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Propietario anterior</th>
+                <th>Fecha de cambio</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var history in Model.OwnerHistories!)
+            {
+                <tr>
+                    <td>@history.PreviousOwner</td>
+                    <td>@history.ChangeDate.ToString("dd/MM/yyyy")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<hr />
+<br />
 <div class="mt-3">
     <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Editar</a> |
     <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a> |

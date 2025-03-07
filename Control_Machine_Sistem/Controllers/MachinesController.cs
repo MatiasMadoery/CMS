@@ -65,6 +65,7 @@ namespace Control_Machine_Sistem.Controllers
             var machine = await _context.Machines
                 .Include(m => m.Customer)
                 .Include(m => m.Model)
+                .Include(m => m.OwnerHistories)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (machine == null)
             {
@@ -180,13 +181,30 @@ namespace Control_Machine_Sistem.Controllers
             {
                 try
                 {
-                    var existingMachine = await _context.Machines.FindAsync(id);
+                    var existingMachine = await _context.Machines
+                        .Include(m => m.Customer)
+                        .Include(m => m.OwnerHistories)
+                        .FirstOrDefaultAsync(m => m.Id == id);
 
                     if (existingMachine == null)
                     {
                         return NotFound();
                     }
-                    
+
+                    if (existingMachine.CustomerId != machine.CustomerId && existingMachine.Customer != null)
+                    {
+                        var ownerHistory = new OwnerHistory
+                        {
+                            MachineId = existingMachine.Id,
+                            PreviousOwner = existingMachine.Customer.FullName,
+                            ChangeDate = DateTime.Now
+                        };
+
+                        _context.OwnerHistories.Add(ownerHistory);
+                        existingMachine.CustomerId = machine.CustomerId;
+                    }
+
+
                     existingMachine.CustomerId = machine.CustomerId;
                     existingMachine.ModelId = machine.ModelId;
                     existingMachine.ChasisNumber = machine.ChasisNumber;

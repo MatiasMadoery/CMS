@@ -24,11 +24,18 @@ namespace Control_Machine_Sistem.Models
                 .HasForeignKey(ac => ac.ModelId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<OwnerHistory>()
+                .HasOne(oh => oh.Machine)
+                .WithMany(m => m.OwnerHistories)
+                .HasForeignKey(oh => oh.MachineId)
+                .OnDelete(DeleteBehavior.Cascade);
+
         }
         public DbSet<Customer> Customers{ get; set; } = default!;
         public DbSet<Machine> Machines { get; set; } = default!;        
         public DbSet<Model> Models { get; set; } = default!;      
-        public DbSet<User> Users { get; set; } = default!;        
+        public DbSet<User> Users { get; set; } = default!; 
+        public DbSet<OwnerHistory> OwnerHistories { get; set; } = default!;
 
     }
 }
