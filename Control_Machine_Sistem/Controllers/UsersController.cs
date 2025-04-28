@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Control_Machine_Sistem.Models;
 
+
 namespace Control_Machine_Sistem.Controllers
 {
     public class UsersController : Controller
@@ -57,6 +58,9 @@ namespace Control_Machine_Sistem.Controllers
         {
             if (ModelState.IsValid)
             {
+                //Convert Password into hash
+                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -94,6 +98,21 @@ namespace Control_Machine_Sistem.Controllers
 
             if (ModelState.IsValid)
             {
+                var originalUser = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
+                if (originalUser == null)
+                {
+                    return NotFound();
+                }
+
+                if (string.IsNullOrWhiteSpace(user.Password))
+                {
+                    user.Password = originalUser.Password;
+                }
+                else
+                {
+                    user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+                }
+
                 try
                 {
                     _context.Update(user);
