@@ -89,6 +89,9 @@ namespace Control_Machine_Sistem.Migrations
                     b.Property<string>("EngineNumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal?>("HorsePower")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int?>("ModelId")
                         .HasColumnType("int");
 
@@ -123,6 +126,30 @@ namespace Control_Machine_Sistem.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Models");
+                });
+
+            modelBuilder.Entity("Control_Machine_Sistem.Models.OwnerHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ChangeDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MachineId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PreviousOwner")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MachineId");
+
+                    b.ToTable("OwnerHistories");
                 });
 
             modelBuilder.Entity("Control_Machine_Sistem.Models.User", b =>
@@ -167,9 +194,25 @@ namespace Control_Machine_Sistem.Migrations
                     b.Navigation("Model");
                 });
 
+            modelBuilder.Entity("Control_Machine_Sistem.Models.OwnerHistory", b =>
+                {
+                    b.HasOne("Control_Machine_Sistem.Models.Machine", "Machine")
+                        .WithMany("OwnerHistories")
+                        .HasForeignKey("MachineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Machine");
+                });
+
             modelBuilder.Entity("Control_Machine_Sistem.Models.Customer", b =>
                 {
                     b.Navigation("Machines");
+                });
+
+            modelBuilder.Entity("Control_Machine_Sistem.Models.Machine", b =>
+                {
+                    b.Navigation("OwnerHistories");
                 });
 
             modelBuilder.Entity("Control_Machine_Sistem.Models.Model", b =>

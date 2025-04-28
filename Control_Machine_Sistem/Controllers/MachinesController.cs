@@ -21,10 +21,8 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Machines
-        public async Task<IActionResult> Index(string searchString, int page = 1, int pageSize = 5)
+        public async Task<IActionResult> Index(string searchString, int page = 1, int pageSize = 5 )
         {
-            //var appDbContext = _context.Machines.Include(m => m.Customer).Include(m => m.Model);
-            //return View(await appDbContext.ToListAsync());
             var machine = from m in _context.Machines!
                           .Include(m => m.Customer)
                           .Include(m => m.Model)
@@ -65,6 +63,7 @@ namespace Control_Machine_Sistem.Controllers
             var machine = await _context.Machines
                 .Include(m => m.Customer)
                 .Include(m => m.Model)
+                .Include(m => m.OwnerHistories)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (machine == null)
             {
@@ -180,13 +179,30 @@ namespace Control_Machine_Sistem.Controllers
             {
                 try
                 {
-                    var existingMachine = await _context.Machines.FindAsync(id);
+                    var existingMachine = await _context.Machines
+                        .Include(m => m.Customer)
+                        .Include(m => m.OwnerHistories)
+                        .FirstOrDefaultAsync(m => m.Id == id);
 
                     if (existingMachine == null)
                     {
                         return NotFound();
                     }
-                    
+
+                    if (existingMachine.CustomerId != machine.CustomerId && existingMachine.Customer != null)
+                    {
+                        var ownerHistory = new OwnerHistory
+                        {
+                            MachineId = existingMachine.Id,
+                            PreviousOwner = existingMachine.Customer.FullName,
+                            ChangeDate = DateTime.Now
+                        };
+
+                        _context.OwnerHistories.Add(ownerHistory);
+                        existingMachine.CustomerId = machine.CustomerId;
+                    }
+
+
                     existingMachine.CustomerId = machine.CustomerId;
                     existingMachine.ModelId = machine.ModelId;
                     existingMachine.ChasisNumber = machine.ChasisNumber;
@@ -283,6 +299,28 @@ namespace Control_Machine_Sistem.Controllers
         private bool MachineExists(int id)
         {
             return _context.Machines.Any(e => e.Id == id);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetCustomers(string term)
+        {
+            if (string.IsNullOrEmpty(term))
+            {
+                return Json(new List<object>());
+            }
+
+            var customers = await _context.Customers
+                                          .Where(c => c.Name.ToLower().Contains(term.ToLower()))
+                                          .Select(c => new
+                                          {
+                                              id = c.Id,
+                                              text = c.Name + " " + c.LastName
+                                          })
+                                          .Take(10)
+                                          .ToListAsync();
+
+            Console.WriteLine($"Clientes encontrados: {customers.Count}");
+            return Json(customers);
         }
 
     }

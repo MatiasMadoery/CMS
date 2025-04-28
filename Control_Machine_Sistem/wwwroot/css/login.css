@@ -176,8 +176,8 @@ a {
 }*/
 
 body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(to right, #FBC107, #FFEB3B);
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background: linear-gradient(to right, #eabe2e, #FFEB3B);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -189,7 +189,7 @@ body {
 .login-container {
     display: flex;
     flex-direction: row;
-    width: 90%;
+    width: 100%;
     max-width: 1200px;
     background-color: white;
     border-radius: 10px;
@@ -204,12 +204,12 @@ body {
     .image-container img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit:fill;
     }
 
 .form-container {
     flex: 1;
-    padding: 40px;
+    padding: 25px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -241,8 +241,8 @@ input {
 button {
     width: 100%;
     padding: 10px;
-    background-color: #FBC107;
-    color: white;
+    background-color: #eabe2e;
+    color: #0d0d0d;
     border: none;
     border-radius: 20px;
     font-size: 16px;
@@ -251,7 +251,8 @@ button {
 }
 
     button:hover {
-        background-color: #F9A800;
+        background-color: #0d0d0d;
+        color: #eabe2e;
     }
 
 a {
@@ -308,6 +309,7 @@ a {
         flex-direction: column;
         width: 90%;
         align-items: center;
+        
     }
 
     .image-container {
@@ -326,9 +328,9 @@ a {
         width: 100%;
         max-width: 500px;
         flex-direction: column;
-        align-items: center;
+        align-items: center;       
     }
-
+  
     .image-container {
         width: 100%;
         height: 200px;
@@ -348,7 +350,7 @@ a {
     .login-container {
         max-width: 400px;
         flex-direction: column;
-        align-items: center;
+        align-items: center;        
     }
 
     .form-container {
