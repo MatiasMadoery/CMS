@@ -8,11 +8,11 @@ namespace Control_Machine_Sistem.Models
     public class Model
     {
         public int Id { get; set; }
-        [Required]
+        [Required(ErrorMessage = "El campo Modelo es obligatorio.")]
         [Display(Name = "Modelo")]
         public string? Name { get; set; }
+        [Required(ErrorMessage = "El campo Manuales es obligatorio.")]
         [NotMapped]
-
         [Display(Name = "Manuales")]
         public IEnumerable<IFormFile>? Manuals { get; set; }
         public List<string> ManualUrls { get; set; } = new List<string>();

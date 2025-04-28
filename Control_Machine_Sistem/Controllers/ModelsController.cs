@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Control_Machine_Sistem.Models;
+using System.Diagnostics;
+using System.Reflection.PortableExecutable;
 
 namespace Control_Machine_Sistem.Controllers
 {
@@ -72,6 +74,11 @@ namespace Control_Machine_Sistem.Controllers
         {
             if (ModelState.IsValid)
             {
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Console.WriteLine(error.ErrorMessage);
+                }
+
                 List<string> manualUrls = new List<string>();
 
                 if (model.Manuals != null && model.Manuals.Any())
@@ -107,7 +114,6 @@ namespace Control_Machine_Sistem.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-
             return View(model);
         }
 

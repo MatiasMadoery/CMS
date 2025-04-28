@@ -89,9 +89,6 @@ namespace Control_Machine_Sistem.Migrations
                     b.Property<string>("EngineNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal?>("HorsePower")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<int?>("ModelId")
                         .HasColumnType("int");
 
