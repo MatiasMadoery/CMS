@@ -106,7 +106,7 @@ namespace Control_Machine_Sistem.Controllers
 
                 if (machine.Documentations != null && machine.Documentations.Any())
                 {
-                    string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "documentations", "machines");
+                    string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "documentation", "machines");
                     Directory.CreateDirectory(uploadsFolder);
 
                     foreach (var documentation in machine.Documentations)
@@ -120,7 +120,7 @@ namespace Control_Machine_Sistem.Controllers
                                 await documentation.CopyToAsync(fileStream);
                             }
 
-                            docUrls.Add($"/documentations/machines/{uniqueFileName}");
+                            docUrls.Add($"/documentation/machines/{uniqueFileName}");
                         }
                     }
                 }
@@ -215,7 +215,7 @@ namespace Control_Machine_Sistem.Controllers
                    
                     if (Documentations != null && Documentations.Any())
                     {
-                        string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "documentations", "machines");
+                        string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "documentation", "machines");
                         Directory.CreateDirectory(uploadsFolder);
 
                         foreach (var documentation in Documentations)
@@ -230,7 +230,7 @@ namespace Control_Machine_Sistem.Controllers
                                     await documentation.CopyToAsync(fileStream);
                                 }
 
-                                docUrls.Add($"/documentations/machines/{uniqueFileName}");
+                                docUrls.Add($"/documentation/machines/{uniqueFileName}");
                             }
                         }
                     }

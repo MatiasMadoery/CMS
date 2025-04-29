@@ -83,7 +83,7 @@ namespace Control_Machine_Sistem.Controllers
 
                 if (model.Manuals != null && model.Manuals.Any())
                 {
-                    string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "manuals", "models");
+                    string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "documentation", "manuals");
                     Directory.CreateDirectory(uploadsFolder);
 
                     foreach (var manual in model.Manuals)
@@ -98,7 +98,7 @@ namespace Control_Machine_Sistem.Controllers
                                 await manual.CopyToAsync(fileStream);
                             }
 
-                            manualUrls.Add($"/manuals/models/{uniqueFileName}");
+                            manualUrls.Add($"/documentation/manuals/{uniqueFileName}");
                         }
                     }
                 }
@@ -162,7 +162,7 @@ namespace Control_Machine_Sistem.Controllers
                   
                     if (Manuals != null && Manuals.Any())
                     {
-                        string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "manuals", "models");
+                        string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "documentation", "manuals");
                         Directory.CreateDirectory(uploadsFolder);
 
                         foreach (var manual in Manuals)
@@ -176,8 +176,8 @@ namespace Control_Machine_Sistem.Controllers
                                 {
                                     await manual.CopyToAsync(fileStream);
                                 }
-
-                                manualUrls.Add($"/manuals/models/{uniqueFileName}");
+                                    
+                                manualUrls.Add($"/documentation/manuals/{uniqueFileName}");
                             }
                         }
                     }

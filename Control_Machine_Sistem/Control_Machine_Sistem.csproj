@@ -20,9 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\documentations\machines\" />
+    <Folder Include="App_Data\documentation\manuals\" />
+    <Folder Include="App_Data\documentation\machines\" />
     <Folder Include="wwwroot\img\images\" />
-    <Folder Include="wwwroot\manuals\models\" />
   </ItemGroup>
 
 </Project>
