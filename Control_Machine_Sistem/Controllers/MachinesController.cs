@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Control_Machine_Sistem.Models;
 using Control_Machine_Sistem.ViewModels;
 using System.Drawing.Printing;
+using Control_Machine_Sistem.Services;
 
 namespace Control_Machine_Sistem.Controllers
 {
@@ -21,7 +22,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Machines
-        public async Task<IActionResult> Index(string searchString, int page = 1, int pageSize = 5 )
+        public async Task<IActionResult> Index(string searchString, int page = 1, int pageSize = 5)
         {
             var machine = from m in _context.Machines!
                           .Include(m => m.Customer)
@@ -31,7 +32,7 @@ namespace Control_Machine_Sistem.Controllers
             //Filter by search text if provided
             if (!String.IsNullOrEmpty(searchString))
             {
-                machine = machine.Where(s => s.Customer!.Name!.Contains(searchString) || s.Customer.LastName!.Contains(searchString) || 
+                machine = machine.Where(s => s.Customer!.Name!.Contains(searchString) || s.Customer.LastName!.Contains(searchString) ||
                 s.Model!.Name!.Contains(searchString));
             }
 
@@ -75,7 +76,7 @@ namespace Control_Machine_Sistem.Controllers
 
         // GET: Machines/Create
         public IActionResult Create()
-        {         
+        {
             var customers = _context.Customers.Select(c => new
             {
                 Id = c.Id,
@@ -106,24 +107,18 @@ namespace Control_Machine_Sistem.Controllers
 
                 if (machine.Documentations != null && machine.Documentations.Any())
                 {
-                    string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "documentation", "machines");
-                    Directory.CreateDirectory(uploadsFolder);
-
-                    foreach (var documentation in machine.Documentations)
+                    foreach (var manual in machine.Documentations)
                     {
-                        if (documentation.Length > 0)
+                        var fileExtension = Path.GetExtension(manual.FileName).ToLower();
+                        if (fileExtension != ".pdf")
                         {
-                            string uniqueFileName = $"{Guid.NewGuid()}_{documentation.FileName}";
-                            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                            using (var fileStream = new FileStream(filePath, FileMode.Create))
-                            {
-                                await documentation.CopyToAsync(fileStream);
-                            }
-
-                            docUrls.Add($"/documentation/machines/{uniqueFileName}");
+                            ModelState.AddModelError("Manuals", "Solo se permiten archivos PDF.");
+                            return View(machine);
                         }
                     }
+                    docUrls = await FileService.SaveDocAsync(machine.Documentations.ToList(), "documentation/machines");
                 }
+
 
                 var newMachine = new Machine
                 {
@@ -212,27 +207,19 @@ namespace Control_Machine_Sistem.Controllers
 
                     List<string> docUrls = ExistingDocs ?? new List<string>();
 
-                   
+
                     if (Documentations != null && Documentations.Any())
                     {
-                        string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "documentation", "machines");
-                        Directory.CreateDirectory(uploadsFolder);
-
-                        foreach (var documentation in Documentations)
+                        foreach (var document in Documentations)
                         {
-                            if (documentation.Length > 0)
+                            var fileExtension = Path.GetExtension(document.FileName).ToLower();
+                            if (fileExtension != ".pdf")
                             {
-                                string uniqueFileName = $"{Guid.NewGuid()}_{documentation.FileName}";
-                                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                                {
-                                    await documentation.CopyToAsync(fileStream);
-                                }
-
-                                docUrls.Add($"/documentation/machines/{uniqueFileName}");
+                                ModelState.AddModelError("Manuals", "Solo se permiten archivos PDF.");
+                                return View(machine);
                             }
                         }
+                        docUrls.AddRange(await FileService.SaveDocAsync(Documentations));
                     }
 
                     existingMachine.DocUrls = docUrls;

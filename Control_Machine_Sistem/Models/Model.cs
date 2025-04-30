@@ -11,7 +11,6 @@ namespace Control_Machine_Sistem.Models
         [Required(ErrorMessage = "El campo Modelo es obligatorio.")]
         [Display(Name = "Modelo")]
         public string? Name { get; set; }
-        [Required(ErrorMessage = "El campo Manuales es obligatorio.")]
         [NotMapped]
         [Display(Name = "Manuales")]
         public IEnumerable<IFormFile>? Manuals { get; set; }

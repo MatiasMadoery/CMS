@@ -15,7 +15,6 @@ $(document).ready(function () {
 
     $('.select2').each(function () {
         var url = $(this).data('url');
-        console.log("URL: ", url); // Esto te muestra si la URL se está mandando bien
 
         $(this).select2({
             placeholder: "Buscar cliente...",
@@ -30,7 +29,6 @@ $(document).ready(function () {
                     };
                 },
                 processResults: function (data) {
-                    console.log("Resultados: ", data); // Ver los resultados en la consola
                     return {
                         results: data
                     };

@@ -44,7 +44,7 @@
             <br />
             <div class="form-group">
                 <label>Archivos cargados</label>
-                <table class="table table-bordered">                   
+                <table class="table table-bordered">
                     <tbody id="existingFiles">
                         @if (Model.DocUrls != null && Model.DocUrls.Any())
                         {
@@ -52,7 +52,7 @@
                             {
                                 <tr>
                                     <td>
-                                        <a class="doc-name" href="@Model.DocUrls[i]" target="_blank">@Model.DocUrls[i]</a>
+                                        <a href="@Model.DocUrls[i]" target="_blank" class="document-name">@Model.DocUrls[i]</a>
                                         <input type="hidden" name="ExistingDocs" value="@Model.DocUrls[i]" />
                                     </td>
                                     <td>
@@ -68,18 +68,19 @@
                             </tr>
                         }
                     </tbody>
+
                 </table>
             </div>
             <br />
 
             <div id="fileUploadContainer">
                 <div class="form-group">
-                    <label asp-for="Documentations" class="control-label"></label>
+                    <label asp-for="Documentations" class="control-label">Agregar documentos</label>
                     <input type="file" name="Documentations" class="form-control" multiple />
                     <span asp-validation-for="Documentations" class="text-danger"></span>
                     <br />
                 </div>
-            </div>          
+            </div>
             <div class="form-group">
                 <button type="button" class="btn btn-primary" onclick="addMoreFiles()">Agregar otro archivo</button>
             </div>
@@ -93,12 +94,7 @@
     </div>
 </div>
 
-
 @section Scripts {
-
-    <script src="~/js/select2.js"></script>
-    <script src="~/js/site.js"></script>
-
     <script>
         function addMoreFiles() {
             var container = document.getElementById('fileUploadContainer');
@@ -116,17 +112,18 @@
                 row.remove();
             }
         }
-    </script>    
+    </script>
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
 
+
 <script src="~/js/cleanNameFile.js"></script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll(".doc-name").forEach(function (element) {
+        document.querySelectorAll(".document-name").forEach(function (element) {
             const originalUrl = element.getAttribute("href");
             element.textContent = getCleanFileName(originalUrl);
         });

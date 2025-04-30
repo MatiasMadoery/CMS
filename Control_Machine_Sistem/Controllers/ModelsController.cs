@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Control_Machine_Sistem.Models;
 using System.Diagnostics;
 using System.Reflection.PortableExecutable;
+using NPOI.OpenXml4Net.OPC.Internal;
+using Control_Machine_Sistem.Services;
 
 namespace Control_Machine_Sistem.Controllers
 {
@@ -74,34 +76,22 @@ namespace Control_Machine_Sistem.Controllers
         {
             if (ModelState.IsValid)
             {
-                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-                {
-                    Console.WriteLine(error.ErrorMessage);
-                }
 
                 List<string> manualUrls = new List<string>();
-
                 if (model.Manuals != null && model.Manuals.Any())
                 {
-                    string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "documentation", "manuals");
-                    Directory.CreateDirectory(uploadsFolder);
-
                     foreach (var manual in model.Manuals)
                     {
-                        if (manual.Length > 0)
+                        var fileExtension = Path.GetExtension(manual.FileName).ToLower();
+                        if (fileExtension != ".pdf")
                         {
-                            string uniqueFileName = $"{Guid.NewGuid()}_{manual.FileName}";
-                            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                            using (var fileStream = new FileStream(filePath, FileMode.Create))
-                            {
-                                await manual.CopyToAsync(fileStream);
-                            }
-
-                            manualUrls.Add($"/documentation/manuals/{uniqueFileName}");
+                            ModelState.AddModelError("Manuals", "Solo se permiten archivos PDF.");
+                            return View(model);
                         }
                     }
+                    manualUrls = await FileService.SaveManualsAsync((List<IFormFile>)model.Manuals);
                 }
+
 
                 var newModel = new Model
                 {
@@ -162,24 +152,17 @@ namespace Control_Machine_Sistem.Controllers
                   
                     if (Manuals != null && Manuals.Any())
                     {
-                        string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "documentation", "manuals");
-                        Directory.CreateDirectory(uploadsFolder);
-
                         foreach (var manual in Manuals)
                         {
-                            if (manual.Length > 0)
+                            var fileExtension = Path.GetExtension(manual.FileName).ToLower();
+                            if (fileExtension != ".pdf")
                             {
-                                string uniqueFileName = $"{Guid.NewGuid()}_{manual.FileName}";
-                                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                                {
-                                    await manual.CopyToAsync(fileStream);
-                                }
-                                    
-                                manualUrls.Add($"/documentation/manuals/{uniqueFileName}");
+                                ModelState.AddModelError("Manuals", "Solo se permiten archivos PDF.");
+                                return View(model);
                             }
                         }
+                        manualUrls.AddRange(await FileService.SaveManualsAsync(Manuals));
+
                     }
 
                     existingModel.ManualUrls = manualUrls;
