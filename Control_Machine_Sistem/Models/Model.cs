@@ -1,6 +1,4 @@
-﻿
-
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Control_Machine_Sistem.Models
@@ -8,14 +6,23 @@ namespace Control_Machine_Sistem.Models
     public class Model
     {
         public int Id { get; set; }
+
         [Required]
         [Display(Name = "Modelo")]
         public string? Name { get; set; }
-        [NotMapped]
 
+        [NotMapped]
         [Display(Name = "Manuales")]
         public IEnumerable<IFormFile>? Manuals { get; set; }
+
+        [Required]
+        public int? CategoryId { get; set; }
+        [Display(Name = "Categoría")]
+        public Category? Category { get; set; }
+
+
         public List<string> ManualUrls { get; set; } = new List<string>();
         public ICollection<Machine>? Machines { get; set; } = new List<Machine>();
+
     }
 }

@@ -3,16 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\CMS\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|c:\\users\\matim\\onedrive\\escritorio\\cms\\cms\\control_machine_sistem\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|solutionrelative:control_machine_sistem\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|c:\\users\\matim\\onedrive\\escritorio\\cms\\cms\\control_machine_sistem\\views\\models\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|solutionrelative:control_machine_sistem\\views\\models\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|c:\\users\\matim\\onedrive\\escritorio\\cms\\cms\\control_machine_sistem\\controllers\\userslogincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|solutionrelative:control_machine_sistem\\controllers\\userslogincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|c:\\users\\matim\\onedrive\\escritorio\\cms\\cms\\control_machine_sistem\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|solutionrelative:control_machine_sistem\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|c:\\users\\matim\\onedrive\\escritorio\\cms\\cms\\control_machine_sistem\\controllers\\modelscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A3140EB8-7ED6-4DD6-8B45-BB08DD8C2AD2}|Control_Machine_Sistem\\Control_Machine_Sistem.csproj|solutionrelative:control_machine_sistem\\controllers\\modelscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,57 +18,32 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 0,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{873151d0-cf2e-48cc-b4bf-ad0394f6a3c3}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Delete.cshtml",
+              "DocumentMoniker": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\CMS\\Control_Machine_Sistem\\Views\\Models\\Delete.cshtml",
+              "RelativeDocumentMoniker": "Control_Machine_Sistem\\Views\\Models\\Delete.cshtml",
+              "ToolTip": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\CMS\\Control_Machine_Sistem\\Views\\Models\\Delete.cshtml",
+              "RelativeToolTip": "Control_Machine_Sistem\\Views\\Models\\Delete.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-30T13:50:33.162Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "UsersLoginController.cs",
-              "DocumentMoniker": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\CMS\\Control_Machine_Sistem\\Controllers\\UsersLoginController.cs",
-              "RelativeDocumentMoniker": "Control_Machine_Sistem\\Controllers\\UsersLoginController.cs",
-              "ToolTip": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\CMS\\Control_Machine_Sistem\\Controllers\\UsersLoginController.cs",
-              "RelativeToolTip": "Control_Machine_Sistem\\Controllers\\UsersLoginController.cs",
-              "ViewState": "AgIAAEUAAAAAAAAAAAAQwB4AAAABAAAAAAAAAA==",
+              "Title": "ModelsController.cs",
+              "DocumentMoniker": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\CMS\\Control_Machine_Sistem\\Controllers\\ModelsController.cs",
+              "RelativeDocumentMoniker": "Control_Machine_Sistem\\Controllers\\ModelsController.cs",
+              "ToolTip": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\CMS\\Control_Machine_Sistem\\Controllers\\ModelsController.cs",
+              "RelativeToolTip": "Control_Machine_Sistem\\Controllers\\ModelsController.cs",
+              "ViewState": "AgIAAMgAAAAAAAAAAAAAAN4AAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-28T14:12:08.813Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "User.cs",
-              "DocumentMoniker": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\CMS\\Control_Machine_Sistem\\Models\\User.cs",
-              "RelativeDocumentMoniker": "Control_Machine_Sistem\\Models\\User.cs",
-              "ToolTip": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\CMS\\Control_Machine_Sistem\\Models\\User.cs",
-              "RelativeToolTip": "Control_Machine_Sistem\\Models\\User.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAowBMAAAAZAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-28T13:45:54.882Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\CMS\\Control_Machine_Sistem\\Program.cs",
-              "RelativeDocumentMoniker": "Control_Machine_Sistem\\Program.cs",
-              "ToolTip": "C:\\Users\\matim\\OneDrive\\Escritorio\\CMS\\CMS\\Control_Machine_Sistem\\Program.cs",
-              "RelativeToolTip": "Control_Machine_Sistem\\Program.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAABQAAABcAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-28T11:30:50.264Z",
+              "WhenOpened": "2025-04-30T12:31:35.452Z",
               "EditorCaption": ""
             }
           ]

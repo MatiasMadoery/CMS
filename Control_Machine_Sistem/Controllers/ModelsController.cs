@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Control_Machine_Sistem.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Control_Machine_Sistem.Controllers
 {
@@ -19,9 +15,14 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Models
-        public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 10, int? categoryId = null)
         {
-            var models = from m in _context.Models select m;
+            var models = _context.Models.Include(m => m.Category).AsQueryable();
+
+            if (categoryId.HasValue && categoryId > 0)
+            {
+                models = models.Where(m => m.CategoryId == categoryId);
+            }
 
             // Get total models 
             var totalModels = await models.CountAsync();
@@ -32,10 +33,12 @@ namespace Control_Machine_Sistem.Controllers
                                          .Take(pageSize)
                                          .ToListAsync();
 
-            // Create the paginator with the paginated list
+            
             var pager = new Pager<Model>(modelsPager, totalModels, page, pageSize);
 
-            //To maintain the value of the lookup field when the user changes pages           
+            ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
+            ViewBag.SelectedCategory = categoryId;
+                     
             return View(pager);
         }
 
@@ -48,6 +51,7 @@ namespace Control_Machine_Sistem.Controllers
             }
 
             var model = await _context.Models
+                .Include(m => m.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (model == null)
             {
@@ -60,15 +64,14 @@ namespace Control_Machine_Sistem.Controllers
         // GET: Models/Create
         public IActionResult Create()
         {
+            ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
             return View();
         }
 
-        // POST: Models/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Models/Create     
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Manuals")] Model model)
+        public async Task<IActionResult> Create([Bind("Id,Name,Manuals,CategoryId")] Model model)
         {
             if (ModelState.IsValid)
             {
@@ -99,7 +102,8 @@ namespace Control_Machine_Sistem.Controllers
                 var newModel = new Model
                 {
                     Name = model.Name,
-                    ManualUrls = manualUrls
+                    ManualUrls = manualUrls,
+                    CategoryId = model.CategoryId
                 };
 
                 _context.Models.Add(newModel);
@@ -108,6 +112,7 @@ namespace Control_Machine_Sistem.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            ViewBag.Categories = new SelectList(_context.Categories, "Id", "Nombre");
             return View(model);
         }
 
@@ -119,20 +124,24 @@ namespace Control_Machine_Sistem.Controllers
                 return NotFound();
             }
 
-            var model = await _context.Models.FindAsync(id);
+            var model = await _context.Models
+                .Include(m => m.Category)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (model == null)
             {
                 return NotFound();
             }
+
+            ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name", model.CategoryId);
+
             return View(model);
         }
 
-        //// POST: Models/Edit/5
-        //// To protect from overposting attacks, enable the specific properties you want to bind to.
-        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.   
+        //// POST: Models/Edit/5        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Model model, List<string> ExistingManuals, List<IFormFile> Manuals)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name, CategoryId")] Model model, List<string> ExistingManuals, List<IFormFile> Manuals)
         {
             if (id != model.Id)
             {
@@ -151,6 +160,7 @@ namespace Control_Machine_Sistem.Controllers
                     }
                     
                     existingModel.Name = model.Name;
+                    existingModel.CategoryId = model.CategoryId;
 
                     List<string> manualUrls = ExistingManuals ?? new List<string>();
                   
@@ -194,6 +204,9 @@ namespace Control_Machine_Sistem.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name", model.CategoryId);
+
             return View(model);
         }
 
@@ -207,6 +220,7 @@ namespace Control_Machine_Sistem.Controllers
             }
 
             var model = await _context.Models
+                .Include(m => m.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (model == null)
             {
