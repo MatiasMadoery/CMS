@@ -56,7 +56,7 @@
                                         <input type="hidden" name="ExistingDocs" value="@Model.DocUrls[i]" />
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-danger btn-sm" onclick="removeFile(@i)">Eliminar</button>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="removeFile(this)">Eliminar</button>
                                     </td>
                                 </tr>
                             }
@@ -106,12 +106,22 @@
             container.appendChild(document.createElement('br'));
         }
 
-        function removeFile(index) {
-            var row = document.querySelector(`#existingFiles tr:nth-child(${index + 1})`);
-            if (row) {
-                row.remove();
-            }
+        function removeFile(button) {
+            var row = button.closest("tr");
+                if (row) {
+                    var url = row.querySelector("a").getAttribute("href");
+
+                    var input = document.createElement("input");
+                    input.type = "hidden";
+                    input.name = "DeletedDocs";
+                    input.value = url;
+
+                    document.getElementById("uploadForm").appendChild(input);
+
+                    row.remove();
+                }
         }
+
     </script>
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

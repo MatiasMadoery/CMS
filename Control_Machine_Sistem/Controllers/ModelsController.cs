@@ -128,7 +128,7 @@ namespace Control_Machine_Sistem.Controllers
         //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.   
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Model model, List<string> ExistingManuals, List<IFormFile> Manuals)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Model model, List<string> ExistingManuals, List<IFormFile> Manuals, List<string> DeletedManuals)
         {
             if (id != model.Id)
             {
@@ -149,7 +149,24 @@ namespace Control_Machine_Sistem.Controllers
                     existingModel.Name = model.Name;
 
                     List<string> manualUrls = ExistingManuals ?? new List<string>();
-                  
+
+                    if (DeletedManuals != null && DeletedManuals.Any())
+                    {
+                        foreach (var url in DeletedManuals)
+                        {
+                            var fileName = Path.GetFileName(url);
+                            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "documentation", "manuals", fileName);
+
+                            if (System.IO.File.Exists(filePath))
+                            {
+                                System.IO.File.Delete(filePath);
+                            }
+                        }
+
+
+                        manualUrls = manualUrls.Except(DeletedManuals).ToList();
+                    }
+
                     if (Manuals != null && Manuals.Any())
                     {
                         foreach (var manual in Manuals)

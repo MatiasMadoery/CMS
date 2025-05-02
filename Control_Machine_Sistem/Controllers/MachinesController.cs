@@ -163,7 +163,7 @@ namespace Control_Machine_Sistem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.     
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,WarrantyExpirationDate")] Machine machine, List<string> ExistingDocs, List<IFormFile> Documentations)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,WarrantyExpirationDate")] Machine machine, List<string> ExistingDocs, List<IFormFile> Documentations, List<string> DeletedDocs)
         {
             if (id != machine.Id)
             {
@@ -207,6 +207,21 @@ namespace Control_Machine_Sistem.Controllers
 
                     List<string> docUrls = ExistingDocs ?? new List<string>();
 
+                    if (DeletedDocs != null && DeletedDocs.Any())
+                    {
+                        foreach (var url in DeletedDocs)
+                        {
+                            var fileName = Path.GetFileName(url);
+                            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "documentation", "machines", fileName);
+
+                            if (System.IO.File.Exists(filePath))
+                            {
+                                System.IO.File.Delete(filePath);
+                            }
+                        }
+
+                        docUrls = docUrls.Except(DeletedDocs).ToList();
+                    }
 
                     if (Documentations != null && Documentations.Any())
                     {
