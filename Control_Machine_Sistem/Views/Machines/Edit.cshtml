@@ -15,6 +15,10 @@
                 <label asp-for="CustomerId" class="control-label"></label>
                 <select asp-for="CustomerId" class="form-control select2" data-url="@Url.Action("GetCustomers", "Machines")">
                     <option value="">Seleccione un Cliente...</option>
+                    @if (Model.CustomerId != null && ViewBag.CustomerName != null)
+                    {
+                        <option value="@Model.CustomerId" selected="selected">@ViewBag.CustomerName</option>
+                    }
                 </select>
             </div>
             <div class="form-group">

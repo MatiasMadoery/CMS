@@ -22,6 +22,8 @@
   <ItemGroup>
     <Folder Include="App_Data\documentation\manuals\" />
     <Folder Include="App_Data\documentation\machines\" />
+    <Folder Include="wwwroot\documentations\machines\" />
+    <Folder Include="wwwroot\documentations\manuals\" />
     <Folder Include="wwwroot\img\images\" />
   </ItemGroup>
 

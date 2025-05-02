@@ -147,7 +147,9 @@ namespace Control_Machine_Sistem.Controllers
             {
                 return NotFound();
             }
-            var machine = await _context.Machines.FindAsync(id);
+            var machine = await _context.Machines
+            .Include(m => m.Customer)
+            .FirstOrDefaultAsync(m => m.Id == id);
 
             if (machine == null)
             {
@@ -155,6 +157,7 @@ namespace Control_Machine_Sistem.Controllers
             }
             ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "FullName", machine.CustomerId);
             ViewData["ModelId"] = new SelectList(_context.Models, "Id", "Name", machine.ModelId);
+            ViewBag.CustomerName = machine.Customer?.FullName;
             return View(machine);
         }
 
