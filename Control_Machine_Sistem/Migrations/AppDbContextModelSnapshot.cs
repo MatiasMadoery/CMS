@@ -63,9 +63,11 @@ namespace Control_Machine_Sistem.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
@@ -93,7 +95,7 @@ namespace Control_Machine_Sistem.Migrations
                     b.Property<string>("ChasisNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CustomerId")
+                    b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("DeliveryDate")
@@ -106,7 +108,7 @@ namespace Control_Machine_Sistem.Migrations
                     b.Property<string>("EngineNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ModelId")
+                    b.Property<int>("ModelId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("WarrantyExpirationDate")
@@ -207,12 +209,14 @@ namespace Control_Machine_Sistem.Migrations
                     b.HasOne("Control_Machine_Sistem.Models.Customer", "Customer")
                         .WithMany("Machines")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Control_Machine_Sistem.Models.Model", "Model")
                         .WithMany("Machines")
                         .HasForeignKey("ModelId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Customer");
 

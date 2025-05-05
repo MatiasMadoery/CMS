@@ -5,17 +5,20 @@ namespace Control_Machine_Sistem.Models
     public class Customer
     {
         public int Id { get; set; }
+
         [Required(ErrorMessage = "Debe ingresar el nombre.")]
         [Display(Name = "Nombre")]
         public string? Name { get; set; }
+
         [Required(ErrorMessage = "Debe ingresar el apellido.")]
         [Display(Name = "Apellido")]
         public string? LastName { get; set; }
 
         public string? Cuit { get; set; }
-        [Required(ErrorMessage = "Debe ingresar el teléfono.")]
+        
         [Display(Name = "Telefono")]
         public string? Phone { get; set; }
+
         public string? Email { get; set; }
 
         [Display(Name = "Direccion")]
