@@ -1,7 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Control_Machine_Sistem.Models;
+using System.Diagnostics;
+using System.Reflection.PortableExecutable;
+using NPOI.OpenXml4Net.OPC.Internal;
+using Control_Machine_Sistem.Services;
 using Microsoft.AspNetCore.Mvc.Rendering;
+
 
 namespace Control_Machine_Sistem.Controllers
 {
@@ -16,6 +21,7 @@ namespace Control_Machine_Sistem.Controllers
 
         // GET: Models
         public async Task<IActionResult> Index(int page = 1, int pageSize = 10, int? categoryId = null)
+
         {
             var models = _context.Models.Include(m => m.Category).AsQueryable();
 
@@ -75,29 +81,22 @@ namespace Control_Machine_Sistem.Controllers
         {
             if (ModelState.IsValid)
             {
-                List<string> manualUrls = new List<string>();
 
+                List<string> manualUrls = new List<string>();
                 if (model.Manuals != null && model.Manuals.Any())
                 {
-                    string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "manuals", "models");
-                    Directory.CreateDirectory(uploadsFolder);
-
                     foreach (var manual in model.Manuals)
                     {
-                        if (manual.Length > 0)
+                        var fileExtension = Path.GetExtension(manual.FileName).ToLower();
+                        if (fileExtension != ".pdf")
                         {
-                            string uniqueFileName = $"{Guid.NewGuid()}_{manual.FileName}";
-                            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                            using (var fileStream = new FileStream(filePath, FileMode.Create))
-                            {
-                                await manual.CopyToAsync(fileStream);
-                            }
-
-                            manualUrls.Add($"/manuals/models/{uniqueFileName}");
+                            ModelState.AddModelError("Manuals", "Solo se permiten archivos PDF.");
+                            return View(model);
                         }
                     }
+                    manualUrls = await FileService.SaveManualsAsync((List<IFormFile>)model.Manuals);
                 }
+
 
                 var newModel = new Model
                 {
@@ -113,6 +112,7 @@ namespace Control_Machine_Sistem.Controllers
             }
 
             ViewBag.Categories = new SelectList(_context.Categories, "Id", "Nombre");
+
             return View(model);
         }
 
@@ -141,7 +141,9 @@ namespace Control_Machine_Sistem.Controllers
         //// POST: Models/Edit/5        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name, CategoryId")] Model model, List<string> ExistingManuals, List<IFormFile> Manuals)
+
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,CategoryId")] Model model, List<string> ExistingManuals, List<IFormFile> Manuals, List<string> DeletedManuals)
+
         {
             if (id != model.Id)
             {
@@ -163,27 +165,37 @@ namespace Control_Machine_Sistem.Controllers
                     existingModel.CategoryId = model.CategoryId;
 
                     List<string> manualUrls = ExistingManuals ?? new List<string>();
-                  
-                    if (Manuals != null && Manuals.Any())
+
+                    if (DeletedManuals != null && DeletedManuals.Any())
                     {
-                        string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "manuals", "models");
-                        Directory.CreateDirectory(uploadsFolder);
-
-                        foreach (var manual in Manuals)
+                        foreach (var url in DeletedManuals)
                         {
-                            if (manual.Length > 0)
+                            var fileName = Path.GetFileName(url);
+                            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "documentation", "manuals", fileName);
+
+                            if (System.IO.File.Exists(filePath))
                             {
-                                string uniqueFileName = $"{Guid.NewGuid()}_{manual.FileName}";
-                                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                                {
-                                    await manual.CopyToAsync(fileStream);
-                                }
-
-                                manualUrls.Add($"/manuals/models/{uniqueFileName}");
+                                System.IO.File.Delete(filePath);
                             }
                         }
+
+
+                        manualUrls = manualUrls.Except(DeletedManuals).ToList();
+                    }
+
+                    if (Manuals != null && Manuals.Any())
+                    {
+                        foreach (var manual in Manuals)
+                        {
+                            var fileExtension = Path.GetExtension(manual.FileName).ToLower();
+                            if (fileExtension != ".pdf")
+                            {
+                                ModelState.AddModelError("Manuals", "Solo se permiten archivos PDF.");
+                                return View(model);
+                            }
+                        }
+                        manualUrls.AddRange(await FileService.SaveManualsAsync(Manuals));
+
                     }
 
                     existingModel.ManualUrls = manualUrls;

@@ -13,7 +13,13 @@
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="CustomerId" class="control-label"></label>
-                <select asp-for="CustomerId" class="form-control select2" asp-items="ViewBag.CustomerId"></select>
+                <select asp-for="CustomerId" class="form-control select2" data-url="@Url.Action("GetCustomers", "Machines")">
+                    <option value="">Seleccione un Cliente...</option>
+                    @if (Model.CustomerId != null && ViewBag.CustomerName != null)
+                    {
+                        <option value="@Model.CustomerId" selected="selected">@ViewBag.CustomerName</option>
+                    }
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="ModelId" class="control-label"></label>
@@ -42,7 +48,7 @@
             <br />
             <div class="form-group">
                 <label>Archivos cargados</label>
-                <table class="table table-bordered">                   
+                <table class="table table-bordered">
                     <tbody id="existingFiles">
                         @if (Model.DocUrls != null && Model.DocUrls.Any())
                         {
@@ -50,11 +56,13 @@
                             {
                                 <tr>
                                     <td>
-                                        <a class="doc-name" href="@Model.DocUrls[i]" target="_blank">@Model.DocUrls[i]</a>
+
+                                        <a href="@Model.DocUrls[i]" target="_blank" class="document-name">@Model.DocUrls[i]</a>
+
                                         <input type="hidden" name="ExistingDocs" value="@Model.DocUrls[i]" />
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-danger btn-sm" onclick="removeFile(@i)">Eliminar</button>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="removeFile(this)">Eliminar</button>
                                     </td>
                                 </tr>
                             }
@@ -66,18 +74,19 @@
                             </tr>
                         }
                     </tbody>
+
                 </table>
             </div>
             <br />
 
             <div id="fileUploadContainer">
                 <div class="form-group">
-                    <label asp-for="Documentations" class="control-label"></label>
+                    <label asp-for="Documentations" class="control-label">Agregar documentos</label>
                     <input type="file" name="Documentations" class="form-control" multiple />
                     <span asp-validation-for="Documentations" class="text-danger"></span>
                     <br />
                 </div>
-            </div>          
+            </div>
             <div class="form-group">
                 <button type="button" class="btn btn-primary" onclick="addMoreFiles()">Agregar otro archivo</button>
             </div>
@@ -91,11 +100,7 @@
     </div>
 </div>
 
-
 @section Scripts {
-
-    <script src="~/js/select2.js"></script>
-
     <script>
         function addMoreFiles() {
             var container = document.getElementById('fileUploadContainer');
@@ -107,23 +112,33 @@
             container.appendChild(document.createElement('br'));
         }
 
-        function removeFile(index) {
-            var row = document.querySelector(`#existingFiles tr:nth-child(${index + 1})`);
-            if (row) {
-                row.remove();
-            }
+        function removeFile(button) {
+            var row = button.closest("tr");
+                if (row) {
+                    var url = row.querySelector("a").getAttribute("href");
+
+                    var input = document.createElement("input");
+                    input.type = "hidden";
+                    input.name = "DeletedDocs";
+                    input.value = url;
+
+                    document.getElementById("uploadForm").appendChild(input);
+
+                    row.remove();
+                }
         }
-    </script>    
+
+    </script>
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
 
-<script src="~/js/cleanNameFile.js"></script>
-
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll(".doc-name").forEach(function (element) {
+
+        document.querySelectorAll(".document-name").forEach(function (element) {
+
             const originalUrl = element.getAttribute("href");
             element.textContent = getCleanFileName(originalUrl);
         });

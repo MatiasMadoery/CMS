@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "Importar Clientes desde Excel";
+}
+
+<h1>Importar Clientes desde Excel</h1>
+
+<form enctype="multipart/form-data" method="post" asp-action="ImportExcel">
+    <div class="form-group">
+        <label for="file">Selecciona un archivo Excel:</label>
+        <input type="file" name="file" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary mt-2">Importar Excel</button>
+</form>
+
+<div>
+    <a asp-action="Index" class="btn btn-secondary mt-3">Volver a la lista de clientes</a>
+</div>

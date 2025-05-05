@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Control_Machine_Sistem.Models;
 using Control_Machine_Sistem.ViewModels;
 using System.Drawing.Printing;
+using Control_Machine_Sistem.Services;
 
 namespace Control_Machine_Sistem.Controllers
 {
@@ -23,8 +24,6 @@ namespace Control_Machine_Sistem.Controllers
         // GET: Machines
         public async Task<IActionResult> Index(string searchString, int page = 1, int pageSize = 5)
         {
-            //var appDbContext = _context.Machines.Include(m => m.Customer).Include(m => m.Model);
-            //return View(await appDbContext.ToListAsync());
             var machine = from m in _context.Machines!
                           .Include(m => m.Customer)
                           .Include(m => m.Model)
@@ -33,7 +32,7 @@ namespace Control_Machine_Sistem.Controllers
             //Filter by search text if provided
             if (!String.IsNullOrEmpty(searchString))
             {
-                machine = machine.Where(s => s.Customer!.Name!.Contains(searchString) || s.Customer.LastName!.Contains(searchString) || 
+                machine = machine.Where(s => s.Customer!.Name!.Contains(searchString) || s.Customer.LastName!.Contains(searchString) ||
                 s.Model!.Name!.Contains(searchString));
             }
 
@@ -77,7 +76,7 @@ namespace Control_Machine_Sistem.Controllers
 
         // GET: Machines/Create
         public IActionResult Create()
-        {         
+        {
             var customers = _context.Customers.Select(c => new
             {
                 Id = c.Id,
@@ -108,24 +107,18 @@ namespace Control_Machine_Sistem.Controllers
 
                 if (machine.Documentations != null && machine.Documentations.Any())
                 {
-                    string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "documentations", "machines");
-                    Directory.CreateDirectory(uploadsFolder);
-
-                    foreach (var documentation in machine.Documentations)
+                    foreach (var manual in machine.Documentations)
                     {
-                        if (documentation.Length > 0)
+                        var fileExtension = Path.GetExtension(manual.FileName).ToLower();
+                        if (fileExtension != ".pdf")
                         {
-                            string uniqueFileName = $"{Guid.NewGuid()}_{documentation.FileName}";
-                            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                            using (var fileStream = new FileStream(filePath, FileMode.Create))
-                            {
-                                await documentation.CopyToAsync(fileStream);
-                            }
-
-                            docUrls.Add($"/documentations/machines/{uniqueFileName}");
+                            ModelState.AddModelError("Manuals", "Solo se permiten archivos PDF.");
+                            return View(machine);
                         }
                     }
+                    docUrls = await FileService.SaveDocAsync(machine.Documentations.ToList(), "documentation/machines");
                 }
+
 
                 var newMachine = new Machine
                 {
@@ -154,7 +147,9 @@ namespace Control_Machine_Sistem.Controllers
             {
                 return NotFound();
             }
-            var machine = await _context.Machines.FindAsync(id);
+            var machine = await _context.Machines
+            .Include(m => m.Customer)
+            .FirstOrDefaultAsync(m => m.Id == id);
 
             if (machine == null)
             {
@@ -162,6 +157,7 @@ namespace Control_Machine_Sistem.Controllers
             }
             ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "FullName", machine.CustomerId);
             ViewData["ModelId"] = new SelectList(_context.Models, "Id", "Name", machine.ModelId);
+            ViewBag.CustomerName = machine.Customer?.FullName;
             return View(machine);
         }
 
@@ -170,7 +166,7 @@ namespace Control_Machine_Sistem.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.     
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,WarrantyExpirationDate")] Machine machine, List<string> ExistingDocs, List<IFormFile> Documentations)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,WarrantyExpirationDate")] Machine machine, List<string> ExistingDocs, List<IFormFile> Documentations, List<string> DeletedDocs)
         {
             if (id != machine.Id)
             {
@@ -214,27 +210,34 @@ namespace Control_Machine_Sistem.Controllers
 
                     List<string> docUrls = ExistingDocs ?? new List<string>();
 
-                   
-                    if (Documentations != null && Documentations.Any())
+                    if (DeletedDocs != null && DeletedDocs.Any())
                     {
-                        string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "documentations", "machines");
-                        Directory.CreateDirectory(uploadsFolder);
-
-                        foreach (var documentation in Documentations)
+                        foreach (var url in DeletedDocs)
                         {
-                            if (documentation.Length > 0)
+                            var fileName = Path.GetFileName(url);
+                            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "documentation", "machines", fileName);
+
+                            if (System.IO.File.Exists(filePath))
                             {
-                                string uniqueFileName = $"{Guid.NewGuid()}_{documentation.FileName}";
-                                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                                {
-                                    await documentation.CopyToAsync(fileStream);
-                                }
-
-                                docUrls.Add($"/documentations/machines/{uniqueFileName}");
+                                System.IO.File.Delete(filePath);
                             }
                         }
+
+                        docUrls = docUrls.Except(DeletedDocs).ToList();
+                    }
+
+                    if (Documentations != null && Documentations.Any())
+                    {
+                        foreach (var document in Documentations)
+                        {
+                            var fileExtension = Path.GetExtension(document.FileName).ToLower();
+                            if (fileExtension != ".pdf")
+                            {
+                                ModelState.AddModelError("Manuals", "Solo se permiten archivos PDF.");
+                                return View(machine);
+                            }
+                        }
+                        docUrls.AddRange(await FileService.SaveDocAsync(Documentations));
                     }
 
                     existingMachine.DocUrls = docUrls;
@@ -301,6 +304,28 @@ namespace Control_Machine_Sistem.Controllers
         private bool MachineExists(int id)
         {
             return _context.Machines.Any(e => e.Id == id);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetCustomers(string term)
+        {
+            if (string.IsNullOrEmpty(term))
+            {
+                return Json(new List<object>());
+            }
+
+            var customers = await _context.Customers
+                                          .Where(c => c.Name.ToLower().Contains(term.ToLower()))
+                                          .Select(c => new
+                                          {
+                                              id = c.Id,
+                                              text = c.Name + " " + c.LastName
+                                          })
+                                          .Take(10)
+                                          .ToListAsync();
+
+            Console.WriteLine($"Clientes encontrados: {customers.Count}");
+            return Json(customers);
         }
 
     }

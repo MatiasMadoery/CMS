@@ -7,7 +7,7 @@ namespace Control_Machine_Sistem.Models
     {
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "El campo Modelo es obligatorio.")]
         [Display(Name = "Modelo")]
         public string? Name { get; set; }
 

@@ -6,6 +6,10 @@
 
 <h1 class="mb-4">Clientes</h1>
 
+<div class="mb-3">
+    <a asp-action="ImportExcel" class="btn btn-primary">Importar Excel</a>
+</div>
+
 <!-- Search form -->
 <form method="get" id="filter-form" class="mb-4">
     <div class="row">
@@ -45,7 +49,9 @@ else
                     <td>@Html.DisplayFor(modelItem => item.Name)</td>
                     <td>@Html.DisplayFor(modelItem => item.LastName)</td>
                     <td>
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Detalle</a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Detalle</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Editar</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Eliminar</a>
                     </td>
                 </tr>
             }

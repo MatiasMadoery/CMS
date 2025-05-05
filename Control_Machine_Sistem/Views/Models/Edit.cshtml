@@ -39,7 +39,7 @@
                                         <input type="hidden" name="ExistingManuals" value="@Model.ManualUrls[i]" />
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-danger btn-sm" onclick="removeFile(@i)">Eliminar</button>
+                                        <button type="button" class="btn btn-danger btn-sm"  onclick="removeFile(this)">Eliminar</button>
                                     </td>
                                 </tr>
                             }
@@ -88,12 +88,23 @@
             container.appendChild(document.createElement('br'));
         }
 
-        function removeFile(index) {
-            var row = document.querySelector(`#existingFiles tr:nth-child(${index + 1})`);
+        function removeFile(button) {
+            var row = button.closest("tr");
             if (row) {
-                row.remove();
+                var url = row.querySelector("a").getAttribute("href");
+
+                var input = document.createElement("input");
+                input.type = "hidden";
+                input.name = "DeletedManuals";
+                input.value = url;
+
+                document.getElementById("uploadForm").appendChild(input);
+
+             row.remove();
             }
         }
+
+
     </script>
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
