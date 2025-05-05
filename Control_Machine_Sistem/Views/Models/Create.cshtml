@@ -12,12 +12,24 @@
     <div class="col-md-4">
         <form asp-action="Create" enctype="multipart/form-data" id="uploadForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
+            <div class="form-group">
+                <label asp-for="CategoryId" class="control-label">Categoría</label>
+                <div class="d-flex">
+                    <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-control-sm me-2">
+                        <option value="">Selecciona una categoría</option>
+                    </select>
+                     <a asp-action="Create" asp-controller="Categories" class="btn btn-success btn-sm" target="_blank">
+                        Crear categoría
+                    </a>
+                </div>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+            <br />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
+            </div>          
             <br />
             <div id="fileUploadContainer">
                 <div class="form-group">

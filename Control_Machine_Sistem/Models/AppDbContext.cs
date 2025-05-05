@@ -30,12 +30,20 @@ namespace Control_Machine_Sistem.Models
                 .HasForeignKey(oh => oh.MachineId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Model>()
+                .HasOne(m => m.Category)
+                .WithMany(c => c.Models)
+                .HasForeignKey(m => m.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
         public DbSet<Customer> Customers{ get; set; } = default!;
         public DbSet<Machine> Machines { get; set; } = default!;        
-        public DbSet<Model> Models { get; set; } = default!;      
+        public DbSet<Model> Models { get; set; } = default!;
+        public DbSet<Category> Categories { get; set; } = default!;
         public DbSet<User> Users { get; set; } = default!; 
         public DbSet<OwnerHistory> OwnerHistories { get; set; } = default!;
+        
 
     }
 }

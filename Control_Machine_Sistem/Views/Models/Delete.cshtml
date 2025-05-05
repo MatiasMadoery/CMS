@@ -1,7 +1,7 @@
 ﻿@model Control_Machine_Sistem.Models.Model
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Eliminar";
 }
 
 <h1>Eliminar</h1>
@@ -9,14 +9,19 @@
 <div>
     <hr />
     <br />
-    <dl class="row">        
+    <dl class="row">   
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Category!.Name)
+        </dd>
         <dt class="col-sm-2">           
             @Html.DisplayNameFor(model => model.Name)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
-
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ManualUrls)  
         </dt>

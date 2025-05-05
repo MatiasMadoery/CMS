@@ -22,6 +22,23 @@ namespace Control_Machine_Sistem.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Control_Machine_Sistem.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("Control_Machine_Sistem.Models.Customer", b =>
                 {
                     b.Property<int>("Id")
@@ -112,6 +129,9 @@ namespace Control_Machine_Sistem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
                     b.PrimitiveCollection<string>("ManualUrls")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -121,6 +141,8 @@ namespace Control_Machine_Sistem.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Models");
                 });
@@ -158,15 +180,21 @@ namespace Control_Machine_Sistem.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Rol")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -191,6 +219,17 @@ namespace Control_Machine_Sistem.Migrations
                     b.Navigation("Model");
                 });
 
+            modelBuilder.Entity("Control_Machine_Sistem.Models.Model", b =>
+                {
+                    b.HasOne("Control_Machine_Sistem.Models.Category", "Category")
+                        .WithMany("Models")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("Control_Machine_Sistem.Models.OwnerHistory", b =>
                 {
                     b.HasOne("Control_Machine_Sistem.Models.Machine", "Machine")
@@ -200,6 +239,11 @@ namespace Control_Machine_Sistem.Migrations
                         .IsRequired();
 
                     b.Navigation("Machine");
+                });
+
+            modelBuilder.Entity("Control_Machine_Sistem.Models.Category", b =>
+                {
+                    b.Navigation("Models");
                 });
 
             modelBuilder.Entity("Control_Machine_Sistem.Models.Customer", b =>

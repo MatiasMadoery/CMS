@@ -5,7 +5,26 @@
 }
 
 <h1 class="mb-4">Modelos</h1>
-
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex">
+        <form asp-action="Index" method="get" class="d-flex">
+            <select name="categoryId" class="form-control form-control me-4">
+                <option value="">Filtrar por categoría</option>
+                @foreach (var category in ViewBag.Categories)
+                {
+                    <option value="@category.Value" selected="@(category.Value == ViewBag.SelectedCategory?.ToString())">
+                        @category.Text
+                    </option>
+                }
+            </select>
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+        </form>
+    </div>
+    <div>       
+        <a asp-action="Index" asp-controller="Categories" class="btn btn-warning">ABM de Categorías</a>
+    </div>
+</div>
+<br />
 <div class="mb-3">
     <a asp-action="Create" class="btn btn-success">Cargar nuevo modelo</a>
 </div>
@@ -15,14 +34,16 @@
         <thead class="table-light">
             <tr>
                 <th>@Html.DisplayNameFor(model => model.Elements.First().Name)</th>
-                <th>Manuales</th>
-            </tr>
-        </thead>
+                <th>@Html.DisplayNameFor(model => model.Elements.First().Category)</th>
+                <th>Manuales</th>               
+            </tr>       
+    </thead>
         <tbody>
         @foreach (var item in Model.Elements)
         {
             <tr>
                 <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.Category!.Name)</td>
                 <td>
                     @if (item.ManualUrls != null && item.ManualUrls.Any())
                     {
