@@ -35,7 +35,8 @@
             <tr>
                 <th>@Html.DisplayNameFor(model => model.Elements.First().Name)</th>
                 <th>@Html.DisplayNameFor(model => model.Elements.First().Category)</th>
-                <th>Manuales</th>               
+                <th>Manuales</th>
+                <th>Kits de Repuestos</th>
             </tr>       
     </thead>
         <tbody>
@@ -59,6 +60,23 @@
                     else
                     {
                         <span>Sin manuales asociados </span>
+                    }
+                </td>
+                <td>
+                    @if (item.SpareKitsUrls != null && item.SpareKitsUrls.Any())
+                    {
+                        <ul>
+                            @foreach (var spareKit in item.SpareKitsUrls)
+                            {
+                                <li class="manual-name" data-url="@spareKit">
+                                    <a href="@spareKit" download>@spareKit</a>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <span>Sin kits de repuestos asociados </span>
                     }
                 </td>
                 <td>

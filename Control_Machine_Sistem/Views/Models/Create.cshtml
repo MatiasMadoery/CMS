@@ -40,7 +40,18 @@
                 </div>
             </div>            
             <div class="form-group">
-                <button type="button" class="btn btn-primary" onclick="addMoreFiles()">Agregar otro archivo</button>
+                <button type="button" class="btn btn-primary" onclick="addMoreManuals()">Agregar otro archivo</button>
+            </div>
+            <div id="fileUploadContainer2">
+                <div class="form-group">
+                    <label asp-for="SpareKits" class="control-label"></label>
+                    <input type="file" name="SpareKits" class="form-control" />
+                    <span asp-validation-for="SpareKits" class="text-danger"></span>
+                    <br />
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="addMoreSpareKits()">Agregar otro archivo</button>
             </div>
             <br />
             <br />
@@ -54,7 +65,7 @@
 
 @section Scripts {
     <script>
-        function addMoreFiles() {
+        function addMoreManuals() {
             var container = document.getElementById('fileUploadContainer');
             var input = document.createElement('input');
             input.type = 'file';
@@ -63,6 +74,18 @@
             container.appendChild(input);
             container.appendChild(document.createElement('br'));
         }       
+    </script>
+
+    <script>
+        function addMoreSpareKits() {
+            var container = document.getElementById('fileUploadContainer2');
+            var input = document.createElement('input');
+            input.type = 'file';
+            input.name = 'SpareKits';
+            input.className = 'form-control';
+            container.appendChild(input);
+            container.appendChild(document.createElement('br'));
+        }
     </script>
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

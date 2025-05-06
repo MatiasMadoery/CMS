@@ -6,6 +6,7 @@ using System.Reflection.PortableExecutable;
 using NPOI.OpenXml4Net.OPC.Internal;
 using Control_Machine_Sistem.Services;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http.Metadata;
 
 
 namespace Control_Machine_Sistem.Controllers
@@ -77,11 +78,11 @@ namespace Control_Machine_Sistem.Controllers
         // POST: Models/Create     
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Manuals,CategoryId")] Model model)
+        public async Task<IActionResult> Create([Bind("Id,Name,Manuals,SpareKits,CategoryId")] Model model)
         {
             if (ModelState.IsValid)
             {
-
+                List<string> spareKitsUrls = new List<string>();
                 List<string> manualUrls = new List<string>();
                 if (model.Manuals != null && model.Manuals.Any())
                 {
@@ -97,11 +98,26 @@ namespace Control_Machine_Sistem.Controllers
                     manualUrls = await FileService.SaveManualsAsync((List<IFormFile>)model.Manuals);
                 }
 
+                if (model.SpareKits != null && model.SpareKits.Any())
+                {
+                    foreach (var spareKit in model.SpareKits)
+                    {
+                        var fileExtension = Path.GetExtension(spareKit.FileName).ToLower();
+                        if (fileExtension != ".pdf")
+                        {
+                            ModelState.AddModelError("SpareKits", "Solo se permiten archivos PDF.");
+                            return View(model);
+                        }
+                    }
+                    spareKitsUrls = await FileService.SaveSpareKitsAsync((List<IFormFile>)model.SpareKits);
+                }
+
 
                 var newModel = new Model
                 {
                     Name = model.Name,
                     ManualUrls = manualUrls,
+                    SpareKitsUrls = spareKitsUrls,
                     CategoryId = model.CategoryId
                 };
 
@@ -142,7 +158,7 @@ namespace Control_Machine_Sistem.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,CategoryId")] Model model, List<string> ExistingManuals, List<IFormFile> Manuals, List<string> DeletedManuals)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,CategoryId")] Model model, List<string> ExistingManuals, List<IFormFile> Manuals, List<string> DeletedManuals, List<string>ExistingSpareKits, List<IFormFile>SpareKits, List<string>DeletedSpareKits)
 
         {
             if (id != model.Id)
@@ -165,6 +181,7 @@ namespace Control_Machine_Sistem.Controllers
                     existingModel.CategoryId = model.CategoryId;
 
                     List<string> manualUrls = ExistingManuals ?? new List<string>();
+                    List<string> spareKitsUrls = ExistingSpareKits ?? new List<string>();
 
                     if (DeletedManuals != null && DeletedManuals.Any())
                     {
@@ -183,6 +200,23 @@ namespace Control_Machine_Sistem.Controllers
                         manualUrls = manualUrls.Except(DeletedManuals).ToList();
                     }
 
+                    if (DeletedSpareKits != null && DeletedSpareKits.Any())
+                    {
+                        foreach (var url in DeletedSpareKits)
+                        {
+                            var fileName = Path.GetFileName(url);
+                            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "documentation", "spareKits", fileName);
+
+                            if (System.IO.File.Exists(filePath))
+                            {
+                                System.IO.File.Delete(filePath);
+                            }
+                        }
+
+
+                        spareKitsUrls = spareKitsUrls.Except(DeletedSpareKits).ToList();
+                    }
+
                     if (Manuals != null && Manuals.Any())
                     {
                         foreach (var manual in Manuals)
@@ -198,7 +232,23 @@ namespace Control_Machine_Sistem.Controllers
 
                     }
 
+                    if (SpareKits != null && SpareKits.Any())
+                    {
+                        foreach (var spareKit in SpareKits)
+                        {
+                            var fileExtension = Path.GetExtension(spareKit.FileName).ToLower();
+                            if (fileExtension != ".pdf")
+                            {
+                                ModelState.AddModelError("SpareKits", "Solo se permiten archivos PDF.");
+                                return View(model);
+                            }
+                        }
+                        spareKitsUrls.AddRange(await FileService.SaveSpareKitsAsync(SpareKits));
+
+                    }
+
                     existingModel.ManualUrls = manualUrls;
+                    existingModel.SpareKitsUrls = spareKitsUrls;
 
                     _context.Update(existingModel);
                     await _context.SaveChangesAsync();
