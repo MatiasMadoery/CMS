@@ -99,13 +99,4 @@
     <a asp-action="Delete" asp-route-id="@Model?.Id" class="btn btn-danger">Eliminar</a>
 </div>
 
-<script src="~/js/cleanNameFile.js"></script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll(".document-name a").forEach(function (element) {
-            const originalUrl = element.getAttribute("href");
-            element.textContent = getCleanFileName(originalUrl);
-        });
-    });
-</script>
+<script src="~/js/views.js"></script>

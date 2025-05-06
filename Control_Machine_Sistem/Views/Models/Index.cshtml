@@ -68,7 +68,7 @@
                         <ul>
                             @foreach (var spareKit in item.SpareKitsUrls)
                             {
-                                <li class="manual-name" data-url="@spareKit">
+                                <li class="spareKit-name" data-url="@spareKit">
                                     <a href="@spareKit" download>@spareKit</a>
                                 </li>
                             }
@@ -118,13 +118,4 @@
 }
 
 
-<script src="~/js/cleanNameFile.js"></script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll(".manual-name a").forEach(function (element) {
-            const originalUrl = element.getAttribute("href");
-            element.textContent = getCleanFileName(originalUrl);
-        });
-    });
-</script> 
+<script src="~/js/views.js"></script>

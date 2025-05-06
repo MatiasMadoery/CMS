@@ -54,7 +54,7 @@
                 <ul>
                     @foreach (var doc in Model.DocUrls)
                     {
-                        <li class="doc-name" data-url="@doc">
+                        <li class="document-name" data-url="@doc">
                             <a href="@doc" download>@doc</a>
                         </li>
                     }
@@ -74,13 +74,4 @@
     </form>
 </div>
 
-<script src="~/js/cleanNameFile.js"></script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll(".doc-name a").forEach(function (element) {
-            const originalUrl = element.getAttribute("href");
-            element.textContent = getCleanFileName(originalUrl);
-        });
-    });
-</script>
+<script src="~/js/views.js"></script>
