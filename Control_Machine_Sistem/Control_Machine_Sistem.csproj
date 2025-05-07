@@ -21,8 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\documentations\machines\" />
-    <Folder Include="wwwroot\documentations\manuals\" />
     <Folder Include="wwwroot\img\images\" />
   </ItemGroup>
 
