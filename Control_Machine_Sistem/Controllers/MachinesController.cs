@@ -16,7 +16,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Machines
-        public async Task<IActionResult> Index(string searchString, int page = 1, int pageSize = 5)
+        public async Task<IActionResult> Index(string searchString,int? categoryId, int page = 1, int pageSize = 5)
         {
             var machine = _context.Machines!
                           .Include(m => m.Customer)
@@ -28,6 +28,12 @@ namespace Control_Machine_Sistem.Controllers
             {
                 machine = machine.Where(s => s.Customer!.Name!.Contains(searchString) || s.Customer.LastName!.Contains(searchString) ||
                 s.Model!.Name!.Contains(searchString));
+            }
+
+            //Filter by category
+            if (categoryId.HasValue && categoryId.Value > 0)
+            {
+                machine = machine.Where(s => s.Model!.CategoryId == categoryId.Value);
             }
 
             // Get total machines 
@@ -44,6 +50,10 @@ namespace Control_Machine_Sistem.Controllers
 
             //To maintain the value of the lookup field when the user changes pages
             ViewData["searchString"] = searchString;
+            ViewData["categoryId"] = categoryId;
+
+            ViewBag.Categories = new SelectList(_context.Categories.ToList(), "Id" , "Name", categoryId);
+
             return View(pager);
         }  
 
