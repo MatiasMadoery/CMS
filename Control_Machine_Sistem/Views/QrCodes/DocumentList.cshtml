@@ -23,10 +23,10 @@
             <ul class="doc-list">
                 @foreach (var doc in Model)
                 {
-                    var fileUrl = Url.Content("~/documentations/machines/" + doc.OriginalName);
+                    var fileUrl = Url.Content("~/documentation/machines/" + doc.OriginalName);
                     <li class="doc-item">
                         Descargar:
-                        <a href="@fileUrl" target="_blank" class="doc-link">
+                        <a href="@Url.Action("DownloadDocument", "QrCodes", new { fileName = doc.OriginalName })" target="_blank" class="manual-link">
                             @doc.DisplayName
                         </a>
                     </li>

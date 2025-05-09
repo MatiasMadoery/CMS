@@ -23,10 +23,10 @@
             <ul class="manual-list">
                 @foreach (var manual in Model)
                 {
-                    var fileUrl = Url.Content("~/manuals/models/" + manual.OriginalName);
+                    var fileUrl = Url.Content("~/documentation/manuals/" + manual.OriginalName);
                     <li class="manual-item">
                         Descargar:
-                        <a href="@fileUrl" target="_blank" class="manual-link">
+                        <a href="@Url.Action("DownloadManual", "QrCodes", new { fileName = manual.OriginalName })" target="_blank" class="manual-link">
                             @manual.DisplayName
                         </a>
                     </li>

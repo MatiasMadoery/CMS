@@ -217,5 +217,36 @@ namespace Control_Machine_Sistem.Controllers
             return View("DocumentList", documents);
         }
 
+        public IActionResult DownloadManual(string fileName)
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "documentation", "manuals", fileName);
+
+            if (!System.IO.File.Exists(path))
+            {
+                Console.WriteLine($"Archivo no encontrado en la ruta: {path}");
+                return NotFound("Archivo no encontrado");
+            }
+
+            var contenido = System.IO.File.ReadAllBytes(path);
+
+            return File(contenido, "application/pdf", fileName);
+        }
+
+        public IActionResult DownloadDocument(string fileName)
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "documentation", "machines", fileName);
+
+            if (!System.IO.File.Exists(path))
+            {
+                Console.WriteLine($"Archivo no encontrado en la ruta: {path}");
+                return NotFound("Archivo no encontrado");
+            }
+
+            var contenido = System.IO.File.ReadAllBytes(path);
+
+            return File(contenido, "application/pdf", fileName);
+        }
+
+
     }
 }

@@ -63,7 +63,7 @@ app.Use(async (context, next) =>
     // Activa el filtro XSS del navegador
     context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
     // Política de seguridad para la carga de contenido (ajústala según tus necesidades)
-    context.Response.Headers.Append("Content-Security-Policy", "default-src 'self' https://cdnjs.cloudflare.com https://kit.fontawesome.com; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://kit.fontawesome.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com");
+    //context.Response.Headers.Append("Content-Security-Policy", "default-src 'self' https://cdnjs.cloudflare.com https://kit.fontawesome.com; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://kit.fontawesome.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com");
     // Política para el Referer
     context.Response.Headers.Append("Referrer-Policy", "no-referrer");
     await next();
