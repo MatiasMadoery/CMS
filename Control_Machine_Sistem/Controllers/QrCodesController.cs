@@ -44,6 +44,7 @@ namespace Control_Machine_Sistem.Controllers
 
             var qrContentUrl = Url.Action("Details", "QrCodes", new { machineId }, Request.Scheme);
 
+
             var qrImageBase64 = GenerateQrCodeAsBase64(qrContentUrl!);
 
             var model = new QrCode
@@ -164,12 +165,20 @@ namespace Control_Machine_Sistem.Controllers
                 ? string.Join(", ", docUrls)
                 : "No hay documentación disponible";
 
+            var spareKitUrls = machine.Model.SpareKitsUrls ?? new List<string>();
+
+            var spareKitUrl = spareKitUrls.Any()
+                ? string.Join(",", spareKitUrls)
+                : "No hay repuestos disponibles";
+
+
             var model = new QrCode
             {
                 ClientName = machine.Customer.FullName,
                 MachineModel = machine.Model.Name,
                 ManualUrl = manualUrl,
                 DocUrl = docUrl,
+                SpareKitsUrl = spareKitUrl,
                 DeliveryDate = machine.DeliveryDate,                
             };
 
@@ -177,25 +186,33 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // Acción para mostrar los manuales
-        public IActionResult ManualList(string urls)
+        public IActionResult ManualList(string manualUrls, string spareKitUrls)
         {
-            var urlArray = urls.Split(',');
+            var manuals = (manualUrls ?? "")
+                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(url => new FileDownloadViewModel
+                {
+                    OriginalName = Path.GetFileName(url),
+                    DisplayName = Path.GetFileName(url).Split('_').Last()
+                }).ToList();
 
-            if (!urlArray.Any())
+            var spareKits = (spareKitUrls ?? "")
+                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(url => new FileDownloadViewModel
+                {
+                    OriginalName = Path.GetFileName(url),
+                    DisplayName = Path.GetFileName(url).Split('_').Last()
+                }).ToList();
+
+            var model = new ModelDownloadsViewModel
             {
-                return NotFound();
-            }
+                Manuals = manuals,
+                SpareKits = spareKits
+            };
 
-            var manuals = urlArray.Select(url => new ManualViewModel
-            {
-
-                OriginalName = Path.GetFileName(url),
-
-                DisplayName = Path.GetFileName(url).Split('_').Last()
-            }).ToList();
-
-            return View("ManualList", manuals);
+            return View("ManualList", model);
         }
+
 
         public IActionResult DocumentList(string urls)
         {
@@ -235,6 +252,21 @@ namespace Control_Machine_Sistem.Controllers
         public IActionResult DownloadDocument(string fileName)
         {
             var path = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "documentation", "machines", fileName);
+
+            if (!System.IO.File.Exists(path))
+            {
+                Console.WriteLine($"Archivo no encontrado en la ruta: {path}");
+                return NotFound("Archivo no encontrado");
+            }
+
+            var contenido = System.IO.File.ReadAllBytes(path);
+
+            return File(contenido, "application/pdf", fileName);
+        }
+
+        public IActionResult DownloadSpareKit(string fileName)
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "documentation", "spareKits", fileName);
 
             if (!System.IO.File.Exists(path))
             {
