@@ -15,6 +15,9 @@ namespace Control_Machine_Sistem.Models
         [Display(Name = "Manuales")]
         public IEnumerable<IFormFile>? Manuals { get; set; }
 
+        [NotMapped]
+        [Display(Name = "Kit de Repuestos")]
+        public IEnumerable<IFormFile>? SpareKits { get; set; }
         [Required]
         public int? CategoryId { get; set; }
         [Display(Name = "Categoría")]
@@ -22,6 +25,7 @@ namespace Control_Machine_Sistem.Models
 
 
         public List<string> ManualUrls { get; set; } = new List<string>();
+        public List<string> SpareKitsUrls { get; set; } = new List<string>();
         public ICollection<Machine>? Machines { get; set; } = new List<Machine>();
 
     }

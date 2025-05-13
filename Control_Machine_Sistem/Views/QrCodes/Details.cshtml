@@ -24,7 +24,7 @@
             <h4>Modelo de Máquina: @Model.MachineModel</h4>
             <h4>Fecha de Entrega: @Model.DeliveryDate?.ToString("dd/MM/yyyy")</h4>
 
-            <a href="@Url.Action("ManualList", "QrCodes", new { urls = Model.ManualUrl })" class="btn">Descargar Manuales</a>
+            <a href="@Url.Action("ManualList", "QrCodes", new { manualUrls = Model.ManualUrl, spareKitUrls = Model.SpareKitsUrl })" class="btn">Descargar Manuales</a>
             <a href="@Url.Action("DocumentList", "QrCodes", new { urls = Model.DocUrl })" class="btn">Descargar Documentación</a>
             <a href="#" class="btn">Descargar Datos del Servicio Técnico</a>
         </div>

@@ -28,7 +28,7 @@
             <div class="form-group">
                 <label>Manuales cargados</label>
                 <table class="table table-bordered">                   
-                    <tbody id="existingFiles">
+                    <tbody>
                         @if (Model.ManualUrls != null && Model.ManualUrls.Any())
                         {
                             @for (int i = 0; i < Model.ManualUrls.Count; i++)
@@ -39,7 +39,34 @@
                                         <input type="hidden" name="ExistingManuals" value="@Model.ManualUrls[i]" />
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-danger btn-sm"  onclick="removeFile(this)">Eliminar</button>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="removeExistingFile(this, 'DeletedManuals')">Eliminar</button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="2">No hay archivos cargados.</td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+                <label>Kits de Repuestos cargados</label>
+                <table class="table table-bordered">
+                    <tbody>
+                        @if (Model.SpareKitsUrls != null && Model.SpareKitsUrls.Any())
+                        {
+                            @for (int i = 0; i < Model.SpareKitsUrls.Count; i++)
+                            {
+                                <tr>
+                                    <td>
+                                        <a href="@Model.SpareKitsUrls[i]" target="_blank" class="spareKit-name">@Model.SpareKitsUrls[i]</a>
+                                        <input type="hidden" name="ExistingSpareKits" value="@Model.SpareKitsUrls[i]" />
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="removeExistingFile(this, 'DeletedSpareKits')">Eliminar</button>
                                     </td>
                                 </tr>
                             }
@@ -57,14 +84,25 @@
             <br />
             <div id="fileUploadContainer">
                 <div class="form-group">
-                    <label asp-for="Manuals" class="control-label">Agregar manuales</label>
-                    <input type="file" name="Manuals" class="form-control" multiple />
+                    <label asp-for="Manuals" class="control-label"></label>
+                    <input type="file" name="Manuals" class="form-control" />
                     <span asp-validation-for="Manuals" class="text-danger"></span>
                     <br />
                 </div>
-            </div>            
+            </div>
             <div class="form-group">
-                <button type="button" class="btn btn-primary" onclick="addMoreFiles()">Agregar otro archivo</button>
+                <button type="button" class="btn btn-primary" onclick="addMoreFiles('fileUploadContainer', 'Manuals')">Agregar otro archivo</button>
+            </div>
+            <div id="fileUploadContainer2">
+                <div class="form-group">
+                    <label asp-for="SpareKits" class="control-label"></label>
+                    <input type="file" name="SpareKits" class="form-control" />
+                    <span asp-validation-for="SpareKits" class="text-danger"></span>
+                    <br />
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="addMoreFiles('fileUploadContainer2', 'SpareKits')">Agregar otro archivo</button>
             </div>
             <br />
             <br />
@@ -77,48 +115,10 @@
 </div>
 
 @section Scripts {
-    <script>
-        function addMoreFiles() {
-            var container = document.getElementById('fileUploadContainer');
-            var input = document.createElement('input');
-            input.type = 'file';
-            input.name = 'Manuals';
-            input.className = 'form-control';
-            container.appendChild(input);
-            container.appendChild(document.createElement('br'));
-        }
 
-        function removeFile(button) {
-            var row = button.closest("tr");
-            if (row) {
-                var url = row.querySelector("a").getAttribute("href");
+    <script src="~/js/views.js"></script>
 
-                var input = document.createElement("input");
-                input.type = "hidden";
-                input.name = "DeletedManuals";
-                input.value = url;
-
-                document.getElementById("uploadForm").appendChild(input);
-
-             row.remove();
-            }
-        }
-
-
-    </script>
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
-
-
-<script src="~/js/cleanNameFile.js"></script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll(".manual-name").forEach(function (element) {
-            const originalUrl = element.getAttribute("href");
-            element.textContent = getCleanFileName(originalUrl);
-        });
-    });
-</script> 

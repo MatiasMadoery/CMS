@@ -1,5 +1,6 @@
 ﻿@using Control_Machine_Sistem.ViewModels
-@model List<ManualViewModel>
+@model Control_Machine_Sistem.ViewModels.ModelDownloadsViewModel
+
 
 @{
     Layout = null;    
@@ -21,13 +22,27 @@
         </div>
         <div class="card-body">
             <ul class="manual-list">
-                @foreach (var manual in Model)
+                @foreach (var manual in Model.Manuals)
                 {
-                    var fileUrl = Url.Content("~/manuals/models/" + manual.OriginalName);
+                    var fileUrl = Url.Content("~/documentation/manuals/" + manual.OriginalName);
                     <li class="manual-item">
                         Descargar:
-                        <a href="@fileUrl" target="_blank" class="manual-link">
+                        <a href="@Url.Action("DownloadManual", "QrCodes", new { fileName = manual.OriginalName })" target="_blank" class="manual-link">
                             @manual.DisplayName
+                        </a>
+                    </li>
+                }
+            </ul>
+            <div>
+                <h3>Kits de repuestos de la máquina</h3>
+            </div>
+            <ul class="manual-list">
+                @foreach (var kit in Model.SpareKits)
+                {
+                    <li class="manual-item">
+                        Descargar:
+                        <a href="@Url.Action("DownloadSpareKit", "QrCodes", new { fileName = kit.OriginalName })" target="_blank" class="manual-link">
+                            @kit.DisplayName
                         </a>
                     </li>
                 }

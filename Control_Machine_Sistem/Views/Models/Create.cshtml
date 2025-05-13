@@ -40,7 +40,18 @@
                 </div>
             </div>            
             <div class="form-group">
-                <button type="button" class="btn btn-primary" onclick="addMoreFiles()">Agregar otro archivo</button>
+                <button type="button" class="btn btn-primary" onclick="addMoreFiles('fileUploadContainer', 'Manuals')">Agregar otro archivo</button>
+            </div>
+            <div id="fileUploadContainer2">
+                <div class="form-group">
+                    <label asp-for="SpareKits" class="control-label"></label>
+                    <input type="file" name="SpareKits" class="form-control" />
+                    <span asp-validation-for="SpareKits" class="text-danger"></span>
+                    <br />
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="addMoreFiles('fileUploadContainer2', 'SpareKits')">Agregar otro archivo</button>
             </div>
             <br />
             <br />
@@ -54,8 +65,8 @@
 
 @section Scripts {
 
-    <script src="~/js/multipleFileUpload.js"></script>
-
+    <script src="~/js/views.js"></script>
+ 
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }

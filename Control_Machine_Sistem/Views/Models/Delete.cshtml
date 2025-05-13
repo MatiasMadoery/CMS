@@ -42,6 +42,28 @@
                 <span>No se encontraron manuales</span>
             }
         </dd>
+        <dt class="col-sm-2">
+            <br />
+            @Html.DisplayNameFor(model => model.SpareKitsUrls)
+        </dt>
+        <dd class="col-sm-10">
+            <br />
+            @if (Model.SpareKitsUrls != null && Model.SpareKitsUrls.Any())
+            {
+                <ul>
+                    @foreach (var spareKit in Model.SpareKitsUrls)
+                    {
+                        <li class="spareKit-name" data-url="@spareKit">
+                            <a href="@spareKit" download>@spareKit</a>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <span>No se encontraron kits de repuestos</span>
+            }
+        </dd>
     </dl>
     <br />
     <form asp-action="Delete">
@@ -53,14 +75,6 @@
     </form>
 </div>
 
-<!-- Referencia al archivo JS -->
-<script src="~/js/cleanNameFile.js"></script>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll(".manual-name a").forEach(function (element) {
-            const originalUrl = element.getAttribute("href");
-            element.textContent = getCleanFileName(originalUrl);
-        });
-    });
-</script>
+<script src="~/js/views.js"></script>
+
