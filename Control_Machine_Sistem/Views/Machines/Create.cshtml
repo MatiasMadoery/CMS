@@ -81,15 +81,7 @@
 
     <script src="~/js/select2.js"></script>
     <script src="~/js/site.js"></script>
-    <script src="~/js/views.js"></script>
-    @{
-            var input = document.createElement('input');
-            input.type = 'file';
-            input.name = 'Documentations';
-            input.className = 'form-control';
-            container.appendChild(input);
-            container.appendChild(document.createElement('br'));
-        }    
+    <script src="~/js/views.js"></script>  
   
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
