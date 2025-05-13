@@ -1,7 +1,7 @@
 ﻿@model Control_Machine_Sistem.Models.Machine
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Crear";
 }
 
 <h1>Crear</h1>
@@ -10,7 +10,8 @@
 <hr />
 <div class="row">
     <div class="col-md-6">
-        <form asp-action="Create" enctype="multipart/form-data" id="uploadForm">
+        <form asp-action="Create" method="post" enctype="multipart/form-data" id="uploadForm">
+            @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="CustomerId" class="control-label"></label>
@@ -19,8 +20,20 @@
                 </select>
             </div>
             <div class="form-group">
-                <label asp-for="ModelId" class="control-label"></label>
-                <select asp-for="ModelId" class="form-control" asp-items="ViewBag.ModelId"></select>
+                <label for="CategoryId">Categoría</label>
+                <select id="CategoryId" class="form-control">
+                    <option value="">Seleccione una categoría...</option>
+                    @foreach (var category in ViewBag.Categories)
+                    {
+                        <option value="@category.Value">@category.Text</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ModelId" class="control-label">Modelo</label>
+                <select asp-for="ModelId" id="ModelId" class="form-control">
+                    <option value="">Seleccione un modelo...</option>
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="ChasisNumber" class="control-label"></label>
@@ -65,15 +78,13 @@
 </div>
 
 @section Scripts {
-
-    <script src="~/js/select2.js"></script>
     <script src="~/js/site.js"></script>
     <script src="~/js/views.js"></script>
-    @{
+    <script src="~/js/machineCreateForm.js"></script>
+         
+   @{
+
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 
 }
-
-
-

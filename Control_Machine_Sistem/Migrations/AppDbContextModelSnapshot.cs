@@ -153,6 +153,36 @@ namespace Control_Machine_Sistem.Migrations
                     b.ToTable("Models");
                 });
 
+            modelBuilder.Entity("Control_Machine_Sistem.Models.OtherMaintenance", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("MachineId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Observations")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrderNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ServiceDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("WorkHours")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MachineId");
+
+                    b.ToTable("OtherMaintenances");
+                });
+
             modelBuilder.Entity("Control_Machine_Sistem.Models.OwnerHistory", b =>
                 {
                     b.Property<int>("Id")
@@ -175,6 +205,36 @@ namespace Control_Machine_Sistem.Migrations
                     b.HasIndex("MachineId");
 
                     b.ToTable("OwnerHistories");
+                });
+
+            modelBuilder.Entity("Control_Machine_Sistem.Models.Service", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("MachineId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Observations")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrderNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ServiceDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("WorkHours")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MachineId");
+
+                    b.ToTable("Services");
                 });
 
             modelBuilder.Entity("Control_Machine_Sistem.Models.User", b =>
@@ -238,6 +298,16 @@ namespace Control_Machine_Sistem.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("Control_Machine_Sistem.Models.OtherMaintenance", b =>
+                {
+                    b.HasOne("Control_Machine_Sistem.Models.Machine", "Machine")
+                        .WithMany("OtherMaintenances")
+                        .HasForeignKey("MachineId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Machine");
+                });
+
             modelBuilder.Entity("Control_Machine_Sistem.Models.OwnerHistory", b =>
                 {
                     b.HasOne("Control_Machine_Sistem.Models.Machine", "Machine")
@@ -245,6 +315,16 @@ namespace Control_Machine_Sistem.Migrations
                         .HasForeignKey("MachineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Machine");
+                });
+
+            modelBuilder.Entity("Control_Machine_Sistem.Models.Service", b =>
+                {
+                    b.HasOne("Control_Machine_Sistem.Models.Machine", "Machine")
+                        .WithMany("Services")
+                        .HasForeignKey("MachineId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Machine");
                 });
@@ -261,7 +341,11 @@ namespace Control_Machine_Sistem.Migrations
 
             modelBuilder.Entity("Control_Machine_Sistem.Models.Machine", b =>
                 {
+                    b.Navigation("OtherMaintenances");
+
                     b.Navigation("OwnerHistories");
+
+                    b.Navigation("Services");
                 });
 
             modelBuilder.Entity("Control_Machine_Sistem.Models.Model", b =>

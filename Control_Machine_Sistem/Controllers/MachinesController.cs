@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Control_Machine_Sistem.Models;
-using Control_Machine_Sistem.ViewModels;
-using System.Drawing.Printing;
 using Control_Machine_Sistem.Services;
 
 namespace Control_Machine_Sistem.Controllers
@@ -22,18 +16,24 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Machines
-        public async Task<IActionResult> Index(string searchString, int page = 1, int pageSize = 5)
+        public async Task<IActionResult> Index(string searchString,int? categoryId, int page = 1, int pageSize = 5)
         {
-            var machine = from m in _context.Machines!
+            var machine = _context.Machines!
                           .Include(m => m.Customer)
                           .Include(m => m.Model)
-                          select m;
+                          .AsQueryable();
 
             //Filter by search text if provided
             if (!String.IsNullOrEmpty(searchString))
             {
                 machine = machine.Where(s => s.Customer!.Name!.Contains(searchString) || s.Customer.LastName!.Contains(searchString) ||
                 s.Model!.Name!.Contains(searchString));
+            }
+
+            //Filter by category
+            if (categoryId.HasValue && categoryId.Value > 0)
+            {
+                machine = machine.Where(s => s.Model!.CategoryId == categoryId.Value);
             }
 
             // Get total machines 
@@ -50,8 +50,12 @@ namespace Control_Machine_Sistem.Controllers
 
             //To maintain the value of the lookup field when the user changes pages
             ViewData["searchString"] = searchString;
+            ViewData["categoryId"] = categoryId;
+
+            ViewBag.Categories = new SelectList(_context.Categories.ToList(), "Id" , "Name", categoryId);
+
             return View(pager);
-        }
+        }  
 
         // GET: Machines/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -77,30 +81,32 @@ namespace Control_Machine_Sistem.Controllers
         // GET: Machines/Create
         public IActionResult Create()
         {
-            var customers = _context.Customers.Select(c => new
-            {
-                Id = c.Id,
-                FullName = c.FullName
-            }).ToList();
-            ViewData["CustomerId"] = new SelectList(customers, "Id", "FullName");
-
-            var models = _context.Models.Select(m => new
-            {
-                Id = m.Id,
-                Name = m.Name
-            }).ToList();
-            ViewData["ModelId"] = new SelectList(models, "Id", "Name");
+            ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
+            ViewBag.ModelId = new SelectList(new List<Model>(), "Id", "Name");
+            ViewBag.Customers = new SelectList(_context.Customers.Select(c => new { c.Id, FullName = c.Name + " " + c.LastName }), "Id", "FullName");
 
             return View();
         }
 
-        // POST: Machines/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.    
+        //Metodo para devolver modelos por categoria
+        [HttpGet]
+        public async Task<JsonResult> GetModelsByCategory(int categoryId)
+        {
+            var models = await _context.Models
+                                       .Where(m => m.CategoryId == categoryId)
+                                       .Select(m => new { id = m.Id, name = m.Name })
+                                       .ToListAsync();
+
+            return Json(models);
+        }
+
+
+        // POST: Machines/Create           
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,WarrantyExpirationDate,Documentations")] Machine machine)
-        {
+        {          
+
             if (ModelState.IsValid)
             {
                 List<string> docUrls = new List<string>();
@@ -134,8 +140,10 @@ namespace Control_Machine_Sistem.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "FullName", machine.CustomerId);
-            ViewData["ModelId"] = new SelectList(_context.Models, "Id", "Name", machine.ModelId);
+
+            ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
+            ViewBag.ModelId = new SelectList(new List<Model>(), "Id", "Name");
+            ViewBag.Customers = new SelectList(_context.Customers.Select(c => new { c.Id, FullName = c.Name + " " + c.LastName }), "Id", "FullName");
             return View(machine);
         }
 
@@ -315,7 +323,7 @@ namespace Control_Machine_Sistem.Controllers
             }
 
             var customers = await _context.Customers
-                                          .Where(c => c.Name.ToLower().Contains(term.ToLower()))
+                                          .Where(c => c.Name!.ToLower().Contains(term.ToLower()))
                                           .Select(c => new
                                           {
                                               id = c.Id,

@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Control_Machine_Sistem.ViewModels.MaintenanceIndexViewModel>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Cliente</th>
+            <th>Modelo</th>            
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.CustomerName</td>
+                <td>@item.MachineModel</td>               
+                <td>
+               
+                    <a class="btn btn-primary"
+                       asp-controller="Services"
+                       asp-action="Index"
+                       asp-route-machineId="@item.MachineId">
+                        Services
+                    </a>
+                   
+                    <a class="btn btn-primary"
+                       asp-controller="OtherMaintenances"
+                       asp-action="Index"
+                       asp-route-machineId="@item.MachineId">
+                        Otros mantenimientos
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

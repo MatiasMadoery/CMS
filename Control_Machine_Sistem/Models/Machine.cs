@@ -37,5 +37,9 @@ namespace Control_Machine_Sistem.Models
 
         public ICollection<OwnerHistory>? OwnerHistories { get; set; }
 
+        public ICollection<Service>? Services { get; set; }
+
+        public ICollection<OtherMaintenance>? OtherMaintenances { get; set; }
+
     }
 }

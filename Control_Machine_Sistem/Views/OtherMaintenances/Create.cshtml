@@ -1,0 +1,50 @@
+﻿@model Control_Machine_Sistem.Models.OtherMaintenance
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h4>Crear Mantenimiento</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- Campo oculto para MachineId; no es necesario establecer el atributo value manualmente -->
+            <input type="hidden" asp-for="MachineId" />
+
+            <div class="form-group">
+                <label asp-for="WorkHours" class="control-label"></label>
+                <input asp-for="WorkHours" class="form-control" />
+                <span asp-validation-for="WorkHours" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ServiceDate" class="control-label"></label>
+                <input asp-for="ServiceDate" class="form-control" />
+                <span asp-validation-for="ServiceDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OrderNumber" class="control-label"></label>
+                <input asp-for="OrderNumber" class="form-control" />
+                <span asp-validation-for="OrderNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Observations" class="control-label"></label>
+                <input asp-for="Observations" class="form-control" />
+                <span asp-validation-for="Observations" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Crear" class="btn btn-primary" /> |
+                <a class="btn btn-secondary" asp-action="Index" asp-route-machineId="@Model.MachineId">Volver a lista</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

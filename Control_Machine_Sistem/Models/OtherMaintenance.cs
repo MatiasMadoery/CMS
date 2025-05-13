@@ -2,13 +2,13 @@
 
 namespace Control_Machine_Sistem.Models
 {
-    public class Service
+    public class OtherMaintenance
     {
         public int Id { get; set; }
         public int? MachineId { get; set; }
         public Machine? Machine { get; set; }
 
-        [Display(Name = "Service/Horas")]
+        [Display(Name = "Mantenimiento/Horas")]
         public string? WorkHours { get; set; }
 
         [Display(Name = "Fecha")]

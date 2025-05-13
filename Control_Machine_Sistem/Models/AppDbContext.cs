@@ -24,6 +24,19 @@ namespace Control_Machine_Sistem.Models
                 .HasForeignKey(ac => ac.ModelId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Machine>()
+                .HasMany(m => m.Services)
+                .WithOne(s => s.Machine)
+                .HasForeignKey(s => s.MachineId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Machine>()
+                .HasMany(m => m.OtherMaintenances)
+                .WithOne(s => s.Machine)
+                .HasForeignKey(s => s.MachineId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
             modelBuilder.Entity<OwnerHistory>()
                 .HasOne(oh => oh.Machine)
                 .WithMany(m => m.OwnerHistories)
@@ -43,7 +56,8 @@ namespace Control_Machine_Sistem.Models
         public DbSet<Category> Categories { get; set; } = default!;
         public DbSet<User> Users { get; set; } = default!; 
         public DbSet<OwnerHistory> OwnerHistories { get; set; } = default!;
-        
+        public DbSet<Service> Services { get; set; } = default!;
+        public DbSet<OtherMaintenance> OtherMaintenances { get; set; } = default!;
 
     }
 }
