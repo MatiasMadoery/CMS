@@ -13,7 +13,11 @@
 
             <!-- Campo oculto para MachineId, ya que se está trabajando sobre una máquina en concreto -->
             <input type="hidden" asp-for="MachineId" />
-
+            <div class="form-group">
+                <label asp-for="ServiceHour" class="control-label"></label>
+                <input asp-for="ServiceHour" class="form-control" readonly />
+                <span asp-validation-for="ServiceHour" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="WorkHours" class="control-label"></label>
                 <input asp-for="WorkHours" class="form-control" />
@@ -35,14 +39,11 @@
                 <span asp-validation-for="Observations" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-success" /> |
+                <a class="btn btn-secondary" asp-action="Index" asp-route-machineId="@Model.MachineId">Volver a la lista</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>    
-    <a asp-action="Index" asp-route-machineId="@Model.MachineId">Volver a la lista</a>
 </div>
 
 @section Scripts {

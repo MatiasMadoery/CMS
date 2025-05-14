@@ -7,9 +7,11 @@ namespace Control_Machine_Sistem.Models
         public int Id { get; set; }
         public int? MachineId { get; set; }
         public Machine? Machine { get; set; }
+        [Display(Name = "Hora Programada")]
+        public int? ServiceHour { get; set; }
 
-        [Display(Name = "Service/Horas")]
-        public string? WorkHours { get; set; }
+        [Display(Name = "Horas Reales")]
+        public int? WorkHours { get; set; }
 
         [Display(Name = "Fecha")]
         public DateTime? ServiceDate { get; set; }
@@ -19,5 +21,6 @@ namespace Control_Machine_Sistem.Models
 
         [Display(Name = "Observaciones")]
         public string? Observations { get; set; }
+
     }
 }
