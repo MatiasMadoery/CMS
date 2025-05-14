@@ -9,7 +9,7 @@
 <h1>Otros mantenimientos</h1>
 
 <p>    
-    <a asp-action="Create" asp-route-machineId="@(contextMachineId)">Crear nuevo</a>
+    <a class="btn btn-success" asp-action="Create" asp-route-machineId="@(contextMachineId)">Crear nuevo</a>
 </p>
 <table class="table">
     <thead>
@@ -45,10 +45,10 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Observations)
                 </td>
-                <td>                    
-                    <a asp-action="Edit" asp-route-id="@item.Id" asp-route-machineId="@(contextMachineId ?? item.MachineId)">Editar</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id" asp-route-machineId="@(contextMachineId ?? item.MachineId)">Detalle</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id" asp-route-machineId="@(contextMachineId ?? item.MachineId)">Eliminar</a>
+                <td>
+                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id" asp-route-machineId="@(contextMachineId ?? item.MachineId)">Editar</a> |
+                    <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id" asp-route-machineId="@(contextMachineId ?? item.MachineId)">Detalle</a> |
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id" asp-route-machineId="@(contextMachineId ?? item.MachineId)">Eliminar</a>
                 </td>
             </tr>
         }

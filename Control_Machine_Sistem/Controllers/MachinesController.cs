@@ -82,7 +82,7 @@ namespace Control_Machine_Sistem.Controllers
         public IActionResult Create()
         {
             ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
-            ViewBag.ModelId = new SelectList(new List<Model>(), "Id", "Name"); // Vacío inicialmente
+            ViewBag.ModelId = new SelectList(new List<Model>(), "Id", "Name");
             ViewBag.Customers = new SelectList(_context.Customers.Select(c => new { c.Id, FullName = c.Name + " " + c.LastName }), "Id", "FullName");
 
             return View();
@@ -142,7 +142,7 @@ namespace Control_Machine_Sistem.Controllers
             }
 
             ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
-            ViewBag.ModelId = new SelectList(new List<Model>(), "Id", "Name"); // Vacío inicialmente
+            ViewBag.ModelId = new SelectList(new List<Model>(), "Id", "Name");
             ViewBag.Customers = new SelectList(_context.Customers.Select(c => new { c.Id, FullName = c.Name + " " + c.LastName }), "Id", "FullName");
             return View(machine);
         }

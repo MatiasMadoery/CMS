@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <Folder Include="App_Data\documentation\spareKits\" />
-    <Folder Include="App_Data\documentation\spareKits\" />
     <Folder Include="wwwroot\img\images\" />
   </ItemGroup>
 
