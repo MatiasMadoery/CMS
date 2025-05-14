@@ -44,4 +44,5 @@ function applyCleanFileNames() {
     });
 }
 
+
 document.addEventListener("DOMContentLoaded", applyCleanFileNames);

@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Control_Machine_Sistem.Models;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Control_Machine_Sistem.Models
 {

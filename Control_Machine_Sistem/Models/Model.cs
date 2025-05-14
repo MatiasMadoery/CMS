@@ -18,6 +18,7 @@ namespace Control_Machine_Sistem.Models
         [NotMapped]
         [Display(Name = "Kit de Repuestos")]
         public IEnumerable<IFormFile>? SpareKits { get; set; }
+
         [Required]
         public int? CategoryId { get; set; }
         [Display(Name = "Categoría")]
