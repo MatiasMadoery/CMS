@@ -51,23 +51,26 @@ namespace Control_Machine_Sistem.Controllers
             return View(service);
         }
 
-        // GET: Services/Create?machineId=...
-        public IActionResult Create(int? machineId)
-        {            
+        // GET: Services/Create?machineId=...&serviceHour=...
+        public IActionResult Create(int? machineId, int? serviceHour)
+        {
             var service = new Service();
+
             if (machineId.HasValue)
-            {
                 service.MachineId = machineId.Value;
-            }
-            
+
+            if (serviceHour.HasValue)
+                service.ServiceHour = serviceHour.Value;
+
             ViewData["MachineId"] = new SelectList(_context.Machines, "Id", "ChasisNumber", service.MachineId);
             return View(service);
         }
 
+
         // POST: Services/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,MachineId,WorkHours,ServiceDate,OrderNumber,Observations")] Service service, int? machineId)
+        public async Task<IActionResult> Create([Bind("Id,MachineId,WorkHours,RealHours,ServiceHour,ServiceDate,OrderNumber,Observations")] Service service, int? machineId)
         {
             if (ModelState.IsValid)
             {
@@ -93,16 +96,15 @@ namespace Control_Machine_Sistem.Controllers
             {
                 return NotFound();
             }
-            
-            ViewData["MachineId"] = new SelectList(_context.Machines, "Id", "ChasisNumber", service.MachineId);
-            ViewData["MachineContext"] = machineId; 
+
+            ViewData["MachineId"] = machineId ?? service.MachineId;
             return View(service);
         }
 
         // POST: Services/Edit/5?machineId=...
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,MachineId,WorkHours,ServiceDate,OrderNumber,Observations")] Service service, int? machineId)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,MachineId,WorkHours,RealHours,ServiceDate,OrderNumber,Observations")] Service service, int? machineId)
         {
             if (id != service.Id)
             {

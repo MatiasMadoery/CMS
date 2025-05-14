@@ -227,8 +227,11 @@ namespace Control_Machine_Sistem.Migrations
                     b.Property<DateTime?>("ServiceDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("WorkHours")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("ServiceHour")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("WorkHours")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
