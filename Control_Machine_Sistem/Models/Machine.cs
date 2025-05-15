@@ -32,6 +32,7 @@ namespace Control_Machine_Sistem.Models
         [NotMapped]
         [Display(Name = "Documentación")]
         public IEnumerable<IFormFile>? Documentations { get; set; }
+
         [Display(Name = "Documentación")]
         public List<string> DocUrls { get; set; } = new List<string>();
 

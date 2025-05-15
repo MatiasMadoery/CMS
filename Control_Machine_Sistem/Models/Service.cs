@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Control_Machine_Sistem.Models
 {
@@ -7,6 +8,7 @@ namespace Control_Machine_Sistem.Models
         public int Id { get; set; }
         public int? MachineId { get; set; }
         public Machine? Machine { get; set; }
+
         [Display(Name = "Hora Programada")]
         public int? ServiceHour { get; set; }
 
@@ -21,6 +23,13 @@ namespace Control_Machine_Sistem.Models
 
         [Display(Name = "Observaciones")]
         public string? Observations { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Planilla Service")]
+        public IEnumerable<IFormFile>? ServiceSheet { get; set; }
+
+        [Display(Name = "Planilla Service")]
+        public List<string> ServiceSheetUrls { get; set; } = new List<string>();
 
     }
 }

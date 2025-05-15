@@ -230,6 +230,10 @@ namespace Control_Machine_Sistem.Migrations
                     b.Property<int?>("ServiceHour")
                         .HasColumnType("int");
 
+                    b.PrimitiveCollection<string>("ServiceSheetUrls")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("WorkHours")
                         .HasColumnType("int");
 

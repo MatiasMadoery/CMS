@@ -1,22 +1,19 @@
 ﻿@model Control_Machine_Sistem.Models.Service
 
 @{
-    ViewData["Title"] = "Edit";
-    
-    var machineId = ViewData["MachineId"] ?? Model.MachineId;
+    ViewData["Title"] = "Editar Service";
 }
 
-<h1>Editar</h1>
-
-<h4>Service</h4>
+<h1>Editar Service</h1>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+    <div class="col-md-6">        
+        <form asp-action="Edit" enctype="multipart/form-data" id="uploadForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                     
             <input type="hidden" asp-for="Id" />
-            <!-- Campo oculto para MachineId, ya que el servicio se edita en el contexto de una máquina -->
             <input type="hidden" asp-for="MachineId" />
+            
             <div class="form-group">
                 <label asp-for="WorkHours" class="control-label"></label>
                 <input asp-for="WorkHours" class="form-control" />
@@ -36,17 +33,58 @@
                 <label asp-for="Observations" class="control-label"></label>
                 <input asp-for="Observations" class="form-control" />
                 <span asp-validation-for="Observations" class="text-danger"></span>
-            </div>
+            </div>            
+            <div class="form-group">
+                <label>Planillas cargadas</label>
+                <table class="table table-bordered">
+                    <tbody>
+                        @if (Model.ServiceSheetUrls != null && Model.ServiceSheetUrls.Any())
+                        {
+                            @for (int i = 0; i < Model.ServiceSheetUrls.Count; i++)
+                            {
+                                <tr>
+                                    <td>
+                                        <a href="@Model.ServiceSheetUrls[i]" target="_blank" class="document-name">
+                                            @System.IO.Path.GetFileName(Model.ServiceSheetUrls[i])
+                                        </a>                                        
+                                        <input type="hidden" name="ExistingServiceSheets" value="@Model.ServiceSheetUrls[i]" />
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="removeExistingFile(this, 'DeletedServiceSheetUrls')">Eliminar</button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="2">No hay planillas cargadas.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>            
+            <div class="form-group">
+                <label asp-for="ServiceSheet" class="control-label"></label>
+                <div id="fileUploadContainer">
+                    <input type="file" name="ServiceSheet" class="form-control" />
+                    <span asp-validation-for="ServiceSheet" class="text-danger"></span>
+                    <br />
+                </div>
+                <button type="button" class="btn btn-primary" onclick="addMoreFiles('fileUploadContainer', 'ServiceSheet')">Agregar otro archivo</button>
+            </div>            
+            <div id="deletedFilesContainer"></div>
+            <br />
             <div class="form-group">
                 <input type="submit" value="Guardar" class="btn btn-success" /> |
-                <a class="btn btn-secondary" asp-action="Index" asp-route-machineId="@machineId">Volver a la lista</a>
+                <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
             </div>
         </form>
     </div>
 </div>
 
-
 @section Scripts {
+    <script src="~/js/views.js"></script>
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }

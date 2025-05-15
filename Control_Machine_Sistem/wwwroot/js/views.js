@@ -42,7 +42,45 @@ function applyCleanFileNames() {
             }
         }
     });
+}    
+      
+function printDocument(url) {
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Error al obtener el PDF");
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            const blobUrl = URL.createObjectURL(blob);
+            const iframe = document.createElement("iframe");            
+            iframe.style.position = "absolute";
+            iframe.style.top = "-1000px";
+            iframe.style.left = "-1000px";
+            iframe.style.width = "0px";
+            iframe.style.height = "0px";
+            iframe.style.border = "none";
+            iframe.src = blobUrl;
+            document.body.appendChild(iframe);
+
+            iframe.onload = function () {
+                setTimeout(() => {
+                    try {
+                        iframe.contentWindow.focus();
+                        iframe.contentWindow.print();
+                    } catch (e) {
+                        console.error("Error al llamar al print:", e);
+                    }
+                    document.body.removeChild(iframe);
+                    URL.revokeObjectURL(blobUrl);
+                }, 500);
+            };
+        })
+        .catch(error => console.error("No se pudo obtener el PDF para imprimir:", error));
 }
 
-
+window.printDocument = printDocument;
 document.addEventListener("DOMContentLoaded", applyCleanFileNames);
+
+

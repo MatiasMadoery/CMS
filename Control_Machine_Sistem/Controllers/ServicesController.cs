@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Control_Machine_Sistem.Models;
 using System.Linq;
 using System.Threading.Tasks;
+using Control_Machine_Sistem.Services;
 
 namespace Control_Machine_Sistem.Controllers
 {
@@ -70,11 +71,37 @@ namespace Control_Machine_Sistem.Controllers
         // POST: Services/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,MachineId,WorkHours,RealHours,ServiceHour,ServiceDate,OrderNumber,Observations")] Service service, int? machineId)
+        public async Task<IActionResult> Create([Bind("Id,MachineId,WorkHours,RealHours,ServiceHour,ServiceDate,OrderNumber,Observations,ServiceSheet")] Service service, int? machineId)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(service);
+                List<string> serviceSheetUrls = new List<string>();
+                if (service.ServiceSheet != null && service.ServiceSheet.Any())
+                {
+                    foreach (var sheet in service.ServiceSheet)
+                    {
+                        var fileExtension = Path.GetExtension(sheet.FileName).ToLower();
+                        if (fileExtension != ".pdf")
+                        {
+                            ModelState.AddModelError("ServiceSheet", "Solo se permiten archivos PDF.");
+                            return View(service);
+                        }
+                    }
+                    serviceSheetUrls = await FileService.SaveServiceSheetAsync((List<IFormFile>)service.ServiceSheet);
+                }
+
+
+                var newService = new Service
+                {
+                    MachineId = service.MachineId,
+                    WorkHours = service.WorkHours,
+                    ServiceHour = service.ServiceHour,
+                    ServiceDate = service.ServiceDate,
+                    OrderNumber = service.OrderNumber,
+                    Observations = service.Observations,
+                    ServiceSheetUrls = serviceSheetUrls
+                };
+                _context.Add(newService);
                 await _context.SaveChangesAsync();
                 
                 return RedirectToAction(nameof(Index), new { machineId = service.MachineId });
@@ -104,7 +131,11 @@ namespace Control_Machine_Sistem.Controllers
         // POST: Services/Edit/5?machineId=...
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,MachineId,WorkHours,RealHours,ServiceDate,OrderNumber,Observations")] Service service, int? machineId)
+        public async Task<IActionResult> Edit(
+            int id,
+            [Bind("Id,MachineId,WorkHours,ServiceDate,OrderNumber,Observations,ServiceSheet")] Service service,
+            int? machineId,
+            string[] DeletedServiceSheetUrls)
         {
             if (id != service.Id)
             {
@@ -114,8 +145,46 @@ namespace Control_Machine_Sistem.Controllers
             if (ModelState.IsValid)
             {
                 try
-                {
-                    _context.Update(service);
+                {                   
+                    var serviceToUpdate = await _context.Services.FindAsync(id);
+                    if (serviceToUpdate == null)
+                    {
+                        return NotFound();
+                    }
+                   
+                    serviceToUpdate.WorkHours = service.WorkHours;
+                    serviceToUpdate.ServiceDate = service.ServiceDate;
+                    serviceToUpdate.OrderNumber = service.OrderNumber;
+                    serviceToUpdate.Observations = service.Observations;
+                    
+                    if (DeletedServiceSheetUrls != null && DeletedServiceSheetUrls.Any())
+                    {
+                        foreach (var url in DeletedServiceSheetUrls)
+                        {
+                            // Elimina de la lista la URL seleccionada
+                            serviceToUpdate.ServiceSheetUrls.Remove(url);
+                            // Elimina el archivo fisico
+                            await FileService.DeleteServiceSheetAsync(url);
+                        }
+                    }
+                    
+                    if (service.ServiceSheet != null && service.ServiceSheet.Any())
+                    {                        
+                        foreach (var file in service.ServiceSheet)
+                        {
+                            var ext = Path.GetExtension(file.FileName).ToLower();
+                            if (ext != ".pdf")
+                            {
+                                ModelState.AddModelError("ServiceSheet", "Solo se permiten archivos PDF.");
+                                return View(service);
+                            }
+                        }                       
+                        var newFileUrls = await FileService.SaveServiceSheetAsync(service.ServiceSheet.ToList());
+                        
+                        serviceToUpdate.ServiceSheetUrls.AddRange(newFileUrls);
+                    }
+
+                    _context.Update(serviceToUpdate);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -128,7 +197,7 @@ namespace Control_Machine_Sistem.Controllers
                     {
                         throw;
                     }
-                }                
+                }
                 return RedirectToAction(nameof(Index), new { machineId = service.MachineId });
             }
             ViewData["MachineId"] = new SelectList(_context.Machines, "Id", "ChasisNumber", service.MachineId);
@@ -159,21 +228,49 @@ namespace Control_Machine_Sistem.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id, int? machineId)
-        {
+        {            
             var service = await _context.Services.FindAsync(id);
             if (service != null)
-            {
+            {                
+                if (service.ServiceSheetUrls != null && service.ServiceSheetUrls.Any())
+                {
+                    foreach (var fileUrl in service.ServiceSheetUrls)
+                    {                        
+                        await FileService.DeleteServiceSheetAsync(fileUrl);
+                    }
+                }                
                 _context.Services.Remove(service);
             }
 
             await _context.SaveChangesAsync();
-            
+
             return RedirectToAction(nameof(Index), new { machineId = machineId });
         }
 
         private bool ServiceExists(int id)
         {
             return _context.Services.Any(e => e.Id == id);
+        }
+
+        public async Task<IActionResult> GetServiceSheet(string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName))
+            {
+                return NotFound();
+            }
+            
+            string baseFolder = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "documentation", "serviceSheets");
+            string filePath = Path.Combine(baseFolder, fileName);
+
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound();
+            }
+
+            byte[] fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
+            
+            Response.Headers["Content-Disposition"] = $"inline; filename=\"{fileName}\"";
+            return File(fileBytes, "application/pdf");
         }
     }
 }

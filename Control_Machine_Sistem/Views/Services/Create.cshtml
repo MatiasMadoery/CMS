@@ -38,6 +38,18 @@
                 <input asp-for="Observations" class="form-control" />
                 <span asp-validation-for="Observations" class="text-danger"></span>
             </div>
+            <div id="fileUploadContainer">
+                <div class="form-group">
+                    <label asp-for="ServiceSheet" class="control-label"></label>
+                    <input type="file" name="ServiceSheet" class="form-control" />
+                    <span asp-validation-for="ServiceSheet" class="text-danger"></span>
+                    <br />
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="addMoreFiles('fileUploadContainer', 'ServiceSheet')">Agregar otro archivo</button>
+            </div>
+            <br />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-success" /> |
                 <a class="btn btn-secondary" asp-action="Index" asp-route-machineId="@Model.MachineId">Volver a la lista</a>

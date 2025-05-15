@@ -2,13 +2,12 @@
 
 @{
     ViewData["Title"] = "Eliminar";
-    
     var machineId = ViewData["MachineId"] ?? Model.MachineId;
 }
 
 <h1>Eliminar Service</h1>
 
-<div>    
+<div>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -36,9 +35,24 @@
             @Html.DisplayFor(model => model.Observations)
         </dd>
     </dl>
+    
+    @if (Model.ServiceSheetUrls != null && Model.ServiceSheetUrls.Any())
+    {
+        <div class="alert alert-warning">
+            <strong>Atención:</strong> Los siguientes archivos se eliminarán junto con este service:
+            <ul>
+                @foreach (var fileUrl in Model.ServiceSheetUrls)
+                {
+                    <li>
+                        <a href="@fileUrl" download>@System.IO.Path.GetFileName(fileUrl)</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
 
     <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />        
+        <input type="hidden" asp-for="Id" />
         <input type="hidden" asp-for="MachineId" />
         <input type="submit" value="Eliminar" class="btn btn-danger" /> |
         <a class="btn btn-secondary" asp-action="Index" asp-route-machineId="@(machineId)">Volver a la lista</a>
