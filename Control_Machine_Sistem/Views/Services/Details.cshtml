@@ -48,9 +48,8 @@
                 var fileName = System.IO.Path.GetFileName(sheetUrl);
                 var fileUrl = Url.Action("GetServiceSheet", "Services", new { fileName = fileName });
 
-                <li>
+                <li class="document-name">
                     <a href="@fileUrl" download>@fileName</a>
-                    <button type="button" class="btn btn-secondary btn-sm ml-2" onclick="printDocument('@fileUrl')">Imprimir</button>
                 </li>
             }
         </ul>
