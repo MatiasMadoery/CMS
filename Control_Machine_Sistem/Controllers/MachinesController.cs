@@ -291,7 +291,7 @@ namespace Control_Machine_Sistem.Controllers
 
             return View(machine);
         }
-
+        
         // POST: Machines/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -299,13 +299,25 @@ namespace Control_Machine_Sistem.Controllers
         {
             var machine = await _context.Machines.FindAsync(id);
             if (machine != null)
-            {
+            {                
+                if (machine.DocUrls != null && machine.DocUrls.Any())
+                {
+                    foreach (var fileUrl in machine.DocUrls)
+                    {
+                        await FileService.DeleteDocumentationFileAsync(fileUrl);
+                    }
+                }
+                
                 _context.Machines.Remove(machine);
+                await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Máquina eliminada correctamente.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "No se encontró la máquina a eliminar.";
             }
 
-            await _context.SaveChangesAsync();
-
-            TempData["SuccessMessage"] = "Máquina eliminada correctamente.";
             return RedirectToAction(nameof(Index));
         }
 
