@@ -1,0 +1,37 @@
+﻿@using Control_Machine_Sistem.ViewModels
+@model List<DocumentationViewModel>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datos del Servicio Técnico</title>
+    <link rel="stylesheet" href="~/css/downloads.css" />
+</head>
+<body>
+    <div class="card">
+        <div class="card-header">
+            <h2>Datos del Servicio Técnico</h2>
+        </div>
+        <div class="card-body">
+            <ul class="doc-list">
+                @foreach (var serviceDoc in Model)
+                {
+                    <li class="doc-item">
+                        Descargar:
+                        <a href="@Url.Action("DownloadService", "QrCodes", new { fileName = serviceDoc.OriginalName })" target="_blank" class="manual-link">
+                            @serviceDoc.DisplayName
+                        </a>
+                    </li>
+                }
+            </ul>
+            <a href="javascript:history.back();" class="btn btn-secondary">Volver al menú principal</a>
+        </div>
+    </div>
+</body>
+</html>

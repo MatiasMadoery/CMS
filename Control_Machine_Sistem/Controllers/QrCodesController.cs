@@ -24,6 +24,7 @@ namespace Control_Machine_Sistem.Controllers
             var machine = await _context.Machines
                 .Include(m => m.Customer)
                 .Include(m => m.Model)
+                .Include(m => m.Services)
                 .FirstOrDefaultAsync(m => m.Id == machineId);
 
             if (machine == null || machine.Model == null || machine.Customer == null)
@@ -44,8 +45,23 @@ namespace Control_Machine_Sistem.Controllers
 
             var qrContentUrl = Url.Action("Details", "QrCodes", new { machineId }, Request.Scheme);
 
-
             var qrImageBase64 = GenerateQrCodeAsBase64(qrContentUrl!);
+
+            var serviceUrls = new List<string>();
+            if (machine.Services != null)
+            {
+                foreach (var service in machine.Services)
+                {
+                    if (service.ServiceSheetUrls != null && service.ServiceSheetUrls.Any())
+                    {
+                        serviceUrls.AddRange(service.ServiceSheetUrls);
+                    }
+                }
+            }
+
+            var serviceUrl = serviceUrls.Any()
+                ? string.Join(", ", serviceUrls)
+                : "No hay datos de service disponibles.";
 
             var model = new QrCode
             {
@@ -53,6 +69,7 @@ namespace Control_Machine_Sistem.Controllers
                 MachineModel = machine.Model.Name,
                 ManualUrl = manualUrl,
                 DocUrl = docUrl,
+                ServiceUrl = serviceUrl,
                 QrContentUrl = qrContentUrl,
                 QrImageBase64 = qrImageBase64
             };
@@ -73,6 +90,7 @@ namespace Control_Machine_Sistem.Controllers
             var machines = await _context.Machines
                 .Include(m => m.Customer)
                 .Include(m => m.Model)
+                .Include(m => m.Services)
                 .Select(m => new SelectListItem
                 {
                     Value = m.Id.ToString(),
@@ -95,6 +113,7 @@ namespace Control_Machine_Sistem.Controllers
             var machine = await _context.Machines
                 .Include(m => m.Customer)
                 .Include(m => m.Model)
+                .Include(m => m.Services)
                 .FirstOrDefaultAsync(m => m.Id == machineId);
 
             if (machine == null || machine.Model == null || machine.Customer == null)
@@ -117,12 +136,29 @@ namespace Control_Machine_Sistem.Controllers
 
             var qrImageBase64 = GenerateQrCodeAsBase64(qrContentUrl!);
 
+            var serviceUrls = new List<string>();
+            if (machine.Services != null)
+            {
+                foreach (var service in machine.Services) 
+                {
+                    if (service.ServiceSheetUrls != null && service.ServiceSheetUrls.Any())
+                    {
+                        serviceUrls.AddRange(service.ServiceSheetUrls);
+                    }
+                }
+            }
+
+            var serviceUrl = serviceUrls.Any()
+                ? string.Join(", ", serviceUrls)
+                : "No hay datos de service disponibles."; 
+
             var model = new QrCode
             {
                 ClientName = customer.FullName,
                 MachineModel = machine.Model.Name,
                 ManualUrl = manualUrl,
                 DocUrl = docUrl,
+                ServiceUrl = serviceUrl,
                 QrContentUrl = qrContentUrl,
                 QrImageBase64 = qrImageBase64
             };
@@ -146,6 +182,7 @@ namespace Control_Machine_Sistem.Controllers
             var machine = await _context.Machines
                 .Include(m => m.Customer)
                 .Include(m => m.Model)
+                .Include(m => m.Services)
                 .FirstOrDefaultAsync(m => m.Id == machineId);
 
             if (machine == null || machine.Model == null || machine.Customer == null)
@@ -171,6 +208,21 @@ namespace Control_Machine_Sistem.Controllers
                 ? string.Join(",", spareKitUrls)
                 : "No hay repuestos disponibles";
 
+            var serviceUrls = new List<string>();
+            if (machine.Services != null)
+            {
+                foreach (var service in machine.Services)
+                {
+                    if (service.ServiceSheetUrls != null && service.ServiceSheetUrls.Any())
+                    {
+                        serviceUrls.AddRange(service.ServiceSheetUrls);
+                    }
+                }
+            }
+
+            var serviceUrl = serviceUrls.Any()
+                ? string.Join(", ", serviceUrls)
+                : "No hay datos de service disponibles.";
 
             var model = new QrCode
             {
@@ -179,6 +231,7 @@ namespace Control_Machine_Sistem.Controllers
                 ManualUrl = manualUrl,
                 DocUrl = docUrl,
                 SpareKitsUrl = spareKitUrl,
+                ServiceUrl = serviceUrl,
                 DeliveryDate = machine.DeliveryDate,                
             };
 
@@ -232,6 +285,49 @@ namespace Control_Machine_Sistem.Controllers
             }).ToList();      
                       
             return View("DocumentList", documents);
+        }
+
+
+        public IActionResult ServiceList(string urls)
+        {
+            if (string.IsNullOrWhiteSpace(urls))
+            {
+                // Puedes redirigir, devolver NotFound o algún mensaje de error amigable
+                return NotFound("No se han proporcionado datos del servicio técnico.");
+            }
+
+            var urlArray = urls.Split(',')
+                                .Select(u => u.Trim())
+                                .Where(u => !string.IsNullOrEmpty(u))
+                                .ToArray();
+
+            if (!urlArray.Any())
+            {
+                return NotFound("No se han encontrado datos del servicio técnico.");
+            }
+
+            var serviceDocuments = urlArray.Select(url => new DocumentationViewModel
+            {
+                OriginalName = Path.GetFileName(url),
+                DisplayName = Path.GetFileName(url).Split('_').Last()
+            }).ToList();
+
+            return View("ServiceList", serviceDocuments);
+        }
+
+        public IActionResult DownloadService(string fileName)
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "documentation", "serviceSheets", fileName);
+
+            if (!System.IO.File.Exists(path))
+            {
+                Console.WriteLine($"Archivo no encontrado en la ruta: {path}");
+                return NotFound("Archivo no encontrado");
+            }
+
+            var contenido = System.IO.File.ReadAllBytes(path);
+
+            return File(contenido, "application/pdf", fileName);
         }
 
         public IActionResult DownloadManual(string fileName)
