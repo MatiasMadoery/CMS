@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Editar Service";
+    var machineId = ViewData["MachineId"];
 }
 
 <h1>Editar Service</h1>
@@ -42,11 +43,14 @@
                         {
                             @for (int i = 0; i < Model.ServiceSheetUrls.Count; i++)
                             {
+                                var fileName = System.IO.Path.GetFileName(Model.ServiceSheetUrls[i]);
+                                var fileUrl = Url.Action("GetServiceSheet", "Services", new { fileName = fileName });
+
                                 <tr>
                                     <td>
-                                        <a href="@Model.ServiceSheetUrls[i]" target="_blank" class="document-name">
-                                            @System.IO.Path.GetFileName(Model.ServiceSheetUrls[i])
-                                        </a>                                        
+                                        <a href="@fileUrl" target="_blank" class="document-name" download>
+                                            @fileName
+                                        </a>
                                         <input type="hidden" name="ExistingServiceSheets" value="@Model.ServiceSheetUrls[i]" />
                                     </td>
                                     <td>
@@ -77,7 +81,7 @@
             <br />
             <div class="form-group">
                 <input type="submit" value="Guardar" class="btn btn-success" /> |
-                <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
+                <a asp-action="Index" asp-route-machineId="@(machineId)" class="btn btn-secondary">Volver a la lista</a>
             </div>
         </form>
     </div>

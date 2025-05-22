@@ -279,6 +279,19 @@ namespace Control_Machine_Sistem.Controllers
             return File(contenido, "application/pdf", fileName);
         }
 
+        public IActionResult DownloadServiceSheet(string fileName)
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "documentation", "serviceSheets", fileName);
 
+            if (!System.IO.File.Exists(path))
+            {
+                Console.WriteLine($"Archivo no encontrado en la ruta: {path}");
+                return NotFound("Archivo no encontrado");
+            }
+
+            var contenido = System.IO.File.ReadAllBytes(path);
+
+            return File(contenido, "application/pdf", fileName);
+        }
     }
 }
