@@ -5,6 +5,7 @@ using Control_Machine_Sistem.Models;
 using System.Linq;
 using System.Threading.Tasks;
 using Control_Machine_Sistem.Services;
+using Control_Machine_Sistem.ViewModels;
 
 namespace Control_Machine_Sistem.Controllers
 {
@@ -250,27 +251,6 @@ namespace Control_Machine_Sistem.Controllers
         private bool ServiceExists(int id)
         {
             return _context.Services.Any(e => e.Id == id);
-        }
-
-        public async Task<IActionResult> GetServiceSheet(string fileName)
-        {
-            if (string.IsNullOrEmpty(fileName))
-            {
-                return NotFound();
-            }
-            
-            string baseFolder = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "documentation", "serviceSheets");
-            string filePath = Path.Combine(baseFolder, fileName);
-
-            if (!System.IO.File.Exists(filePath))
-            {
-                return NotFound();
-            }
-
-            byte[] fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
-            
-            Response.Headers["Content-Disposition"] = $"inline; filename=\"{fileName}\"";
-            return File(fileBytes, "application/pdf");
         }
     }
 }

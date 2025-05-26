@@ -12,23 +12,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalle de Máquina</title>
-    <link rel="stylesheet" href="~/css/scannedQr.css" />
+    <link rel="stylesheet" href="~/css/qrCustomerView.css" />
 </head>
 <body>
 
-    <div class="card">
-        <div class="card-header">
-            <h3>Sr @Model.ClientName</h3>
-        </div>
-        <div class="card-body">
-            <h4>Modelo de Máquina: @Model.MachineModel</h4>
-            <h4>Fecha de Entrega: @Model.DeliveryDate?.ToString("dd/MM/yyyy")</h4>
 
-            <a href="@Url.Action("ManualList", "QrCodes", new { manualUrls = Model.ManualUrl, spareKitUrls = Model.SpareKitsUrl })" class="btn">Descargar Manuales</a>
-            <a href="@Url.Action("DocumentList", "QrCodes", new { urls = Model.DocUrl })" class="btn">Descargar Documentación</a>
-            <a href="#" class="btn">Descargar Datos del Servicio Técnico</a>
-        </div>
+<div class="card">
+    <div class="card-header">
+        <h3>Sr @Model.ClientName</h3>
     </div>
+    <div class="card-body">
+        <h4>Modelo de Máquina: @Model.MachineModel</h4>
+        <h4>Fecha de Entrega: @Model.DeliveryDate?.ToString("dd/MM/yyyy")</h4>
 
+        <a href="@Url.Action("ManualList", "QrCodes", new { manualUrls = Model.ManualUrl, spareKitUrls = Model.SpareKitsUrl })" class="btn">
+            Descargar Manuales
+        </a>
+        <a href="@Url.Action("DocumentList", "QrCodes", new { urls = Model.DocUrl })" class="btn">
+            Descargar Documentación
+        </a>
+            <a href="@Url.Action("ServiceDetails", "QrCodes", new { machineId = Model.MachineId })" class="btn">
+                Ver Services
+            </a>
+    </div>
+</div>
 </body>
 </html>

@@ -40,12 +40,12 @@ namespace Control_Machine_Sistem.Controllers
                                          .Take(pageSize)
                                          .ToListAsync();
 
-            
+
             var pager = new Pager<Model>(modelsPager, totalModels, page, pageSize);
 
             ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
             ViewBag.SelectedCategory = categoryId;
-                     
+
             return View(pager);
         }
 
@@ -158,7 +158,7 @@ namespace Control_Machine_Sistem.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,CategoryId")] Model model, List<string> ExistingManuals, List<IFormFile> Manuals, List<string> DeletedManuals, List<string>ExistingSpareKits, List<IFormFile>SpareKits, List<string>DeletedSpareKits)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,CategoryId")] Model model, List<string> ExistingManuals, List<IFormFile> Manuals, List<string> DeletedManuals, List<string> ExistingSpareKits, List<IFormFile> SpareKits, List<string> DeletedSpareKits)
 
         {
             if (id != model.Id)
@@ -176,7 +176,7 @@ namespace Control_Machine_Sistem.Controllers
                     {
                         return NotFound();
                     }
-                    
+
                     existingModel.Name = model.Name;
                     existingModel.CategoryId = model.CategoryId;
 
@@ -296,26 +296,41 @@ namespace Control_Machine_Sistem.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
-        {
+        {            
             var model = await _context.Models
-        .Include(m => m.Machines)
-        .FirstOrDefaultAsync(m => m.Id == id);
+                                      .Include(m => m.Machines)
+                                      .FirstOrDefaultAsync(m => m.Id == id);
 
             if (model == null)
             {
                 return NotFound();
             }
-
-            if (model.Machines!.Any())
+            
+            if (model.Machines != null && model.Machines.Any())
             {
                 TempData["ErrorMessage"] = "No se puede eliminar el modelo porque tiene máquinas asociadas.";
                 return RedirectToAction(nameof(Index));
             }
-
+          
+            if (model.ManualUrls != null && model.ManualUrls.Any())
+            {
+                foreach (var fileUrl in model.ManualUrls)
+                {
+                    await FileService.DeleteManualFileAsync(fileUrl);
+                }
+            }
+          
+            if (model.SpareKitsUrls != null && model.SpareKitsUrls.Any())
+            {
+                foreach (var fileUrl in model.SpareKitsUrls)
+                {
+                    await FileService.DeleteSpareKitFileAsync(fileUrl);
+                }
+            }
+            
             _context.Models.Remove(model);
             await _context.SaveChangesAsync();
 
-            TempData["SuccessMessage"] = "Modelo eliminado correctamente.";
             return RedirectToAction(nameof(Index));
         }
 

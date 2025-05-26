@@ -24,6 +24,7 @@ namespace Control_Machine_Sistem.Controllers
             var machine = await _context.Machines
                 .Include(m => m.Customer)
                 .Include(m => m.Model)
+                .Include(m => m.Services)  // Incluimos los Services para poder trabajar con ellos
                 .FirstOrDefaultAsync(m => m.Id == machineId);
 
             if (machine == null || machine.Model == null || machine.Customer == null)
@@ -32,6 +33,8 @@ namespace Control_Machine_Sistem.Controllers
             }
 
             var customer = machine.Customer;
+
+            // Obtenemos manuales y documentación igual que antes
             var manualUrls = machine.Model.ManualUrls ?? new List<string>();
             var manualUrl = manualUrls.Any()
                 ? string.Join(", ", manualUrls)
@@ -43,18 +46,34 @@ namespace Control_Machine_Sistem.Controllers
                 : "No hay documentación disponible";
 
             var qrContentUrl = Url.Action("Details", "QrCodes", new { machineId }, Request.Scheme);
-
-
             var qrImageBase64 = GenerateQrCodeAsBase64(qrContentUrl!);
+            
+            var serviceUrls = new List<string>();
+            if (machine.Services != null)
+            {
+                foreach (var service in machine.Services)
+                {
+                    if (service.ServiceSheetUrls != null && service.ServiceSheetUrls.Any())
+                    {
+                        serviceUrls.AddRange(service.ServiceSheetUrls);
+                    }
+                }
+            }
+            var serviceUrl = serviceUrls.Any()
+                ? string.Join(", ", serviceUrls)
+                : "No hay datos de service disponibles.";        
 
+            
             var model = new QrCode
             {
                 ClientName = customer.FullName,
                 MachineModel = machine.Model.Name,
                 ManualUrl = manualUrl,
                 DocUrl = docUrl,
+                ServiceUrl = serviceUrl,
                 QrContentUrl = qrContentUrl,
-                QrImageBase64 = qrImageBase64
+                QrImageBase64 = qrImageBase64,             
+                MachineId = machineId     
             };
 
             return View(model);
@@ -73,6 +92,7 @@ namespace Control_Machine_Sistem.Controllers
             var machines = await _context.Machines
                 .Include(m => m.Customer)
                 .Include(m => m.Model)
+                .Include(m => m.Services)
                 .Select(m => new SelectListItem
                 {
                     Value = m.Id.ToString(),
@@ -95,6 +115,7 @@ namespace Control_Machine_Sistem.Controllers
             var machine = await _context.Machines
                 .Include(m => m.Customer)
                 .Include(m => m.Model)
+                .Include(m => m.Services)
                 .FirstOrDefaultAsync(m => m.Id == machineId);
 
             if (machine == null || machine.Model == null || machine.Customer == null)
@@ -114,8 +135,23 @@ namespace Control_Machine_Sistem.Controllers
                 : "No hay documentación disponible";
 
             var qrContentUrl = Url.Action("Details", "QrCodes", new { machineId }, Request.Scheme);
-
             var qrImageBase64 = GenerateQrCodeAsBase64(qrContentUrl!);
+
+            var serviceUrls = new List<string>();
+            if (machine.Services != null)
+            {
+                foreach (var service in machine.Services)
+                {
+                    if (service.ServiceSheetUrls != null && service.ServiceSheetUrls.Any())
+                    {
+                        serviceUrls.AddRange(service.ServiceSheetUrls);
+                    }
+                }
+            }
+
+            var serviceUrl = serviceUrls.Any()
+                ? string.Join(", ", serviceUrls)
+                : "No hay datos de service disponibles.";           
 
             var model = new QrCode
             {
@@ -123,8 +159,10 @@ namespace Control_Machine_Sistem.Controllers
                 MachineModel = machine.Model.Name,
                 ManualUrl = manualUrl,
                 DocUrl = docUrl,
+                ServiceUrl = serviceUrl,
                 QrContentUrl = qrContentUrl,
-                QrImageBase64 = qrImageBase64
+                QrImageBase64 = qrImageBase64,
+                MachineId = machineId,
             };
 
             return View(model);
@@ -146,6 +184,7 @@ namespace Control_Machine_Sistem.Controllers
             var machine = await _context.Machines
                 .Include(m => m.Customer)
                 .Include(m => m.Model)
+                .Include(m => m.Services)
                 .FirstOrDefaultAsync(m => m.Id == machineId);
 
             if (machine == null || machine.Model == null || machine.Customer == null)
@@ -171,6 +210,21 @@ namespace Control_Machine_Sistem.Controllers
                 ? string.Join(",", spareKitUrls)
                 : "No hay repuestos disponibles";
 
+            var serviceUrls = new List<string>();
+            if (machine.Services != null)
+            {
+                foreach (var service in machine.Services)
+                {
+                    if (service.ServiceSheetUrls != null && service.ServiceSheetUrls.Any())
+                    {
+                        serviceUrls.AddRange(service.ServiceSheetUrls);
+                    }
+                }
+            }
+
+            var serviceUrl = serviceUrls.Any()
+                ? string.Join(", ", serviceUrls)
+                : "No hay datos de service disponibles.";
 
             var model = new QrCode
             {
@@ -179,6 +233,8 @@ namespace Control_Machine_Sistem.Controllers
                 ManualUrl = manualUrl,
                 DocUrl = docUrl,
                 SpareKitsUrl = spareKitUrl,
+                ServiceUrl = serviceUrl,
+                MachineId = machineId,
                 DeliveryDate = machine.DeliveryDate,                
             };
 
@@ -232,6 +288,48 @@ namespace Control_Machine_Sistem.Controllers
             }).ToList();      
                       
             return View("DocumentList", documents);
+        }
+
+
+        public IActionResult ServiceList(string urls)
+        {
+            if (string.IsNullOrWhiteSpace(urls))
+            {                
+                return NotFound("No se han proporcionado datos del servicio técnico.");
+            }
+
+            var urlArray = urls.Split(',')
+                                .Select(u => u.Trim())
+                                .Where(u => !string.IsNullOrEmpty(u))
+                                .ToArray();
+
+            if (!urlArray.Any())
+            {
+                return NotFound("No se han encontrado datos del servicio técnico.");
+            }
+
+            var serviceDocuments = urlArray.Select(url => new DocumentationViewModel
+            {
+                OriginalName = Path.GetFileName(url),
+                DisplayName = Path.GetFileName(url).Split('_').Last()
+            }).ToList();
+
+            return View("ServiceList", serviceDocuments);
+        }
+
+        public IActionResult DownloadService(string fileName)
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "documentation", "serviceSheets", fileName);
+
+            if (!System.IO.File.Exists(path))
+            {
+                Console.WriteLine($"Archivo no encontrado en la ruta: {path}");
+                return NotFound("Archivo no encontrado");
+            }
+
+            var contenido = System.IO.File.ReadAllBytes(path);
+
+            return File(contenido, "application/pdf", fileName);
         }
 
         public IActionResult DownloadManual(string fileName)
@@ -293,5 +391,20 @@ namespace Control_Machine_Sistem.Controllers
 
             return File(contenido, "application/pdf", fileName);
         }
+        public async Task<IActionResult> ServiceDetails(int machineId)
+        {
+            var services = await _context.Services
+                .Where(s => s.MachineId == machineId)
+                .ToListAsync();
+
+            if (!services.Any())
+            {
+                return NotFound("No hay servicios registrados para esta máquina.");
+            }
+
+            ViewData["MachineId"] = machineId; 
+            return View(services);
+        }
+
     }
 }

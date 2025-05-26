@@ -118,7 +118,66 @@
             return urls;
         }
 
+        public static async Task DeleteManualFileAsync(string fileUrl)
+        {
+            var fileName = Path.GetFileName(fileUrl);
+            var rootPath = Directory.GetCurrentDirectory();
+            var filePath = Path.Combine(rootPath, "App_Data", "documentation", "manuals", fileName);
 
+            if (File.Exists(filePath))
+            {
+                try
+                {
+                    File.Delete(filePath);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Error al eliminar el archivo en {filePath}", ex);
+                }
+            }
+            await Task.CompletedTask;
+        }
+
+        public static async Task DeleteSpareKitFileAsync(string fileUrl)
+        {
+            var fileName = Path.GetFileName(fileUrl);
+            var rootPath = Directory.GetCurrentDirectory();
+            var filePath = Path.Combine(rootPath, "App_Data", "documentation", "spareKits", fileName);
+
+            if (File.Exists(filePath))
+            {
+                try
+                {
+                    File.Delete(filePath);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Error al eliminar el archivo en {filePath}", ex);
+                }
+            }
+            await Task.CompletedTask;
+        }
+
+        public static async Task DeleteDocumentationFileAsync(string fileUrl)
+        {
+            var fileName = Path.GetFileName(fileUrl);
+            var rootPath = Directory.GetCurrentDirectory();
+            var filePath = Path.Combine(rootPath, "App_Data", "documentation", "machines", fileName);
+
+            if (File.Exists(filePath))
+            {
+                try
+                {
+                    File.Delete(filePath);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Error al eliminar el archivo en {filePath}", ex);
+                }
+            }
+
+            await Task.CompletedTask;
+        }
         public static async Task DeleteServiceSheetAsync(string fileUrl)
         {            
             var fileName = Path.GetFileName(fileUrl);           

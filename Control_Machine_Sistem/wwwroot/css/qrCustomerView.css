@@ -1,0 +1,84 @@
+﻿body {
+    font-family: Arial, sans-serif;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+
+/* Tarjeta Principal */
+.card {
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    overflow: hidden;
+    animation: fadeIn 0.8s ease;
+}
+
+/* Animación */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Encabezado */
+.card-header {
+    background-color: #eabe2e;
+    color: black;
+    text-align: center;
+    padding: 20px 15px;
+}
+
+/* Contenido Principal */
+.card-body {
+    padding: 20px;
+    text-align: center;
+}
+
+    .card-body h4 {
+        font-size: 18px;
+        margin: 10px 0;
+        font-weight: bold;
+        color: black;
+    }
+
+/* Botones */
+.btn {
+    display: block;
+    width: 100%;
+    background-color: #eabe2e;
+    color: black;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px 0;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 12px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+    .btn:hover {
+        background-color: black;
+        color: #eabe2e;
+        transform: scale(1.05);
+    }
+
+    .btn:active {
+        background-color: #d35400;
+        transform: scale(0.95);
+    }
