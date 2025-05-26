@@ -1,5 +1,4 @@
-﻿﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -16,27 +15,23 @@
 
     <script src="https://kit.fontawesome.com/88381571ec.js" crossorigin="anonymous"></script>
 </head>
-<body>
-    @if (User.Identity!.IsAuthenticated)
+<body class="@(ViewData["BodyClass"] ?? "")">
+    @if (User.Identity!.IsAuthenticated && ViewData["BodyClass"] != "login-page")
     {
         <header>
             <nav class="navbar">
                 <div class="container">
                     <ul class="navbar-nav">
-                        @if (User.Identity!.IsAuthenticated)
-                        {
-                            <li class="nav-item logout-item">
-                                <a class="nav-link" id="logout" asp-controller="UsersLogin" asp-action="Logout">Cerrar Sesión</a>
-                            </li>
-
-                        }
+                        <li class="nav-item logout-item">
+                            <a class="nav-link" id="logout" asp-controller="UsersLogin" asp-action="Logout">Cerrar Sesión</a>
+                        </li>
                     </ul>
                 </div>
             </nav>
         </header>
     }
 
-    @if (User.Identity!.IsAuthenticated)
+    @if (User.Identity!.IsAuthenticated && ViewData["BodyClass"] != "login-page")
     {
         <div class="sidebar">
             <ul class="nav">
@@ -62,10 +57,12 @@
         </div>
 
         <div id="menuHambur">
-            <button id="btnMenuMobile" onclick="openMenu()"><i class="fa-solid fa-bars"></i></button>
+            <button id="btnMenuMobile" onclick="openMenu()">
+                <i class="fa-solid fa-bars"></i>
+            </button>
         </div>
         <nav class="menuMobile">
-            <div class="menuMobile-Invisible" id="menuQuery">
+            <div id="menuQuery">
                 <a class="nav-link" asp-controller="Customers" asp-action="Index">Clientes</a>
                 <a class="nav-link" asp-controller="Models" asp-action="Index">Modelos</a>
                 <a class="nav-link" asp-controller="Machines" asp-action="Index">Máquinas</a>
@@ -74,20 +71,32 @@
         </nav>
     }
 
-    <div class="content">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    @if (User.Identity!.IsAuthenticated)
+
+    @if (User.Identity!.IsAuthenticated && ViewData["BodyClass"] != "login-page")
+    {
+        <div class="content">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    }
+    else
+    {
+        @RenderBody()
+    }
+    
+ 
+
+    @if (User.Identity!.IsAuthenticated && ViewData["BodyClass"] != "login-page")
     {
         <footer class="footer">
             <div class="container">
                 &copy; 2025 - Todos los derechos reservados -
             </div>
         </footer>
-    }   
+    }  
+   
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

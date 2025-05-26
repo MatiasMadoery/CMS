@@ -31,13 +31,10 @@
         </a>
         <a href="@Url.Action("DocumentList", "QrCodes", new { urls = Model.DocUrl })" class="btn">
             Descargar Documentación
+        </a>    
+        <a href="@Url.Action("ServiceDetails", "QrCodes", new { machineId = Model.MachineId })" class="btn">
+            Ver Services
         </a>
-     @*    <a href="@Url.Action("ServiceList", "QrCodes", new { urls = Model.ServiceUrl })" class="btn">
-            Descargar Datos del Servicio Técnico
-        </a> *@
-            <a href="@Url.Action("ServiceDetails", "QrCodes", new { machineId = Model.MachineId })" class="btn">
-                Ver Services
-            </a>
     </div>
 </div>
 </body>
