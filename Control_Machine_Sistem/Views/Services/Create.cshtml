@@ -11,7 +11,6 @@
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <!-- Campo oculto para MachineId, ya que se está trabajando sobre una máquina en concreto -->
             <input type="hidden" asp-for="MachineId" />
             <div class="form-group">
                 <label asp-for="ServiceHour" class="control-label"></label>

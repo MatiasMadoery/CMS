@@ -30,10 +30,10 @@
         </a>
         <a href="@Url.Action("DocumentList", "QrCodes", new { urls = Model.DocUrl })" class="btn">
             Descargar Documentación
+        </a>    
+        <a href="@Url.Action("ServiceDetails", "QrCodes", new { machineId = Model.MachineId })" class="btn">
+            Ver Services
         </a>
-            <a href="@Url.Action("ServiceDetails", "QrCodes", new { machineId = Model.MachineId })" class="btn">
-                Ver Services
-            </a>
     </div>
 </div>
 </body>

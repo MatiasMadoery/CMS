@@ -96,7 +96,7 @@ body {
         }
 
 /* ajustar el contenido principal para que no quede debajo de la barra lateral */
-*.content {
+.content {
     margin-left: 160px; /*mismo ancho de la barra + margen */
     padding: 20px;
 }
@@ -160,47 +160,69 @@ body {
 }
 
 
-
 @media (max-width: 768px) {
-
+    /* La sidebar se oculta en móviles */
     .sidebar {
-        display:none;
+        display: none;
     }
 
-    /*TEST MENU HAMBUR*/
-    #menuHambur{
+    /* Ajuste del botón del menú hamburguesa */
+    #menuHambur {
         display: flex;
-        justify-content: flex-end;
-        margin-left: auto;
+        justify-content: flex-start;
         position: absolute;
-        top: 25px;
-        right: 325px;
+        top: 15px;
+        left: 15px; 
+        z-index: 1000;
     }
 
-    #menuHambur button{
-        padding: 3px 20px;
-        font-size: 25px;
-        margin: 5px;
-        border-radius: 20px;
-        background-color: rgb(218, 215, 215);
-        text-decoration: none;
-        color: black;
-        z-index: 1;
-    }
-    .menuMobile-Visible {
-        display: grid;
-        position: absolute;
-        width: 200px;
-        background-color: rgb(218, 215, 215);
-        top: 80px;
-        left: 25px;
-        border: 1px solid black;
-        border-radius: 10%;
-        color: rgb(29, 117, 189);
-        box-shadow: 0px 3px 5px 3px rgba(0, 0, 0, 0.5);
+        #menuHambur button {
+            padding: 3px 20px;
+            font-size: 25px;
+            margin: 5px;
+            border-radius: 20px;
+            background-color: rgb(218, 215, 215);
+            color: black;
+            border: none;
+            z-index: 1000;
+        }
+
+    /* Por defecto, el menú queda oculto */
+    #menuQuery {
+        display: none;
     }
 
+        /* Cuando el menú esté activo, se mostrará con estos estilos */
+        #menuQuery.active {
+            display: grid;
+            position: absolute;
+            width: 200px;
+            background-color: rgb(218, 215, 215);
+            top: 60px; /* Ajusta la posición vertical según convenga */
+            left: 15px;
+            border: 1px solid black;
+            border-radius: 10%;
+            color: rgb(29, 117, 189);
+            box-shadow: 0px 3px 5px 3px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+    /* Asegúrate de que el contenedor del menú móvil se muestre como bloque */
     .menuMobile {
         display: block;
     }
+
+    .content {
+        width: 100%;
+        margin-left: 0;
+        overflow-x: hidden;
+    }
+
+        .content table {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
 }
