@@ -9,7 +9,7 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/qr.css" />   
 </head>
 <body>
@@ -19,8 +19,7 @@
 
         <div>
             <img src="@Model.QrImageBase64" alt="QR Code" class="qr-image" />
-        </div>
-
+        </div>       
         <div>
             <button onclick="window.print()" class="btn btn-success no-print">Imprimir QR</button>
         </div>
@@ -31,7 +30,10 @@
             <a asp-controller="Machines" asp-action="Index" class="btn btn-secondary no-print">Volver a la lista</a>
         </div>
 
-        <div class="print-only">
+        <div class="print-only">            
+            <div>
+                <img src="~/img/icons/QrPrintViewLogo.png" alt="Qr logo" class="qr-logo" />
+            </div>
             <h2 class="center">Registro de Servicios</h2>
             <table class="service-table">
                 <thead>
