@@ -79,9 +79,7 @@ namespace Control_Machine_Sistem.Controllers
             return View(user);
         }
 
-        // POST: Users/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Users/Edit/5       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Email,Password,Rol")] User user)
@@ -93,12 +91,14 @@ namespace Control_Machine_Sistem.Controllers
 
             if (ModelState.IsValid)
             {
+                // Obtener el usuario original sin tracking
                 var originalUser = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
                 if (originalUser == null)
                 {
                     return NotFound();
                 }
 
+                // Si la contraseña enviada es vacía, se conserva la original
                 if (string.IsNullOrWhiteSpace(user.Password))
                 {
                     user.Password = originalUser.Password;
@@ -106,6 +106,13 @@ namespace Control_Machine_Sistem.Controllers
                 else
                 {
                     user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+                }
+
+                // Desanexar la entidad ya trackeada con el mismo ID, si es que existe
+                var local = _context.Set<User>().Local.FirstOrDefault(entry => entry.Id == id);
+                if (local != null)
+                {
+                    _context.Entry(local).State = EntityState.Detached;
                 }
 
                 try
