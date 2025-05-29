@@ -21,6 +21,7 @@ namespace Control_Machine_Sistem.Controllers
             var machine = _context.Machines!
                           .Include(m => m.Customer)
                           .Include(m => m.Model)
+                          .OrderBy(m => m.Id)
                           .AsQueryable();
 
             //Filter by search text if provided
