@@ -15,21 +15,41 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: /Maintenance/Index        
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, int page = 1, int pageSize = 5)
         {
-            var machines = await _context.Machines
+            var machines = _context.Machines
                 .Include(m => m.Customer)
                 .Include(m => m.Model)
-                .ToListAsync();
+                .AsQueryable(); 
             
-            var viewModel = machines.Select(m => new MaintenanceIndexViewModel
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                machines = machines.Where(m =>
+                    m.Customer!.Name!.Contains(searchString) ||
+                     m.Customer!.LastName!.Contains(searchString) ||
+                    m.Model!.Name!.Contains(searchString));
+            }
+            
+            var totalMachines = await machines.CountAsync();
+            
+            var pagedMachines = await machines
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            // Convertir a ViewModel
+            var viewModel = pagedMachines.Select(m => new MaintenanceIndexViewModel
             {
                 MachineId = m.Id,
-                MachineModel = m.Model?.Name,               
-                CustomerName = m.Customer?.Name
+                MachineModel = m.Model?.Name,
+                CustomerName = m.Customer?.FullName
             }).ToList();
+           
+            var pager = new Pager<MaintenanceIndexViewModel>(viewModel, totalMachines, page, pageSize);
+            
+            ViewData["searchString"] = searchString;
 
-            return View(viewModel);
+            return View(pager);
         }
 
         // GET: /Maintenance/MachineServices?machineId=5       
