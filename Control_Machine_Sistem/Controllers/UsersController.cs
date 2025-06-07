@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Control_Machine_Sistem.Models;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace Control_Machine_Sistem.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
         private readonly AppDbContext _context;

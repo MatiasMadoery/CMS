@@ -4,9 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Control_Machine_Sistem.Models;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Control_Machine_Sistem.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class OtherMaintenancesController : Controller
     {
         private readonly AppDbContext _context;

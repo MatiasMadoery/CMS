@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Control_Machine_Sistem.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Control_Machine_Sistem.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CategoriesController : Controller
     {
         private readonly AppDbContext _context;

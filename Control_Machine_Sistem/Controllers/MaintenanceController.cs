@@ -2,9 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Control_Machine_Sistem.Models;
 using Control_Machine_Sistem.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Control_Machine_Sistem.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class MaintenanceController : Controller
     {
         private readonly AppDbContext _context;
