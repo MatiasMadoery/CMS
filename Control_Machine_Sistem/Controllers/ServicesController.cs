@@ -6,9 +6,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Control_Machine_Sistem.Services;
 using Control_Machine_Sistem.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Control_Machine_Sistem.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ServicesController : Controller
     {
         private readonly AppDbContext _context;

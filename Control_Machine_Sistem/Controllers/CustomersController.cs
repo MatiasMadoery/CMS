@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Control_Machine_Sistem.Models;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Control_Machine_Sistem.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CustomersController : Controller
     {
         private readonly AppDbContext _context;

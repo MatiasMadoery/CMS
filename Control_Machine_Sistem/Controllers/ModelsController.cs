@@ -7,10 +7,12 @@ using NPOI.OpenXml4Net.OPC.Internal;
 using Control_Machine_Sistem.Services;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Http.Metadata;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace Control_Machine_Sistem.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ModelsController : Controller
     {
         private readonly AppDbContext _context;

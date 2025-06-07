@@ -5,9 +5,11 @@ using QRCoder;
 using Control_Machine_Sistem.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Control_Machine_Sistem.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class QrCodesController : Controller
     {
         private readonly AppDbContext _context;
