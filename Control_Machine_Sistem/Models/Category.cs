@@ -8,7 +8,7 @@ namespace Control_Machine_Sistem.Models
         public int Id { get; set; }
 
         [Required]
-        [Display(Name="Categoría")]
+        [Display(Name="Producto")]
         public string Name { get; set; } = string.Empty;
 
         public ICollection<Model> Models { get; set; } = new List<Model>();

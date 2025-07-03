@@ -23,7 +23,7 @@ namespace Control_Machine_Sistem.Models
         [Display(Name = "Número de motor")]
         public string? EngineNumber { get; set; }
 
-        [Display(Name = "Fecha de entrega")]        
+        [Display(Name = "Fecha de entrega técnica")]        
         public DateTime? DeliveryDate { get; set; }
 
         [Display(Name = "Fecha vencimiento garantia")]

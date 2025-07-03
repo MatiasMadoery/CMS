@@ -21,7 +21,7 @@
         </form>
     </div>
     <div>       
-        <a asp-action="Index" asp-controller="Categories" class="btn btn-warning">Categorías</a>
+        <a asp-action="Index" asp-controller="Categories" class="btn btn-warning">Productos</a>
     </div>
 </div>
 <br />
@@ -36,7 +36,7 @@
                 <th>@Html.DisplayNameFor(model => model.Elements.First().Name)</th>
                 <th>@Html.DisplayNameFor(model => model.Elements.First().Category)</th>
                 <th>Manuales</th>
-                <th>Kits de Repuestos</th>
+                <th>Consumibles Services</th>
             </tr>       
     </thead>
         <tbody>
@@ -76,7 +76,7 @@
                     }
                     else
                     {
-                        <span>Sin kits de repuestos asociados </span>
+                        <span>Sin consumibles de services asociados </span>
                     }
                 </td>
                 <td>
