@@ -6,6 +6,17 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <!--<ItemGroup>
+    <Compile Remove="App_Data\documentation\NewFolder1\**" />
+    <Compile Remove="App_Data\documentation\serviceSheets\**" />
+    <Content Remove="App_Data\documentation\NewFolder1\**" />
+    <Content Remove="App_Data\documentation\serviceSheets\**" />
+    <EmbeddedResource Remove="App_Data\documentation\NewFolder1\**" />
+    <EmbeddedResource Remove="App_Data\documentation\serviceSheets\**" />
+    <None Remove="App_Data\documentation\NewFolder1\**" />
+    <None Remove="App_Data\documentation\serviceSheets\**" />
+  </ItemGroup>-->
+
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.13" />
@@ -21,8 +32,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="App_Data\documentation\serviceSheets\" />
     <Folder Include="App_Data\documentation\spareKits\" />
+	<Folder Include="App_Data\documentation\serviceSheets\" />
     <Folder Include="wwwroot\img\images\" />
   </ItemGroup>
 

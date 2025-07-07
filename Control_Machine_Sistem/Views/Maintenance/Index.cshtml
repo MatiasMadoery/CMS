@@ -10,7 +10,7 @@
 <form method="get" id="filter-form" class="mb-4">
     <div class="row">
         <div class="col-8 col-sm-8 col-md-4">
-            <input type="text" name="searchString" class="form-control" placeholder="Buscar máquina o cliente..." value="@ViewData["searchString"]" />
+            <input type="text" name="searchString" class="form-control" placeholder="Buscar modelo o cliente..." value="@ViewData["searchString"]" />
         </div>
         <div class="col-1 col-md-4">
             <button type="submit" class="btn btn-primary">Buscar</button>
@@ -35,7 +35,7 @@
                 <td>
                     <a class="btn btn-primary" asp-controller="Services" asp-action="Index" asp-route-machineId="@item.MachineId">
                         Services
-                    </a>
+                    </a> |
                     <a class="btn btn-primary" asp-controller="OtherMaintenances" asp-action="Index" asp-route-machineId="@item.MachineId">
                         Otros mantenimientos
                     </a>

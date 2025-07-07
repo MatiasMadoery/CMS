@@ -1,8 +1,6 @@
-﻿﻿@{
-    
+﻿@{
     ViewData["Title"] = "Iniciar Sesión";
     ViewData["BodyClass"] = "login-page";
-
 }
 <head>
     <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
@@ -14,10 +12,10 @@
         </div>
         <div class="form-container">
             <h2 id="welcome">¡Bienvenido!</h2>
-            @if (ViewData["Error"] != null)
+            @if (TempData["AlertMessage"] != null)
             {
                 <div class="alert alert-danger">
-                    @ViewData["Error"]
+                    @TempData["AlertMessage"]
                 </div>
             }
             <form asp-action="Login" method="post">

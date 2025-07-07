@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using BCrypt.Net;
 
 namespace Control_Machine_Sistem.Controllers
 {
@@ -17,7 +16,7 @@ namespace Control_Machine_Sistem.Controllers
             _context = context;
         }
 
-        // Action to show the login view
+        // Action para mostrar la vista de login
         [HttpGet]
         public IActionResult Login()
         {
@@ -28,7 +27,71 @@ namespace Control_Machine_Sistem.Controllers
             return View();
         }
 
- 
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginDto loginDto)
+        {
+            // Si el modelo no es válido, enviamos un mensaje de alerta
+            if (!ModelState.IsValid)
+            {
+                TempData["AlertMessage"] = "Por favor, revise los datos ingresados.";
+                return View(loginDto);
+            }
+
+            try
+            {
+                // Buscar el usuario en la base de datos por el nombre
+                var user = _context.Users.FirstOrDefault(u => u.Name == loginDto.Name);
+                if (user != null && BCrypt.Net.BCrypt.Verify(loginDto.Password, user.Password))
+                {
+                    // Si la verificación del hash es exitosa, se crean los claims
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, user.Name ?? string.Empty),
+                        new Claim(ClaimTypes.Role, user.Rol ?? string.Empty)
+                    };
+
+                    // Se crea la identidad del usuario
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    // Se firma la cookie de autenticación
+                    await HttpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(claimsIdentity));
+
+                    // Redirigir al usuario a la página principal (ej: "Home/Index")
+                    return RedirectToAction("Index", "Home");
+                }
+
+                // Si el usuario no existe o la contraseña es incorrecta, enviar alerta
+                TempData["AlertMessage"] = "Usuario o contraseña incorrectos.";
+                return View(loginDto);
+            }
+            catch (Exception ex)
+            {
+                // Podés registrar la excepción si lo deseas con tu logger
+                TempData["AlertMessage"] = "Ocurrió un error al procesar la solicitud. Intente nuevamente más tarde.";
+                return View(loginDto);
+            }
+        }
+
+        // Log Out Action
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login");
+        }
+
+        // Access Denied View
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+    }
+}
+
+
+        //Post para ingresar con usuario y contraseña
         //[HttpPost]
         //public async Task<IActionResult> Login(LoginDto loginDto)
         //{
@@ -95,55 +158,4 @@ namespace Control_Machine_Sistem.Controllers
         //    return View(loginDto);
         //}
 
-        [HttpPost]
-        public async Task<IActionResult> Login(LoginDto loginDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(loginDto);
-            }
-
-            // Buscar el usuario en la base de datos por el nombre
-            var user = _context.Users.FirstOrDefault(u => u.Name == loginDto.Name);
-            if (user != null && BCrypt.Net.BCrypt.Verify(loginDto.Password, user.Password))
-            {
-                // Si la verificación del hash es exitosa, se crean los claims
-                var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, user.Name ?? string.Empty),
-            new Claim(ClaimTypes.Role, user.Rol ?? string.Empty)
-        };
-
-                // Se crea la identidad del usuario
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-                // Se firma la cookie de autenticación
-                await HttpContext.SignInAsync(
-                    CookieAuthenticationDefaults.AuthenticationScheme,
-                    new ClaimsPrincipal(claimsIdentity));
-
-                // Redirigir al usuario a la página principal (por ejemplo, "Home/Index")
-                return RedirectToAction("Index", "Home");
-            }
-
-            // Si el usuario no existe o la contraseña es incorrecta, se agrega un error al ModelState 
-            ModelState.AddModelError("", "Usuario o contraseña incorrectos");
-            return View(loginDto);
-        }
-
-        // Log Out Action
-        [Authorize]
-        public async Task<IActionResult> Logout()
-        {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login");
-        }
-
-        //  Access Denied View
-        public IActionResult AccessDenied()
-        {
-            return View();
-        }
-    }
-}
 

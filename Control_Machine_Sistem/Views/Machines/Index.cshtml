@@ -4,12 +4,12 @@
     ViewData["Title"] = "Máquinas";
 }
 
-<h1 class="mb-4">Máquinas</h1>
+<h1 class="mb-4">Modelos vendidos</h1>
 
 <form method="get" id="filter-form" class="mb-4">
     <div class="row">
         <div class="col-md-3">
-            <input type="text" name="searchString" class="form-control" placeholder="Buscar cliente o máquina..." value="@ViewData["searchString"]" />
+            <input type="text" name="searchString" class="form-control" placeholder="Buscar cliente o modelo..." value="@ViewData["searchString"]" />
         </div>
         <div class="col-md-3">
             <button type="submit" class="btn btn-primary">Buscar</button>
@@ -21,7 +21,7 @@
     </div>
 </form>
 <div class="mb-3">
-    <a asp-action="Create" class="btn btn-success">Cargar nueva máquina</a>
+    <a asp-action="Create" class="btn btn-success">Cargar nueva venta</a>
 </div>
 
 <hr />
