@@ -44,7 +44,7 @@ namespace Control_Machine_Sistem.Controllers
             {
                 MachineId = m.Id,
                 MachineModel = m.Model?.Name,
-                CustomerName = m.Customer?.FullName
+                CustomerName = m.Customer?.Name
             }).ToList();
            
             var pager = new Pager<MaintenanceIndexViewModel>(viewModel, totalMachines, page, pageSize);
