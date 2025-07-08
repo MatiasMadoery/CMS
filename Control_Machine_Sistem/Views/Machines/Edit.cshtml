@@ -36,12 +36,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="DeliveryDate" class="control-label"></label>
-                <input asp-for="DeliveryDate" class="form-control" />
+                <input asp-for="DeliveryDate" class="form-control" type="date" />
                 <span asp-validation-for="DeliveryDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="WarrantyExpirationDate" class="control-label"></label>
-                <input asp-for="WarrantyExpirationDate" class="form-control" />
+                <input asp-for="WarrantyExpirationDate" class="form-control" readonly id="WarrantyExpirationDate" />
                 <span asp-validation-for="WarrantyExpirationDate" class="text-danger"></span>
             </div>
             <br />
@@ -101,6 +101,10 @@
 
 @section Scripts {
     <script src="~/js/views.js"></script>
+    <script src="~/js/machineCreateForm.js"></script>
+    <script>
+        setupWarrantyDateAutoCalc("DeliveryDate", "WarrantyExpirationDate");
+    </script>
 
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

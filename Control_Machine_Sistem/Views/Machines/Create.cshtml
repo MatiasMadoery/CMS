@@ -47,13 +47,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="DeliveryDate" class="control-label"></label>
-                <input asp-for="DeliveryDate" class="form-control" />
+                <input asp-for="DeliveryDate" class="form-control" type="date" />
                 <span asp-validation-for="DeliveryDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="WarrantyExpirationDate" class="control-label"></label>
-                <input asp-for="WarrantyExpirationDate" class="form-control" />
-                <span asp-validation-for="WarrantyExpirationDate" class="text-danger"></span>
+                <label class="control-label">Fecha de vencimiento de garantía</label>
+                <input class="form-control" id="warrantyDatePreview" readonly />
             </div>
             <br />
             <div id="fileUploadContainer">
@@ -81,6 +80,10 @@
     <script src="~/js/site.js"></script>
     <script src="~/js/views.js"></script>  
     <script src="~/js/machineCreateForm.js"></script>
+
+    <script>
+        setupWarrantyDateAutoCalc("DeliveryDate", "warrantyDatePreview");
+    </script>
   
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

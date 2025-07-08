@@ -106,7 +106,7 @@ namespace Control_Machine_Sistem.Controllers
         // POST: Machines/Create           
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,WarrantyExpirationDate,Documentations")] Machine machine)
+        public async Task<IActionResult> Create([Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,Documentations")] Machine machine)
         {          
 
             if (ModelState.IsValid)
@@ -135,7 +135,7 @@ namespace Control_Machine_Sistem.Controllers
                     ChasisNumber = machine.ChasisNumber,
                     EngineNumber = machine.EngineNumber,
                     DeliveryDate = machine.DeliveryDate,
-                    WarrantyExpirationDate = machine.WarrantyExpirationDate,
+                    WarrantyExpirationDate = machine.DeliveryDate?.AddDays(365),
                     DocUrls = docUrls,
                 };
                 _context.Add(newMachine);
@@ -216,7 +216,7 @@ namespace Control_Machine_Sistem.Controllers
                     existingMachine.ChasisNumber = machine.ChasisNumber;
                     existingMachine.EngineNumber = machine.EngineNumber;
                     existingMachine.DeliveryDate = machine.DeliveryDate;
-                    existingMachine.WarrantyExpirationDate = machine.WarrantyExpirationDate;
+                    existingMachine.WarrantyExpirationDate = machine.DeliveryDate?.AddDays(365);
 
                     List<string> docUrls = ExistingDocs ?? new List<string>();
 

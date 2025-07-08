@@ -50,8 +50,8 @@ else
                 <tr>
                     <td>@Html.DisplayFor(modelItem => item.Customer!.FullName)</td>
                     <td>@Html.DisplayFor(modelItem => item.Model!.Name)</td>
-                    <td>@Html.DisplayFor(modelItem => item.DeliveryDate)</td>
-                    <td>@Html.DisplayFor(modelItem => item.WarrantyExpirationDate)</td>
+                    <td>@item.DeliveryDate?.ToString("dd/MM/yyyy")</td>
+                    <td>@item.WarrantyExpirationDate?.ToString("dd/MM/yyyy")</td>
                     <td>
                         @if (item.DocUrls != null && item.DocUrls.Any())
                         {

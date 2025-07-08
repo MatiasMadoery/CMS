@@ -14,3 +14,20 @@
           .catch(error => console.error("Error cargando modelos:", error));
  });
 
+function setupWarrantyDateAutoCalc(deliveryInputId, warrantyPreviewId) {
+    const deliveryInput = document.getElementById(deliveryInputId);
+    const warrantyPreview = document.getElementById(warrantyPreviewId);
+
+    if (!deliveryInput || !warrantyPreview) return;
+
+    deliveryInput.addEventListener("change", function () {
+        const deliveryDate = new Date(this.value);
+        if (!isNaN(deliveryDate)) {
+            const warrantyDate = new Date(deliveryDate);
+            warrantyDate.setDate(warrantyDate.getDate() + 365);
+            warrantyPreview.value = warrantyDate.toISOString().split("T")[0]; // ✅ solo fecha
+        } else {
+            warrantyPreview.value = "";
+        }
+    });
+}
