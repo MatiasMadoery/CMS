@@ -216,10 +216,12 @@ namespace Control_Machine_Sistem.Controllers
                     var workbook = new XSSFWorkbook(stream);
                     var sheet = workbook.GetSheetAt(0);
 
-                    for (int row = 1; row < sheet.LastRowNum; row++) // Comienza desde la fila 1 (segunda fila)
+                    var importedCustomers = new List<Customer>();
+
+                    for (int row = 1; row <= sheet.LastRowNum; row++)
                     {
                         var currentRow = sheet.GetRow(row);
-                        if (currentRow == null) continue; // Si la fila está vacía, salta
+                        if (currentRow == null || currentRow.Cells.All(c => c.CellType == CellType.Blank)) continue;
 
                         var customer = new Customer
                         {
@@ -235,13 +237,27 @@ namespace Control_Machine_Sistem.Controllers
                             Country = GetCellValue(currentRow.GetCell(9))
                         };
 
-                        _context.Add(customer);
+                        // Validaciones mínimas antes de agregar
+                        if (string.IsNullOrWhiteSpace(customer.Name) || string.IsNullOrWhiteSpace(customer.Phone) || string.IsNullOrWhiteSpace(customer.Email))
+                        {
+                            TempData["ErrorMessage"] = $"Error en fila {row + 1}: Faltas datos en campos obligatorios.";
+                            return RedirectToAction(nameof(Index));
+                        }
+
+                        importedCustomers.Add(customer);
                     }
 
-                    await _context.SaveChangesAsync();
+                    if (importedCustomers.Any())
+                    {
+                        _context.Customers.AddRange(importedCustomers);
+                        await _context.SaveChangesAsync();
+                        TempData["SuccessMessage"] = $"Se importaron {importedCustomers.Count} clientes correctamente.";
+                    }
+                    else
+                    {
+                        TempData["WarningMessage"] = "No se encontraron clientes válidos para importar.";
+                    }
                 }
-
-                TempData["SuccessMessage"] = "Clientes importados exitosamente.";
             }
             catch (Exception ex)
             {
@@ -250,21 +266,44 @@ namespace Control_Machine_Sistem.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
         private string GetCellValue(ICell cell)
         {
-            if (cell == null) return string.Empty; // Retorna un valor vacío si la celda es nula
+            if (cell == null) return string.Empty;
 
-            switch (cell.CellType)
+            try
             {
-                case CellType.String:
-                    return cell.StringCellValue;
-                case CellType.Numeric:
-                    return cell.NumericCellValue.ToString();
-                case CellType.Boolean:
-                    return cell.BooleanCellValue.ToString();
-                default:
-                    return string.Empty;
+                switch (cell.CellType)
+                {
+                    case CellType.String:
+                        return cell.StringCellValue?.Trim() ?? "";
+
+                    case CellType.Numeric:
+                        if (DateUtil.IsCellDateFormatted(cell))
+                        {
+                            DateTime? fecha = cell.DateCellValue;
+                            return fecha.HasValue ? fecha.Value.ToString("dd/MM/yyyy") : "";
+
+                        }
+                        return cell.NumericCellValue.ToString();
+
+                    case CellType.Boolean:
+                        return cell.BooleanCellValue.ToString();
+
+                    case CellType.Formula:
+                        var evaluator = cell.Sheet.Workbook.GetCreationHelper().CreateFormulaEvaluator();
+                        var evaluatedCell = evaluator.EvaluateInCell(cell);
+                        return GetCellValue(evaluatedCell);
+
+                    default:
+                        return cell.ToString().Trim();
+                }
+            }
+            catch
+            {
+                return "";
             }
         }
+
     }
 }

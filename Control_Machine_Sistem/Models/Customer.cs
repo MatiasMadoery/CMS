@@ -7,7 +7,7 @@ namespace Control_Machine_Sistem.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Debe ingresar la Razón Social.")]
-        [Display(Name = "Razón Social")]
+        [Display(Name = "Razón Social *")]
         public string? Name { get; set; }
 
         
@@ -17,10 +17,11 @@ namespace Control_Machine_Sistem.Models
         public string? Cuit { get; set; }
 
         [Required(ErrorMessage = "Debe ingresar el Teléfono")]
-        [Display(Name = "Telefono")]
+        [Display(Name = "Telefono *")]
         public string? Phone { get; set; }
 
         [Required(ErrorMessage = "Debe ingresar el Email")]
+        [Display(Name = "Email *")]
         public string? Email { get; set; }
 
         [Display(Name = "Direccion")]
