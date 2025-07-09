@@ -68,7 +68,7 @@ namespace Control_Machine_Sistem.Controllers
             
             var model = new QrCode
             {
-                ClientName = customer.FullName,
+                ClientName = customer.Name,
                 MachineModel = machine.Model.Name,
                 ManualUrl = manualUrl,
                 DocUrl = docUrl,
@@ -157,7 +157,7 @@ namespace Control_Machine_Sistem.Controllers
 
             var model = new QrCode
             {
-                ClientName = customer.FullName,
+                ClientName = customer.Name,
                 MachineModel = machine.Model.Name,
                 ManualUrl = manualUrl,
                 DocUrl = docUrl,
@@ -230,7 +230,7 @@ namespace Control_Machine_Sistem.Controllers
 
             var model = new QrCode
             {
-                ClientName = machine.Customer.FullName,
+                ClientName = machine.Customer.Name,
                 MachineModel = machine.Model.Name,
                 ManualUrl = manualUrl,
                 DocUrl = docUrl,

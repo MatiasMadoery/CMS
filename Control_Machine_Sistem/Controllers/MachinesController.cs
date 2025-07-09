@@ -23,6 +23,7 @@ namespace Control_Machine_Sistem.Controllers
             var machine = _context.Machines!
                           .Include(m => m.Customer)
                           .Include(m => m.Model)
+                          .OrderBy(m => m.Id)
                           .AsQueryable();
 
             //Filter by search text if provided
@@ -85,7 +86,7 @@ namespace Control_Machine_Sistem.Controllers
         {
             ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
             ViewBag.ModelId = new SelectList(new List<Model>(), "Id", "Name");
-            ViewBag.Customers = new SelectList(_context.Customers.Select(c => new { c.Id, FullName = c.Name + " " + c.LastName }), "Id", "FullName");
+            ViewBag.Customers = new SelectList(_context.Customers.Select(c => new { c.Id, c.Name}), "Id", "Name");
 
             return View();
         }
@@ -145,7 +146,7 @@ namespace Control_Machine_Sistem.Controllers
 
             ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
             ViewBag.ModelId = new SelectList(new List<Model>(), "Id", "Name");
-            ViewBag.Customers = new SelectList(_context.Customers.Select(c => new { c.Id, FullName = c.Name + " " + c.LastName }), "Id", "FullName");
+            ViewBag.Customers = new SelectList(_context.Customers.Select(c => new { c.Id, c.Name }), "Id", "Name");
             return View(machine);
         }
 
@@ -165,9 +166,9 @@ namespace Control_Machine_Sistem.Controllers
             {
                 return NotFound();
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "FullName", machine.CustomerId);
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Name", machine.CustomerId);
             ViewData["ModelId"] = new SelectList(_context.Models, "Id", "Name", machine.ModelId);
-            ViewBag.CustomerName = machine.Customer?.FullName;
+            ViewBag.CustomerName = machine.Customer?.Name;
             return View(machine);
         }
 
@@ -202,7 +203,7 @@ namespace Control_Machine_Sistem.Controllers
                         var ownerHistory = new OwnerHistory
                         {
                             MachineId = existingMachine.Id,
-                            PreviousOwner = existingMachine.Customer.FullName,
+                            PreviousOwner = existingMachine.Customer.Name,
                             ChangeDate = DateTime.Now
                         };
 
@@ -341,7 +342,7 @@ namespace Control_Machine_Sistem.Controllers
                                           .Select(c => new
                                           {
                                               id = c.Id,
-                                              text = c.Name + " " + c.LastName
+                                              text = c.Name
                                           })
                                           .Take(10)
                                           .ToListAsync();

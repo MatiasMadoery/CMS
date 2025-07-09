@@ -6,19 +6,21 @@ namespace Control_Machine_Sistem.Models
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Debe ingresar el nombre.")]
-        [Display(Name = "Nombre")]
+        [Required(ErrorMessage = "Debe ingresar la Razón Social.")]
+        [Display(Name = "Razón Social")]
         public string? Name { get; set; }
 
-        [Required(ErrorMessage = "Debe ingresar el apellido.")]
-        [Display(Name = "Apellido")]
+        
+        [Display(Name = "Persona de contacto")]
         public string? LastName { get; set; }
 
         public string? Cuit { get; set; }
-        
+
+        [Required(ErrorMessage = "Debe ingresar el Teléfono")]
         [Display(Name = "Telefono")]
         public string? Phone { get; set; }
 
+        [Required(ErrorMessage = "Debe ingresar el Email")]
         public string? Email { get; set; }
 
         [Display(Name = "Direccion")]

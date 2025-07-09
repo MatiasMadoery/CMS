@@ -171,21 +171,23 @@ body {
         display: flex;
         justify-content: flex-start;
         position: absolute;
-        top: 15px;
-        left: 15px; 
+        top: 10px;
+        left: 15px;
         z-index: 1000;
     }
 
-        #menuHambur button {
-            padding: 3px 20px;
-            font-size: 25px;
-            margin: 5px;
-            border-radius: 20px;
-            background-color: rgb(218, 215, 215);
-            color: black;
-            border: none;
-            z-index: 1000;
-        }
+    #btnMenuMobile {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10px 20px;
+        font-size: 15px;
+        width: 20px;
+        height: 25px;
+        border-radius: 5px;
+        background-color: #eabe2e !important;
+        cursor: pointer;
+    }
 
     /* Por defecto, el menú queda oculto */
     #menuQuery {
@@ -196,16 +198,25 @@ body {
         #menuQuery.active {
             display: grid;
             position: absolute;
-            width: 200px;
-            background-color: rgb(218, 215, 215);
-            top: 60px; /* Ajusta la posición vertical según convenga */
+            width: 150px;
+            background-color: #eabe2e;
+            top: 50px; /* Ajusta la posición vertical según convenga */
             left: 15px;
             border: 1px solid black;
-            border-radius: 10%;
-            color: rgb(29, 117, 189);
+            border-radius: 5px;
             box-shadow: 0px 3px 5px 3px rgba(0, 0, 0, 0.5);
             z-index: 1000;
         }
+
+            #menuQuery.active .nav-link {
+                color: #0d0d0d;
+            }
+
+                #menuQuery.active .nav-link:hover {
+                    background-color: #0d0d0d;
+                    color: #eabe2e;
+                    border-radius: 5px;
+                }
 
     /* Asegúrate de que el contenedor del menú móvil se muestre como bloque */
     .menuMobile {
@@ -225,4 +236,27 @@ body {
             -webkit-overflow-scrolling: touch;
         }
 
+    .footer {
+        font-size: 14px; 
+        padding: 10px; 
+    }
+
+        .footer .container {
+            font-size: 12px; 
+            padding: 10px;
+            display: flex;
+            flex-direction: column; 
+            align-items: center;
+            justify-content: center;
+            gap: 0px;
+        }
+
+            .footer .container span {
+                line-height: 1.2; 
+                margin: 2px 0; 
+                padding: 0;
+            }
+
 }
+
+
