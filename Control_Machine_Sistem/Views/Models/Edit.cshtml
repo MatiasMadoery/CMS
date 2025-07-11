@@ -12,9 +12,9 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="CategoryId" class="control-label">Categoría</label>
+                <label asp-for="CategoryId" class="control-label">Producto</label>
                 <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-control">
-                    <option value="">Selecciona una categoría</option>
+                    <option value="">Selecciona un producto</option>
                 </select>
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>

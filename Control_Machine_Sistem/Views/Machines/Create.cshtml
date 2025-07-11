@@ -20,9 +20,9 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="CategoryId">Categoría</label>
+                <label for="CategoryId">Producto</label>
                 <select id="CategoryId" class="form-control">
-                    <option value="">Seleccione una categoría...</option>
+                    <option value="">Seleccione un producto...</option>
                     @foreach (var category in ViewBag.Categories)
                     {
                         <option value="@category.Value">@category.Text</option>

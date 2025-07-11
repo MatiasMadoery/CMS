@@ -21,7 +21,7 @@ namespace Control_Machine_Sistem.Models
 
         [Required]
         public int? CategoryId { get; set; }
-        [Display(Name = "Categoría")]
+        [Display(Name = "Producto")]
         public Category? Category { get; set; }
 
         [Display(Name = "Manuales")]

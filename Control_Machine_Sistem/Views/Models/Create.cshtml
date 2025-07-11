@@ -13,13 +13,13 @@
         <form asp-action="Create" enctype="multipart/form-data" id="uploadForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="CategoryId" class="control-label">Categoría</label>
+                <label asp-for="CategoryId" class="control-label">Producto</label>
                 <div class="d-flex">
                     <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-control-sm me-2">
-                        <option value="">Selecciona una categoría</option>
+                        <option value="">Selecciona un producto</option>
                     </select>
                      <a asp-action="Create" asp-controller="Categories" class="btn btn-success btn-sm" target="_blank">
-                        Crear categoría
+                        Crear producto
                     </a>
                 </div>
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
