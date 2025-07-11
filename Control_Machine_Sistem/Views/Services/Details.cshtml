@@ -38,29 +38,36 @@
     </dl>
 </div>
 
-@if (Model.ServiceSheetUrls != null && Model.ServiceSheetUrls.Any())
-{
-    <div class="form-group">
-        <h4>Planillas Asociadas</h4>
-        <ul>
-            @foreach (var sheetUrl in Model.ServiceSheetUrls)
+<div class="form-group">
+    <label>Planillas cargadas</label>
+    <table class="table table-bordered">
+        <tbody>
+            @if (Model.ServiceSheetUrls != null && Model.ServiceSheetUrls.Any())
             {
-                var fileName = System.IO.Path.GetFileName(sheetUrl);
-                var fileUrl = Url.Action("GetServiceSheet", "Services", new { fileName = fileName });
+                @for (int i = 0; i < Model.ServiceSheetUrls.Count; i++)
+                {
+                    var fileUrl = Model.ServiceSheetUrls[i];
+                    var fileName = System.IO.Path.GetFileName(fileUrl);
 
-                <li class="document-name">
-                    <a href="@fileUrl" download>@fileName</a>
-                </li>
+                    <tr>
+                        <td>
+                            <a href="@fileUrl" target="_blank" class="document-name" download>
+                                @fileName
+                            </a>
+                            <input type="hidden" name="ExistingServiceSheets" value="@fileUrl" />
+                        </td>
+                    </tr>
+                }
             }
-        </ul>
-    </div>
-}
-else
-{
-    <div class="alert alert-info">
-        <strong>Nota:</strong> No hay planillas asociadas.
-    </div>
-}
+            else
+            {
+                <tr>
+                    <td colspan="2">No hay planillas cargadas.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 <div>
     <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.Id" asp-route-machineId="@(machineId)">Editar</a> |

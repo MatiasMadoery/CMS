@@ -39,7 +39,7 @@
                                 @foreach (var sheetUrl in service.ServiceSheetUrls)
                                 {
                                     <li>
-                                        <a href="@sheetUrl" download class="btn btn-outline-primary btn-sm">
+                                        <a href="@sheetUrl" class="document-name" download="">
                                             @System.IO.Path.GetFileName(sheetUrl)
                                         </a>
                                     </li>
