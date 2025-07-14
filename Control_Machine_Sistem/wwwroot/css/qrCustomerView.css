@@ -14,7 +14,7 @@
 /* Tarjeta Principal */
 .card {
     background-color: #fff;
-    border-radius: 16px;
+    border-radius: 15px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 400px;
@@ -40,7 +40,7 @@
     background-color: #eabe2e;
     color: black;
     text-align: center;
-    padding: 20px 15px;
+    padding: 5px 10px;
 }
 
 /* Contenido Principal */
@@ -90,4 +90,38 @@
     display: block;
     margin: 10px auto 0; 
 }
+
+/*TABLA SERVICE*/
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+    .table th,
+    .table td {
+        border: 1px solid black;
+        padding: 12px;
+        color: black;
+        text-align: center;
+    }
+
+    .table thead {
+        background-color: #eabe2e;
+    }
+
+        .table thead th {
+            color: black;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+    .table tbody tr:nth-child(even) {
+        background-color: silver; /* suave contraste */
+    }
+
+    .table tbody tr:nth-child(odd) {
+        background-color: white;
+    }
     

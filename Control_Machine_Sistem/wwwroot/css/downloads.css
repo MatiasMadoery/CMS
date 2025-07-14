@@ -1,10 +1,10 @@
-﻿/* ==================== */
+﻿
 /*    ESTILOS GENERALES */
-/* ==================== */
 body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(to bottom, #f39c12, #f1c40f, #ffffff);
+    background: black;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -13,12 +13,11 @@ body {
     color: #333;
 }
 
-/* ==================== */
+
 /*       TARJETA        */
-/* ==================== */
 .card {
     background-color: #fff;
-    border-radius: 16px;
+    border-radius: 15px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 400px;
@@ -41,10 +40,11 @@ body {
 
 /* Encabezado */
 .card-header {
-    background-color: #f39c12;
-    color: #fff;
+    background-color: #eabe2e;
+    border-radius: 5px;
+    color: black;
     text-align: center;
-    padding: 20px 15px;
+    padding: 5px 15px;
 }
 
 /* Contenido Principal */
@@ -53,9 +53,16 @@ body {
     text-align: center;
 }
 
-/* ==================== */
+    .card-body h4 {
+        font-size: 18px;
+        margin: 10px 0;
+        font-weight: bold;
+        color: black;
+    }
+
+
+
 /*     LISTA COMÚN      */
-/* ==================== */
 .list {
     list-style: none;
     padding: 0;
@@ -85,30 +92,31 @@ body {
         text-decoration: underline;
     }
 
-/* ==================== */
+
 /*       BOTONES        */
-/* ==================== */
-.btn-secondary {
+.btn {
     display: block;
     width: 100%;
-    background-color: #555;
-    color: #fff;
+    background-color: #eabe2e;
+    color: black;
     font-size: 16px;
     font-weight: bold;
     padding: 12px 0;
     border: none;
     border-radius: 8px;
     cursor: pointer;
+    margin-bottom: 12px;
     text-decoration: none;
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-    .btn-secondary:hover {
-        background-color: #333;
+    .btn:hover {
+        background-color: black;
+        color: #eabe2e;
         transform: scale(1.05);
     }
 
-    .btn-secondary:active {
-        background-color: #222;
+    .btn:active {
+        background-color: #d35400;
         transform: scale(0.95);
     }

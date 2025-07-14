@@ -5,7 +5,6 @@
     ViewData["Title"] = "Detalles de la Máquina";
 }
 
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -15,8 +14,6 @@
     <link rel="stylesheet" href="~/css/qrCustomerView.css" />
 </head>
 <body>
-
-
 <div class="card">
     <div class="card-header">
         <h3>Sr @Model.ClientName</h3>
@@ -33,6 +30,9 @@
         </a>    
         <a href="@Url.Action("ServiceDetails", "QrCodes", new { machineId = Model.MachineId })" class="btn">
             Ver Services
+        </a>
+        <a href="@Url.Action("OtherMaintenancesDetails", "QrCodes", new { machineId = Model.MachineId })" class="btn">
+        Ver Otros Mantenimientos
         </a>
     </div>
 </div>

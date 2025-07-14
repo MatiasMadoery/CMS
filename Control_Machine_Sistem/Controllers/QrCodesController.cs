@@ -6,6 +6,7 @@ using Control_Machine_Sistem.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Authorization;
+using System.Runtime.InteropServices;
 
 namespace Control_Machine_Sistem.Controllers
 {
@@ -27,6 +28,7 @@ namespace Control_Machine_Sistem.Controllers
                 .Include(m => m.Customer)
                 .Include(m => m.Model)
                 .Include(m => m.Services)  // Incluimos los Services para poder trabajar con ellos
+                .Include(m => m.OtherMaintenances)
                 .FirstOrDefaultAsync(m => m.Id == machineId);
 
             if (machine == null || machine.Model == null || machine.Customer == null)
@@ -399,13 +401,17 @@ namespace Control_Machine_Sistem.Controllers
                 .Where(s => s.MachineId == machineId)
                 .ToListAsync();
 
-            if (!services.Any())
-            {
-                return NotFound("No hay servicios registrados para esta máquina.");
-            }
-
             ViewData["MachineId"] = machineId; 
             return View(services);
+        }
+
+        public async Task<IActionResult> OtherMaintenancesDetails(int machineId)
+        {
+            var otherMaintenances = await _context.OtherMaintenances
+                .Where(m => m.MachineId == machineId)
+                .ToListAsync();
+            ViewData["MachineId"] = machineId;
+            return View(otherMaintenances);
         }
 
     }

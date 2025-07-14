@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Control_Machine_Sistem.Models.OtherMaintenance>
+
+@{
+    Layout = "~/Views/Shared/_QrLayout.cshtml";
+    ViewData["Title"] = "Otros Mantenimientos";
+    var contextMachineId = ViewData["MachineId"];  
+}
+
+<link rel="stylesheet" href="~/css/qrCustomerView.css" />
+
+
+@if (!Model.Any())
+{
+    <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+        <div class="card">
+            <div class="card-header">
+                <h3>Otros Mantenimientos</h3>
+            </div>
+            <div class="card-body">
+                <h4>No mantenimientos registrados.</h4>
+                <a href="javascript:history.back();" class="btn">Volver atrás</a>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.WorkHours)</th>
+                <th>@Html.DisplayNameFor(model => model.ServiceDate)</th>
+                <th>@Html.DisplayNameFor(model => model.OrderNumber)</th>
+                <th>@Html.DisplayNameFor(model => model.Observations)</th>                
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.WorkHours)</td>
+                    <td>@(item.ServiceDate?.ToString("dd/MM/yyyy"))</td>
+                    <td>@Html.DisplayFor(modelItem => item.OrderNumber)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Observations)</td>                   
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="mt-4">
+        <a href="javascript:history.back();" class="btn btn-secondary">Volver al menú principal</a>
+    </div>
+}
+
+<script src="~/js/views.js"></script>

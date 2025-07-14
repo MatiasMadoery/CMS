@@ -1,24 +1,23 @@
 ﻿@using Control_Machine_Sistem.ViewModels
 @model Control_Machine_Sistem.ViewModels.ModelDownloadsViewModel
 
-
 @{
     Layout = null;    
 }
+
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manuales de la Máquina</title>
-    <link rel="stylesheet" href="~/css/downloads.css" />
+    <title>Manuales</title>
+    <link rel="stylesheet" href="~/css/downloads.css" />    
 </head>
 <body>
-
     <div class="card">
         <div class="card-header">
-            <h2>Manuales de la Máquina</h2>
+            <h2>Manuales</h2>
         </div>
         <div class="card-body">
             <ul class="manual-list">
@@ -33,10 +32,12 @@
                     </li>
                 }
             </ul>
-            <div>
-                <h3>Consumibles de Services de la máquina</h3>
+            <hr />
+            <div class="card-header">
+                <h3>Consumibles de Services</h3>
             </div>
-            <ul class="manual-list">
+            <div>
+                   <ul class="manual-list">
                 @foreach (var kit in Model.SpareKits)
                 {
                     <li class="manual-item">
@@ -47,10 +48,12 @@
                     </li>
                 }
             </ul>
-
+            </div class="card-body">         
+            <hr />
             <a href="javascript:history.back();" class="btn btn-secondary">Volver al menú principal</a>
         </div>
     </div>
-
 </body>
 </html>
+
+
