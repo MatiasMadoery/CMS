@@ -10,7 +10,6 @@ using System.Runtime.InteropServices;
 
 namespace Control_Machine_Sistem.Controllers
 {
-    [Authorize(Roles = "Admin")]
     public class QrCodesController : Controller
     {
         private readonly AppDbContext _context;
@@ -21,6 +20,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: QrCodes/GenerateQr/5
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> GenerateQr(int machineId)
         {
@@ -113,6 +113,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // QR generation
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> postGenerateQr(int machineId)
         {
