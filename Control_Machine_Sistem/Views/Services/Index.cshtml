@@ -2,8 +2,22 @@
 
 @{
     ViewData["Title"] = "Servicios";
-    var contextMachineId = ViewData["MachineId"];
-    var serviceHours = Enumerable.Range(1, 8).Select(i => i * 250);
+
+    // Recupero MachineId y categoría
+    var contextMachineId = (int?)ViewData["MachineId"];
+    var machineCategory = (ViewData["MachineCategory"] as string) ?? "";
+
+    // La lista base: 250 * 1..8
+    var serviceHours = Enumerable
+        .Range(1, 8)
+        .Select(i => i * 250);
+
+    // Si es AUTOELEVADOR, agrego 150 al inicio
+    if (machineCategory
+            .Equals("AUTOELEVADOR", StringComparison.OrdinalIgnoreCase))
+    {
+        serviceHours = serviceHours.Prepend(150);
+    }
 }
 
 <h1 class="mb-4">Servicios</h1>

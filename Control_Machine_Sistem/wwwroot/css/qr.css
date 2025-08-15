@@ -66,22 +66,23 @@
     margin: 0;
 }
 
-@media print {
+/*CSS IMPRESION VERTICAL*/
+/*@media print {
     .no-print {
         display: none;
     }
 
     .print-only {
-        display: block;
+        display: block;*/
         /*background-color: #eabe2e !important;*/
-    }   
+    /*}   
 
     body {
         margin: 10px;
-        padding: 0;
+        padding: 0;*/
        /* background-color: #eabe2e !important;
         -webkit-print-color-adjust: exact;*/
-        border-radius: 5px;
+        /*border-radius: 5px;
     }
     .qr-container {
         background-color: white;
@@ -90,9 +91,9 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         text-align: center;
         width: 80%;
-        max-width: 600px;
+        max-width: 600px;*/
        /* background-color: #eabe2e !important;*/
-    }
+    /*}
 
     .qr-image {
         width: 100%;
@@ -118,4 +119,84 @@
             padding: 15px;
             background-color: white;
         }
+}*/
+
+
+    /*CSS IMPRESION HORIZONTAL*/
+@media print {
+    @page {
+        size: A4 landscape;
+        margin: 10mm;
+    }
+
+    body {
+        display: block;
+        margin: 0;
+        padding: 0;
+        background-color: white !important;
+        -webkit-print-color-adjust: exact;
+    }
+
+    .qr-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+        width: 100%;
+        max-width: 100%;
+        padding: 10px;
+        box-shadow: none;
+        border-radius: 0;
+        page-break-inside: avoid;
+    }
+
+    .qr-left, .qr-right {
+        width: 48%;
+    }
+
+        .qr-left h1, .qr-right h2 {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+    .qr-image {
+        max-width: 50%;
+        height: auto;
+    }
+
+    .service-table {
+        font-size: 12px;
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .service-table th, .service-table td {
+            padding: 6px;
+            border: 1px solid black;
+        }
+
+    .print-only {
+        display: block;
+    }
+
+    .no-print {
+        display: none;
+    }
+
+    .qr-logo {
+        width: 50px;
+        margin-bottom: 5px;
+    }
+
+    .service-table th:nth-child(1),
+    .service-table td:nth-child(1) {
+        width: 20%;
+    }
+
+    .service-table th:nth-child(2),
+    .service-table td:nth-child(2),
+    .service-table th:nth-child(3),
+    .service-table td:nth-child(3) {
+        width: 40%;
+    }
 }

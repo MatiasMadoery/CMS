@@ -27,8 +27,19 @@ namespace Control_Machine_Sistem.Controllers
             
             if (machineId.HasValue)
             {
-                query = query.Where(s => s.MachineId == machineId.Value);
+                var machine = await _context.Machines
+                    .Include(m => m.Model)
+                        .ThenInclude(mo => mo!.Category)
+                    .FirstOrDefaultAsync(m => m.Id == machineId.Value);
+
+                if (machine == null)
+                    return NotFound();
+
                 ViewData["MachineId"] = machineId.Value;
+                ViewData["MachineCategory"] = machine.Model!.Category?.Name ?? string.Empty;
+
+                query = query.Where(s => s.MachineId == machineId.Value);
+                
             }
 
             var services = await query.ToListAsync();
