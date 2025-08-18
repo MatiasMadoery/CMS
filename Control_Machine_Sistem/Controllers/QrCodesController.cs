@@ -4,12 +4,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using QRCoder;
 using Control_Machine_Sistem.ViewModels;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Authorization;
-using System.Runtime.InteropServices;
 
 namespace Control_Machine_Sistem.Controllers
 {
+
     public class QrCodesController : Controller
     {
         private readonly AppDbContext _context;
@@ -22,6 +21,7 @@ namespace Control_Machine_Sistem.Controllers
         // GET: QrCodes/GenerateQr/5
         [Authorize(Roles = "Admin")]
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GenerateQr(int machineId)
         {
             var machine = await _context.Machines
@@ -115,6 +115,7 @@ namespace Control_Machine_Sistem.Controllers
         // QR generation
         [Authorize(Roles = "Admin")]
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> postGenerateQr(int machineId)
         {
             var machine = await _context.Machines

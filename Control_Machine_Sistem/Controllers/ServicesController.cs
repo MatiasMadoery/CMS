@@ -2,10 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Control_Machine_Sistem.Models;
-using System.Linq;
-using System.Threading.Tasks;
 using Control_Machine_Sistem.Services;
-using Control_Machine_Sistem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Control_Machine_Sistem.Controllers
@@ -24,7 +21,7 @@ namespace Control_Machine_Sistem.Controllers
         public async Task<IActionResult> Index(int? machineId)
         {
             IQueryable<Service> query = _context.Services.Include(s => s.Machine);
-            
+
             if (machineId.HasValue)
             {
                 query = query.Where(s => s.MachineId == machineId.Value);

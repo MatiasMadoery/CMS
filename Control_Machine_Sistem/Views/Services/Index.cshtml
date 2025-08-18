@@ -3,7 +3,9 @@
 @{
     ViewData["Title"] = "Servicios";
     var contextMachineId = ViewData["MachineId"];
-    var serviceHours = Enumerable.Range(1, 8).Select(i => i * 250);
+    var serviceHours = Enumerable
+        .Range(1, 8).Select(i => i * 250)
+        .Prepend(150);
 }
 
 <h1 class="mb-4">Servicios</h1>
@@ -25,7 +27,14 @@
             var service = Model.FirstOrDefault(s => s.ServiceHour == hour && s.MachineId == (int?)contextMachineId);
 
             <tr>
-                <td>@hour</td>
+               @*  <td>@hour</td> *@
+                <td>
+                    @hour
+                    @if (hour == 150)
+                    {
+                        <span class="text-info">(Service Autoelevadores)</span>
+                    }
+                </td>
 
                 @if (service != null)
                 {
