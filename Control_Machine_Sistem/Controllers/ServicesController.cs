@@ -2,10 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Control_Machine_Sistem.Models;
-using System.Linq;
-using System.Threading.Tasks;
 using Control_Machine_Sistem.Services;
-using Control_Machine_Sistem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Control_Machine_Sistem.Controllers
@@ -24,22 +21,11 @@ namespace Control_Machine_Sistem.Controllers
         public async Task<IActionResult> Index(int? machineId)
         {
             IQueryable<Service> query = _context.Services.Include(s => s.Machine);
-            
+
             if (machineId.HasValue)
             {
-                var machine = await _context.Machines
-                    .Include(m => m.Model)
-                        .ThenInclude(mo => mo!.Category)
-                    .FirstOrDefaultAsync(m => m.Id == machineId.Value);
-
-                if (machine == null)
-                    return NotFound();
-
-                ViewData["MachineId"] = machineId.Value;
-                ViewData["MachineCategory"] = machine.Model!.Category?.Name ?? string.Empty;
-
                 query = query.Where(s => s.MachineId == machineId.Value);
-                
+                ViewData["MachineId"] = machineId.Value;
             }
 
             var services = await query.ToListAsync();
