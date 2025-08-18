@@ -13,7 +13,7 @@ namespace Control_Machine_Sistem.Models
         
         [Display(Name = "Persona de contacto")]
         public string? LastName { get; set; }
-
+        [Required(ErrorMessage = "Debe ingresar la Razón Social.")]
         public string? Cuit { get; set; }
 
         [Required(ErrorMessage = "Debe ingresar el Teléfono")]

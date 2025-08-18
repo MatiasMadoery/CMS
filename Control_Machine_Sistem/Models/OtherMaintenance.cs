@@ -13,7 +13,7 @@ namespace Control_Machine_Sistem.Models
 
         [Display(Name = "Fecha")]
         public DateTime? ServiceDate { get; set; }
-
+        [Required(ErrorMessage = "Debe ingresar en N° de Orden")]
         [Display(Name = "N° Orden")]
         public string? OrderNumber { get; set; }
 

@@ -25,28 +25,31 @@
 }
 else
 {
-    <table class="table table-bordered">
-        <thead class="thead-light">
-            <tr>
-                <th>@Html.DisplayNameFor(model => model.WorkHours)</th>
-                <th>@Html.DisplayNameFor(model => model.ServiceDate)</th>
-                <th>@Html.DisplayNameFor(model => model.OrderNumber)</th>
-                <th>@Html.DisplayNameFor(model => model.Observations)</th>                
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead class="thead-light">
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => item.WorkHours)</td>
-                    <td>@(item.ServiceDate?.ToString("dd/MM/yyyy"))</td>
-                    <td>@Html.DisplayFor(modelItem => item.OrderNumber)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Observations)</td>                   
+                    <th>@Html.DisplayNameFor(model => model.WorkHours)</th>
+                    <th>@Html.DisplayNameFor(model => model.ServiceDate)</th>
+                    <th>@Html.DisplayNameFor(model => model.OrderNumber)</th>
+                    <th>@Html.DisplayNameFor(model => model.Observations)</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.WorkHours)</td>
+                        <td>@(item.ServiceDate?.ToString("dd/MM/yyyy"))</td>
+                        <td>@Html.DisplayFor(modelItem => item.OrderNumber)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Observations)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
+        
+    </div>
     <div class="mt-4">
         <a href="javascript:history.back();" class="btn btn-secondary">Volver al menú principal</a>
     </div>

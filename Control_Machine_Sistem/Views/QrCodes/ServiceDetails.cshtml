@@ -27,54 +27,55 @@
     }
 else
 {
-    <table class="table table-bordered">
-        <thead class="thead-light">
-            <tr>
-                <th>Service Horas</th>
-                <th>Horas Reales</th>
-                <th>Fecha</th>
-                <th>N° Orden</th>
-                <th>Planilla service</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var hour in serviceHours)
-            {
-                var service = Model.FirstOrDefault(s => s.ServiceHour == hour && s.MachineId == (int?)contextMachineId);
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead class="thead-light">
                 <tr>
-                    <td>@hour</td>
-                    @if (service != null)
-                    {
-                        <td>@service.WorkHours</td>
-                        <td>@(service.ServiceDate?.ToString("dd/MM/yyyy"))</td>
-                        <td>@service.OrderNumber</td>
-                        <td>
-                            @if (service.ServiceSheetUrls != null && service.ServiceSheetUrls.Any())
-                            {
-                                <ul class="list-unstyled">
-                                    @foreach (var sheetUrl in service.ServiceSheetUrls)
-                                    {
-                                        <li data-url="@sheetUrl">
-                                            <a class="document-name" href="@sheetUrl" download>@System.IO.Path.GetFileName(sheetUrl)</a>
-                                        </li>
-                                    }
-                                </ul>
-                            }
-                            else
-                            {
-                                <span>Sin planilla</span>
-                            }
-                        </td>
-                    }
-                    else
-                    {
-                        <td colspan="4"><i>No registrado</i></td>
-                    }
+                    <th>Service Horas</th>
+                    <th>Horas Reales</th>
+                    <th>Fecha</th>
+                    <th>N° Orden</th>
+                    <th>Planilla service</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-
+            </thead>
+            <tbody>
+                @foreach (var hour in serviceHours)
+                {
+                    var service = Model.FirstOrDefault(s => s.ServiceHour == hour && s.MachineId == (int?)contextMachineId);
+                    <tr>
+                        <td>@hour</td>
+                        @if (service != null)
+                        {
+                            <td>@service.WorkHours</td>
+                            <td>@(service.ServiceDate?.ToString("dd/MM/yyyy"))</td>
+                            <td>@service.OrderNumber</td>
+                            <td>
+                                @if (service.ServiceSheetUrls != null && service.ServiceSheetUrls.Any())
+                                {
+                                    <ul class="list-unstyled">
+                                        @foreach (var sheetUrl in service.ServiceSheetUrls)
+                                        {
+                                            <li data-url="@sheetUrl">
+                                                <a class="document-name" href="@sheetUrl" download>@System.IO.Path.GetFileName(sheetUrl)</a>
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <span>Sin planilla</span>
+                                }
+                            </td>
+                        }
+                        else
+                        {
+                            <td colspan="4"><i>No registrado</i></td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
     <div class="mt-4">
         <a href="javascript:history.back();" class="btn btn-secondary">Volver al menú principal</a>
     </div>

@@ -11,13 +11,11 @@ namespace Control_Machine_Sistem.Models
 
         [Display(Name = "Hora Programada")]
         public int? ServiceHour { get; set; }
-
         [Display(Name = "Horas Reales")]
         public int? WorkHours { get; set; }
-
         [Display(Name = "Fecha")]
         public DateTime? ServiceDate { get; set; }
-
+        [Required(ErrorMessage = "Debe ingresar un N° de Orden")]
         [Display(Name = "N° Orden")]
         public string? OrderNumber { get; set; }
 

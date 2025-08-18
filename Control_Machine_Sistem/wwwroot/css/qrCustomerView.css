@@ -91,6 +91,14 @@
     margin: 10px auto 0; 
 }
 
+
+/* Contenedor que hace que la tabla sea responsiva */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Mejora el desplazamiento en iOS */
+}
+
+
 /*TABLA SERVICE*/
 
 .table {
@@ -124,4 +132,10 @@
     .table tbody tr:nth-child(odd) {
         background-color: white;
     }
-    
+
+@media (max-width: 600px) {
+    .table td:nth-child(5) ul {
+        padding-left: 0;
+        text-align: left;
+    }
+}
