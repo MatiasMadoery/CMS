@@ -18,7 +18,6 @@ namespace Control_Machine_Sistem.Models
         public string? Cuit { get; set; }
 
         [Required(ErrorMessage = "Debe ingresar el Teléfono")]
-        [RegularExpression("^[0-9]*$", ErrorMessage = "El Teléfono debe contener solo números.")]
         [Display(Name = "Teléfono")]
         public string? Phone { get; set; }
 
