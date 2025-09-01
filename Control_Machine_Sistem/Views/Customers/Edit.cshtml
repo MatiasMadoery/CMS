@@ -23,7 +23,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Cuit" class="control-label"></label>
-                <input asp-for="Cuit" class="form-control" />
+                <input asp-for="Cuit" type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '');" class="form-control" />
                 <span asp-validation-for="Cuit" class="text-danger"></span>
             </div>
             <div class="form-group">

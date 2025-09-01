@@ -11,6 +11,7 @@ namespace Control_Machine_Sistem.Models
 
         [Display(Name = "Hora Programada")]
         public int? ServiceHour { get; set; }
+        [Required(ErrorMessage = "Debe ingresar las Horas Reales")]
         [Display(Name = "Horas Reales")]
         public int? WorkHours { get; set; }
         [Display(Name = "Fecha")]
