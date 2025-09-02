@@ -1,73 +1,88 @@
 ﻿@model Control_Machine_Sistem.Models.Model
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Crear Modelo";
 }
 
-<h1>Crear</h1>
+<link href="~/css/views.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-<h4>Modelo</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data" id="uploadForm">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="CategoryId" class="control-label">Producto</label>
-                <div class="d-flex">
-                    <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-control-sm me-2">
-                        <option value="">Selecciona un producto</option>
-                    </select>
-                     <a asp-action="Create" asp-controller="Categories" class="btn btn-success btn-sm" target="_blank">
-                        Crear producto
-                    </a>
-                </div>
-                <span asp-validation-for="CategoryId" class="text-danger"></span>
-            </div>
-            <br />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>          
-            <br />
-            <div id="fileUploadContainer">
+<div class="form-container">
+    <h1 class="form-title">@ViewData["Title"]</h1>
+
+    <h4 class="form-section-title">Información del Modelo</h4>
+    <hr />
+
+    <form asp-action="Create" enctype="multipart/form-data" id="uploadForm">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-row">
+            <div class="form-col">
                 <div class="form-group">
-                    <label asp-for="Manuals" class="control-label"></label>
+                    <label asp-for="CategoryId" class="form-label">Producto</label>
+                    <div class="input-group-addon">
+                        <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-control">
+                            <option value="">Selecciona un producto</option>
+                        </select>
+                        <a asp-action="Create" asp-controller="Categories" class="btn btn-success" target="_blank">
+                            <i class="fas fa-plus-circle icon"></i> Crear producto
+                        </a>
+                    </div>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="Name" class="form-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <h4 class="form-section-title">Manuales</h4>
+        <div id="fileUploadContainer" class="form-row">
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="Manuals" class="form-label"></label>
                     <input type="file" name="Manuals" class="form-control" />
                     <span asp-validation-for="Manuals" class="text-danger"></span>
-                    <br/>
                 </div>
-            </div>            
-            <div class="form-group">
-                <button type="button" class="btn btn-primary" onclick="addMoreFiles('fileUploadContainer', 'Manuals')">Agregar otro archivo</button>
             </div>
-            <br />
-            <div id="fileUploadContainer2">
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" onclick="addMoreFiles('fileUploadContainer', 'Manuals')">
+                <i class="fas fa-plus icon"></i> Agregar otro manual
+            </button>
+        </div>
+
+        <h4 class="form-section-title">Consumibles / Services</h4>
+        <div id="fileUploadContainer2" class="form-row">
+            <div class="form-col">
                 <div class="form-group">
-                    <label asp-for="SpareKits" class="control-label"></label>
+                    <label asp-for="SpareKits" class="form-label"></label>
                     <input type="file" name="SpareKits" class="form-control" />
                     <span asp-validation-for="SpareKits" class="text-danger"></span>
-                    <br />
                 </div>
             </div>
-            <div class="form-group">
-                <button type="button" class="btn btn-primary" onclick="addMoreFiles('fileUploadContainer2', 'SpareKits')">Agregar otro archivo</button>
-            </div>
-            <br />
-            <br />
-            <div class="form-group">
-                <input type="submit" value="Crear modelo" class="btn btn-success" /> |
-                <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
-            </div>
-        </form>
-    </div>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" onclick="addMoreFiles('fileUploadContainer2', 'SpareKits')">
+                <i class="fas fa-plus icon"></i> Agregar otro consumible
+            </button>
+        </div>
+
+        <div class="button-group">
+            <input type="submit" value="Crear modelo" class="btn btn-success" />
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left icon"></i> Volver a la lista
+            </a>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
-
     <script src="~/js/views.js"></script>
- 
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }

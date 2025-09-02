@@ -1,77 +1,78 @@
 ﻿@model Control_Machine_Sistem.Models.Model
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalle del Modelo";
 }
-<h1>Detalle</h1>
-<div>
-    <hr />
-    <br />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Category!.Name)
-        </dd>
-        <dt class="col-sm-2">
-            <br />
-            @Html.DisplayNameFor(model => model.ManualUrls)  
-        </dt>
-        <dd class="col-sm-10">
-            <br />
-            @if (Model.ManualUrls != null && Model.ManualUrls.Any())
-            {
-                <ul>
-                    @foreach (var manual in Model.ManualUrls)
-                    {
-                        <li class="manual-name" data-url="@manual">
-                            <a href="@manual" download>@manual</a>  
-                        </li>
-                    }
-                </ul>
-            }
-            else
-            {
-                <span>No se encontraron manuales</span>
-            }
-        </dd>
-        <dt class="col-sm-2">
-            <br />
-            @Html.DisplayNameFor(model => model.SpareKitsUrls)
-        </dt>
-        <dd class="col-sm-10">
-            <br />
-            @if (Model.SpareKitsUrls != null && Model.SpareKitsUrls.Any())
-            {
-                <ul>
-                    @foreach (var spareKit in Model.SpareKitsUrls)
-                    {
-                        <li class="spareKit-name" data-url="@spareKit">
-                            <a href="@spareKit" download>@spareKit</a>
-                        </li>
-                    }
-                </ul>
-            }
-            else
-            {
-                <span>No se encontraron consumibles de services</span>
-            }
-        </dd>
-    </dl>
-</div>
-<br />
-<div class="mt-3">
-    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Editar</a> |
-    <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a> |
-    <a asp-action="Delete" asp-route-id="@Model?.Id" class="btn btn-danger">Eliminar</a>
-</div>
 
+<link href="~/css/views.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<div class="content-wrapper">
+    <h1 class="page-title">@ViewData["Title"]</h1>
+    <hr />
+
+    <div class="details-container">
+        <dl class="details-list">
+            <div class="details-item">
+                <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+                <dd>@Html.DisplayFor(model => model.Name)</dd>
+            </div>
+            <div class="details-item">
+                <dt>@Html.DisplayNameFor(model => model.Category)</dt>
+                <dd>@Html.DisplayFor(model => model.Category!.Name)</dd>
+            </div>
+
+            <div class="details-item">
+                <dt>@Html.DisplayNameFor(model => model.ManualUrls)</dt>
+                <dd>
+                    @if (Model.ManualUrls != null && Model.ManualUrls.Any())
+                    {
+                        <ul class="file-list">
+                            @foreach (var manual in Model.ManualUrls)
+                            {
+                                <li><a class="manual-name" href="@manual" download>@System.IO.Path.GetFileName(manual)</a></li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <span class="text-danger">No se encontraron manuales</span>
+                    }
+                </dd>
+            </div>
+
+            <div class="details-item">
+                <dt>@Html.DisplayNameFor(model => model.SpareKitsUrls)</dt>
+                <dd>
+                    @if (Model.SpareKitsUrls != null && Model.SpareKitsUrls.Any())
+                    {
+                        <ul class="file-list">
+                            @foreach (var spareKit in Model.SpareKitsUrls)
+                            {
+                                <li><a class="spareKit-name" href="@spareKit" download>@System.IO.Path.GetFileName(spareKit)</a></li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <span class="text-danger">No se encontraron consumibles de services</span>
+                    }
+                </dd>
+            </div>
+        </dl>
+    </div>
+
+    <div class="button-group">
+        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">
+            <i class="fas fa-edit icon"></i> Editar
+        </a>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left icon"></i> Volver a la lista
+        </a>
+        <a asp-action="Delete" asp-route-id="@Model?.Id" class="btn btn-danger">
+            <i class="fas fa-trash-alt icon"></i> Eliminar
+        </a>
+    </div>
+</div>
 
 <script src="~/js/views.js"></script>

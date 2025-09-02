@@ -1,123 +1,143 @@
 ﻿@model Control_Machine_Sistem.Models.Model
 
 @{
-    ViewData["Title"] = "Editar";
+    ViewData["Title"] = "Editar Modelo";
 }
 
-<h1>Editar</h1>
-<hr />
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Edit" enctype="multipart/form-data" id="uploadForm">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="CategoryId" class="control-label">Producto</label>
-                <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-control">
-                    <option value="">Selecciona un producto</option>
-                </select>
-                <span asp-validation-for="CategoryId" class="text-danger"></span>
-            </div>
-            <br />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <br />
-            <div class="form-group">
-                <label>Manuales cargados</label>
-                <table class="table table-bordered">                   
-                    <tbody>
-                        @if (Model.ManualUrls != null && Model.ManualUrls.Any())
-                        {
-                            @for (int i = 0; i < Model.ManualUrls.Count; i++)
-                            {
-                                <tr>
-                                    <td>
-                                        <a href="@Model.ManualUrls[i]" target="_blank" class="manual-name">@Model.ManualUrls[i]</a>
-                                        <input type="hidden" name="ExistingManuals" value="@Model.ManualUrls[i]" />
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm" onclick="removeExistingFile(this, 'DeletedManuals')">Eliminar</button>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="2">No hay archivos cargados.</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-                <label>Consumibles Services cargados</label>
-                <table class="table table-bordered">
-                    <tbody>
-                        @if (Model.SpareKitsUrls != null && Model.SpareKitsUrls.Any())
-                        {
-                            @for (int i = 0; i < Model.SpareKitsUrls.Count; i++)
-                            {
-                                <tr>
-                                    <td>
-                                        <a href="@Model.SpareKitsUrls[i]" target="_blank" class="spareKit-name">@Model.SpareKitsUrls[i]</a>
-                                        <input type="hidden" name="ExistingSpareKits" value="@Model.SpareKitsUrls[i]" />
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm" onclick="removeExistingFile(this, 'DeletedSpareKits')">Eliminar</button>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="2">No hay archivos cargados.</td>
-                            </tr>
-                        }
-                    </tbody>
+<link href="~/css/views.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-                </table>
-            </div>
-            <br />
-            <div id="fileUploadContainer">
+<div class="form-container">
+    <h1 class="form-title">@ViewData["Title"]</h1>
+    <hr />
+
+    <form asp-action="Edit" enctype="multipart/form-data" id="uploadForm">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+
+        <div class="form-row">
+            <div class="form-col">
                 <div class="form-group">
-                    <label asp-for="Manuals" class="control-label"></label>
-                    <input type="file" name="Manuals" class="form-control" />
-                    <span asp-validation-for="Manuals" class="text-danger"></span>
-                    <br />
+                    <label asp-for="CategoryId" class="form-label">Producto</label>
+                    <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-control">
+                        <option value="">Selecciona un producto</option>
+                    </select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
                 </div>
             </div>
-            <div class="form-group">
-                <button type="button" class="btn btn-primary" onclick="addMoreFiles('fileUploadContainer', 'Manuals')">Agregar otro archivo</button>
-            </div>
-            <br />
-            <div id="fileUploadContainer2">
+            <div class="form-col">
                 <div class="form-group">
-                    <label asp-for="SpareKits" class="control-label"></label>
-                    <input type="file" name="SpareKits" class="form-control" />
-                    <span asp-validation-for="SpareKits" class="text-danger"></span>
-                    <br />
+                    <label asp-for="Name" class="form-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
             </div>
-            <div class="form-group">
-                <button type="button" class="btn btn-primary" onclick="addMoreFiles('fileUploadContainer2', 'SpareKits')">Agregar otro archivo</button>
+        </div>
+
+        <h4 class="form-section-title">Manuales</h4>
+        <table class="file-list-table">
+            <tbody>
+                @if (Model.ManualUrls != null && Model.ManualUrls.Any())
+                {
+                    @for (int i = 0; i < Model.ManualUrls.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                <a href="@Model.ManualUrls[i]" target="_blank" class="file-name-link manual-name">@System.IO.Path.GetFileName(Model.ManualUrls[i])</a>
+                                <input type="hidden" name="ExistingManuals" value="@Model.ManualUrls[i]" />
+                            </td>
+                            <td style="width: 100px; text-align: center;">
+                                <button type="button" class="btn btn-danger btn-sm" onclick="removeExistingFile(this, 'DeletedManuals')">
+                                    <i class="fas fa-trash-alt icon"></i> Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="2">No hay archivos cargados.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <br />
+        <div id="manualsUploadContainer">
+            <h5 class="form-sub-title">Cargar nuevos manuales</h5>
+            <div class="form-row">
+                <div class="form-col">
+                    <div class="form-group">
+                        <input type="file" name="Manuals" class="form-control" />
+                        <span asp-validation-for="Manuals" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
-            <br />
-            <br />
-            <div class="form-group">
-                <input type="submit" value="Guardar" class="btn btn-success" /> |
-                <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" onclick="addMoreFiles('manualsUploadContainer', 'Manuals')">
+                <i class="fas fa-plus icon"></i> Agregar otro manual
+            </button>
+        </div>
+
+        <h4 class="form-section-title">Consumibles / Services</h4>
+        <table class="file-list-table">
+            <tbody>
+                @if (Model.SpareKitsUrls != null && Model.SpareKitsUrls.Any())
+                {
+                    @for (int i = 0; i < Model.SpareKitsUrls.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                <a href="@Model.SpareKitsUrls[i]" target="_blank" class="file-name-link spareKit-name">@System.IO.Path.GetFileName(Model.SpareKitsUrls[i])</a>
+                                <input type="hidden" name="ExistingSpareKits" value="@Model.SpareKitsUrls[i]" />
+                            </td>
+                            <td style="width: 100px; text-align: center;">
+                                <button type="button" class="btn btn-danger btn-sm" onclick="removeExistingFile(this, 'DeletedSpareKits')">
+                                    <i class="fas fa-trash-alt icon"></i> Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="2">No hay archivos cargados.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <br />
+        <div id="spareKitsUploadContainer">
+            <h5 class="form-sub-title">Cargar nuevos consumibles</h5>
+            <div class="form-row">
+                <div class="form-col">
+                    <div class="form-group">
+                        <input type="file" name="SpareKits" class="form-control" />
+                        <span asp-validation-for="SpareKits" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
-        </form>
-    </div>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" onclick="addMoreFiles('spareKitsUploadContainer', 'SpareKits')">
+                <i class="fas fa-plus icon"></i> Agregar otro consumible
+            </button>
+        </div>
+
+        <br />
+        <div class="button-group">
+            <input type="submit" value="Guardar" class="btn btn-success" />
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left icon"></i> Volver a la lista
+            </a>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
-
     <script src="~/js/views.js"></script>
-
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
