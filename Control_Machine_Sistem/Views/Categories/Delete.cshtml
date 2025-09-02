@@ -1,25 +1,37 @@
 ﻿@model Control_Machine_Sistem.Models.Category
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Eliminar Producto";
 }
 
-<h1>Eliminar Producto</h1>
+<link href="~/css/views.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-<div>
+<div class="content-wrapper">
+    <h1 class="page-title">@ViewData["Title"]</h1>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-    </dl>
-    
+
+    <div class="alert alert-danger" role="alert">
+        <i class="fas fa-exclamation-triangle icon"></i>
+        ¿Estás seguro de que quieres eliminar este producto? Esta acción no se puede deshacer.
+    </div>
+
+    <div class="details-container">
+        <dl class="details-list">
+            <div class="details-item">
+                <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+                <dd>@Html.DisplayFor(model => model.Name)</dd>
+            </div>
+        </dl>
+    </div>
+
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
-        <a class="btn btn-secondary" asp-action="Index">Volver a la lista</a>
+        <div class="button-group">
+            <input type="submit" value="Eliminar" class="btn btn-danger" />
+            <a class="btn btn-secondary" asp-action="Index">
+                <i class="fas fa-arrow-left icon"></i> Volver a la lista
+            </a>
+        </div>
     </form>
 </div>
