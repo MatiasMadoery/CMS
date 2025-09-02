@@ -20,7 +20,7 @@ namespace Control_Machine_Sistem.Models
         [StringLength(100, MinimumLength = 6, ErrorMessage = "La contraseña debe tener entre 6 y 15 caracteres.")]
         public string? Password { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "El rol es obligatorio: Adm o Tec")]
+        [Required(ErrorMessage = "El rol es obligatorio")]
         public string? Rol { get; set; } = string.Empty;
     }
 }

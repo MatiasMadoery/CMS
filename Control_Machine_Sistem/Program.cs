@@ -35,6 +35,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization(options =>
 {
+    options.AddPolicy("IsViewer", policy => policy.RequireRole("Viewer"));
     options.AddPolicy("IsTec", policy => policy.RequireRole("Tec"));
     options.AddPolicy("IsAdm", policy => policy.RequireRole("Admin"));
 });

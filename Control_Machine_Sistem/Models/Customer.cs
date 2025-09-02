@@ -6,15 +6,16 @@ namespace Control_Machine_Sistem.Models
     {
         public int Id { get; set; }
 
+        [StringLength(75, ErrorMessage = "La Razón Social no puede exceder los 100 caracteres.")]
         [Required(ErrorMessage = "Debe ingresar la Razón Social.")]
         [Display(Name = "Razón Social")]
         public string? Name { get; set; }
 
-        
+        [StringLength(75, ErrorMessage = "El nombre de contacto no puede exceder los 100 caracteres.")]
         [Display(Name = "Persona de contacto")]
         public string? LastName { get; set; }
         [Required(ErrorMessage = "Debe ingresar el CUIT.")]
-        [RegularExpression("^[0-9]*$", ErrorMessage = "El CUIT debe contener solo números.")]
+        [RegularExpression("^[0-9]+$", ErrorMessage = "El CUIT debe contener solo números.")]
         public string? Cuit { get; set; }
 
         [Required(ErrorMessage = "Debe ingresar el Teléfono")]
@@ -22,6 +23,7 @@ namespace Control_Machine_Sistem.Models
         public string? Phone { get; set; }
 
         [Required(ErrorMessage = "Debe ingresar el Email")]
+        [EmailAddress(ErrorMessage = "El Email no tiene un formato válido.")]
         [Display(Name = "Email")]
         public string? Email { get; set; }
 
