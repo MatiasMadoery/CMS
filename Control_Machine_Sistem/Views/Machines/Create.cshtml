@@ -1,92 +1,118 @@
 ﻿@model Control_Machine_Sistem.Models.Machine
 
 @{
-    ViewData["Title"] = "Crear";
+    ViewData["Title"] = "Crear Venta";
 }
 
-<h1>Crear</h1>
+<link href="~/css/views.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-<h4>Venta</h4>
-<hr />
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Create" method="post" enctype="multipart/form-data" id="uploadForm">
-            @Html.AntiForgeryToken()
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="CustomerId" class="control-label"></label>
-                <select asp-for="CustomerId" class="form-control select2" data-url="@Url.Action("GetCustomers", "Machines")">
-                    <option value="">Seleccione un Cliente...</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="CategoryId">Producto</label>
-                <select id="CategoryId" class="form-control">
-                    <option value="">Seleccione un producto...</option>
-                    @foreach (var category in ViewBag.Categories)
-                    {
-                        <option value="@category.Value">@category.Text</option>
-                    }
-                </select>
-            </div>
-            <div class="form-group">
-                <label asp-for="ModelId" class="control-label">Modelo</label>
-                <select asp-for="ModelId" id="ModelId" class="form-control">
-                    <option value="">Seleccione un modelo...</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label asp-for="ChasisNumber" class="control-label"></label>
-                <input asp-for="ChasisNumber" class="form-control" />
-                <span asp-validation-for="ChasisNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EngineNumber" class="control-label"></label>
-                <input asp-for="EngineNumber" class="form-control" />
-                <span asp-validation-for="EngineNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DeliveryDate" class="control-label"></label>
-                <input asp-for="DeliveryDate" class="form-control" type="date" />
-                <span asp-validation-for="DeliveryDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="control-label">Fecha de vencimiento de garantía</label>
-                <input class="form-control" type="date" id="warrantyDatePreview" readonly />
-            </div>
-            <br />
-            <div id="fileUploadContainer">
+<div class="form-container">
+    <h1 class="form-title">@ViewData["Title"]</h1>
+    <h4 class="form-sub-title">Nueva Venta</h4>
+    <hr />
+
+    <form asp-action="Create" method="post" enctype="multipart/form-data" id="uploadForm">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-row">
+            <div class="form-col">
                 <div class="form-group">
-                    <label asp-for="Documentations" class="control-label"></label>
-                    <input type="file" name="Documentations" class="form-control" multiple />
-                    <span asp-validation-for="Documentations" class="text-danger"></span>
-                    <br />
+                    <label asp-for="CustomerId" class="form-label">Cliente</label>
+                    <select asp-for="CustomerId" class="form-control select2" data-url="@Url.Action("GetCustomers", "Machines")">
+                        <option value="">Seleccione un Cliente...</option>
+                    </select>
+                    <span asp-validation-for="CustomerId" class="text-danger"></span>
                 </div>
-            </div>            
-            <div class="form-group">
-                <button type="button" class="btn btn-primary" onclick="addMoreFiles('fileUploadContainer', 'Documentations')">Agregar otro archivo</button>
             </div>
-            <br />
-            <br />
-            <div class="form-group">
-                <input type="submit" value="Crear" class="btn btn-success" /> 
-                <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
+            <div class="form-col">
+                <div class="form-group">
+                    <label for="CategoryId" class="form-label">Producto</label>
+                    <select id="CategoryId" class="form-control">
+                        <option value="">Seleccione un producto...</option>
+                        @foreach (var category in ViewBag.Categories)
+                        {
+                            <option value="@category.Value">@category.Text</option>
+                        }
+                    </select>
+                </div>
             </div>
-        </form>
-    </div>
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="ModelId" class="form-label">Modelo</label>
+                    <select asp-for="ModelId" id="ModelId" class="form-control">
+                        <option value="">Seleccione un modelo...</option>
+                    </select>
+                    <span asp-validation-for="ModelId" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="ChasisNumber" class="form-label"></label>
+                    <input asp-for="ChasisNumber" class="form-control" />
+                    <span asp-validation-for="ChasisNumber" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="EngineNumber" class="form-label"></label>
+                    <input asp-for="EngineNumber" class="form-control" />
+                    <span asp-validation-for="EngineNumber" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="DeliveryDate" class="form-label"></label>
+                    <input asp-for="DeliveryDate" class="form-control" type="date" />
+                    <span asp-validation-for="DeliveryDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-col">
+                <div class="form-group">
+                    <label class="form-label">Fecha de vencimiento de garantía</label>
+                    <input class="form-control" type="date" id="warrantyDatePreview" readonly />
+                </div>
+            </div>
+        </div>
+
+        <h4 class="form-section-title">Documentación</h4>
+        <div id="fileUploadContainer">
+            <div class="form-group">
+                <label asp-for="Documentations" class="form-label"></label>
+                <input type="file" name="Documentations" class="form-control" multiple />
+                <span asp-validation-for="Documentations" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" onclick="addMoreFiles('fileUploadContainer', 'Documentations')">
+                <i class="fas fa-plus icon"></i> Agregar otro archivo
+            </button>
+        </div>
+
+        <div class="button-group">
+            <input type="submit" value="Crear" class="btn btn-success" />
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left icon"></i> Volver a la lista
+            </a>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
     <script src="~/js/site.js"></script>
-    <script src="~/js/views.js"></script>  
+    <script src="~/js/views.js"></script>
     <script src="~/js/machineCreateForm.js"></script>
-
     <script>
         setupWarrantyDateAutoCalc("DeliveryDate", "warrantyDatePreview");
     </script>
-  
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-
 }

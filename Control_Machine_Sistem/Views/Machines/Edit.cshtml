@@ -1,102 +1,128 @@
 ﻿@model Control_Machine_Sistem.Models.Machine
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Venta";
 }
-<h1>Editar</h1>
-<hr />
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Edit" enctype="multipart/form-data" id="uploadForm">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="CustomerId" class="control-label"></label>
-                <select asp-for="CustomerId" class="form-control select2" data-url="@Url.Action("GetCustomers", "Machines")">
-                    <option value="">Seleccione un Cliente...</option>
-                    @if (Model.CustomerId != null && ViewBag.CustomerName != null)
-                    {
-                        <option value="@Model.CustomerId" selected="selected">@ViewBag.CustomerName</option>
-                    }
-                </select>
-            </div>
-            <div class="form-group">
-                <label asp-for="ModelId" class="control-label"></label>
-                <select asp-for="ModelId" class="form-control" asp-items="ViewBag.ModelId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="ChasisNumber" class="control-label"></label>
-                <input asp-for="ChasisNumber" class="form-control" />
-                <span asp-validation-for="ChasisNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EngineNumber" class="control-label"></label>
-                <input asp-for="EngineNumber" class="form-control" />
-                <span asp-validation-for="EngineNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DeliveryDate" class="control-label"></label>
-                <input asp-for="DeliveryDate" class="form-control" type="date" />
-                <span asp-validation-for="DeliveryDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="WarrantyExpirationDate" class="control-label"></label>
-                <input asp-for="WarrantyExpirationDate" type="date" class="form-control" readonly id="WarrantyExpirationDate" />
-                <span asp-validation-for="WarrantyExpirationDate" class="text-danger"></span>
-            </div>
-            <br />
-            <div class="form-group">
-                <label>Archivos cargados</label>
-                <table class="table table-bordered">
-                    <tbody>
-                        @if (Model.DocUrls != null && Model.DocUrls.Any())
-                        {
-                            @for (int i = 0; i < Model.DocUrls.Count; i++)
-                            {
-                                <tr>
-                                    <td>
 
-                                        <a href="@Model.DocUrls[i]" download class="document-name">@Model.DocUrls[i]</a>
+<link href="~/css/views.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-                                        <input type="hidden" name="ExistingDocs" value="@Model.DocUrls[i]" />
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm" onclick="removeExistingFile(this, 'DeletedDocs')">Eliminar</button>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="2">No hay archivos cargados.</td>
-                            </tr>
-                        }
-                    </tbody>
+<div class="form-container">
+    <h1 class="form-title">@ViewData["Title"]</h1>
+    <hr />
 
-                </table>
-            </div>
-            <br />
+    <form asp-action="Edit" enctype="multipart/form-data" id="uploadForm">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
 
-            <div id="fileUploadContainer">
+        <div class="form-row">
+            <div class="form-col">
                 <div class="form-group">
-                    <label asp-for="Documentations" class="control-label">Agregar documentos</label>
-                    <input type="file" name="Documentations" class="form-control" multiple />
-                    <span asp-validation-for="Documentations" class="text-danger"></span>
-                    <br />
+                    <label asp-for="CustomerId" class="form-label"></label>
+                    <select asp-for="CustomerId" class="form-control select2" data-url="@Url.Action("GetCustomers", "Machines")">
+                        <option value="">Seleccione un Cliente...</option>
+                        @if (Model.CustomerId != null && ViewBag.CustomerName != null)
+                        {
+                            <option value="@Model.CustomerId" selected="selected">@ViewBag.CustomerName</option>
+                        }
+                    </select>
                 </div>
             </div>
-            <div class="form-group">
-                <button type="button" class="btn btn-primary" onclick="addMoreFiles('fileUploadContainer', 'Documentations')">Agregar otro archivo</button>
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="ModelId" class="form-label"></label>
+                    <select asp-for="ModelId" class="form-control" asp-items="ViewBag.ModelId"></select>
+                </div>
             </div>
-            <br />
-            <br />
-            <div class="form-group">
-                <input type="submit" value="Guardar" class="btn btn-success" /> |
-                <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
+        </div>
+
+        <div class="form-row">
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="ChasisNumber" class="form-label"></label>
+                    <input asp-for="ChasisNumber" class="form-control" />
+                    <span asp-validation-for="ChasisNumber" class="text-danger"></span>
+                </div>
             </div>
-        </form>
-    </div>
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="EngineNumber" class="form-label"></label>
+                    <input asp-for="EngineNumber" class="form-control" />
+                    <span asp-validation-for="EngineNumber" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="DeliveryDate" class="form-label"></label>
+                    <input asp-for="DeliveryDate" class="form-control" type="date" />
+                    <span asp-validation-for="DeliveryDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="WarrantyExpirationDate" class="form-label"></label>
+                    <input asp-for="WarrantyExpirationDate" type="date" class="form-control" readonly id="WarrantyExpirationDate" />
+                    <span asp-validation-for="WarrantyExpirationDate" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <h4 class="form-section-title">Archivos cargados</h4>
+        <div class="document-management">
+            <table class="data-table">
+                <tbody>
+                    @if (Model.DocUrls != null && Model.DocUrls.Any())
+                    {
+                        @for (int i = 0; i < Model.DocUrls.Count; i++)
+                        {
+                            <tr class="document-row">
+                                <td>
+                                    <a href="@Model.DocUrls[i]" download class="document-name">@System.IO.Path.GetFileName(Model.DocUrls[i])</a>
+                                    <input type="hidden" name="ExistingDocs" value="@Model.DocUrls[i]" />
+                                </td>
+                                <td class="table-actions">
+                                    <button type="button" class="btn-file-delete" onclick="removeExistingFile(this, 'DeletedDocs')">
+                                        <i class="fas fa-trash-alt icon"></i> Eliminar
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="2" class="text-center text-secondary">No hay archivos cargados.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <h4 class="form-section-title">Agregar nuevos documentos</h4>
+        <div id="fileUploadContainer">
+            <div class="form-group">
+                <label asp-for="Documentations" class="form-label"></label>
+                <input type="file" name="Documentations" class="form-control" multiple />
+                <span asp-validation-for="Documentations" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" onclick="addMoreFiles('fileUploadContainer', 'Documentations')">
+                <i class="fas fa-plus icon"></i> Agregar otro archivo
+            </button>
+        </div>
+
+        <div class="button-group">
+            <input type="submit" value="Guardar" class="btn btn-success" />
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left icon"></i> Volver a la lista
+            </a>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
@@ -105,7 +131,6 @@
     <script>
         setupWarrantyDateAutoCalc("DeliveryDate", "WarrantyExpirationDate");
     </script>
-
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }

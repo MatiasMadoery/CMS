@@ -1,102 +1,112 @@
 ﻿@model Control_Machine_Sistem.Models.Machine
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalle de Máquina";
 }
 
-<h1>Detalle</h1>
+<link href="~/css/views.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-<div>    
+<div class="content-wrapper">
+    <h1 class="page-title">@ViewData["Title"]</h1>
     <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Customer!.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Customer!.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Model!.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Model!.Name)
-        </dd>          
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ChasisNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ChasisNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EngineNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EngineNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DeliveryDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Model.DeliveryDate?.ToString("dd/MM/yyyy")
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.WarrantyExpirationDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Model.WarrantyExpirationDate?.ToString("dd/MM/yyyy")
-        </dd>
-        <dt class="col-sm-2">
-         <br />
-            @Html.DisplayNameFor(model => model.DocUrls)
-        </dt>
-        <dd class="col-sm-10">
-            <br />
-            @if (Model.DocUrls != null && Model.DocUrls.Any())
-            {
-                <ul>
-                    @foreach (var document in Model.DocUrls)
+
+    <div class="details-container">
+        <dl class="details-list">
+            <div class="details-item">
+                <dt>@Html.DisplayNameFor(model => model.Customer!.Name)</dt>
+                <dd>@Html.DisplayFor(model => model.Customer!.Name)</dd>
+            </div>
+            <div class="details-item">
+                <dt>@Html.DisplayNameFor(model => model.Model!.Name)</dt>
+                <dd>@Html.DisplayFor(model => model.Model!.Name)</dd>
+            </div>
+            <div class="details-item">
+                <dt>@Html.DisplayNameFor(model => model.ChasisNumber)</dt>
+                <dd>@Html.DisplayFor(model => model.ChasisNumber)</dd>
+            </div>
+            <div class="details-item">
+                <dt>@Html.DisplayNameFor(model => model.EngineNumber)</dt>
+                <dd>@Html.DisplayFor(model => model.EngineNumber)</dd>
+            </div>
+            <div class="details-item">
+                <dt>@Html.DisplayNameFor(model => model.DeliveryDate)</dt>
+                <dd>@Model.DeliveryDate?.ToString("dd/MM/yyyy")</dd>
+            </div>
+            <div class="details-item">
+                <dt>@Html.DisplayNameFor(model => model.WarrantyExpirationDate)</dt>
+                <dd>@Model.WarrantyExpirationDate?.ToString("dd/MM/yyyy")</dd>
+            </div>
+            <div class="details-item">
+                <dt>@Html.DisplayNameFor(model => model.DocUrls)</dt>
+                <dd>
+                    @if (Model.DocUrls != null && Model.DocUrls.Any())
                     {
-                        <li class="document-name" data-url="@document">
-                            <a href="@document" download>@document</a>
-                        </li>
+                        <ul class="file-list">
+                            @foreach (var document in Model.DocUrls)
+                            {
+                                <li>
+                                    <a class="document-name" href="@document" download>@System.IO.Path.GetFileName(document)</a>
+                                </li>
+                            }
+                        </ul>
                     }
-                </ul>
-            }
-            else
-            {
-                <span>No se encontró documentación</span>
-            }
-        </dd>
-    </dl>
-</div>
-<br />
-<hr />
-<div class="form-group">
-    <label><b>Historial de propietarios de la máquina: </b></label>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Propietario anterior</th>
-                <th>Fecha de cambio</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var history in Model.OwnerHistories!)
-            {
-                <tr>
-                    <td>@history.PreviousOwner</td>
-                    <td>@history.ChangeDate.ToString("dd/MM/yyyy")</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
-<hr />
-<br />
-<div class="mt-3">
-    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Editar</a> |
-    <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a> |
-    <a asp-action="Delete" asp-route-id="@Model?.Id" class="btn btn-danger">Eliminar</a>
+                    else
+                    {
+                        <span>No se encontró documentación</span>
+                    }
+                </dd>
+            </div>
+        </dl>
+    </div>
+
+    <hr />
+
+    <div class="document-management">
+        <h4 class="form-section-title">Historial de propietarios</h4>
+        <div class="data-table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Propietario anterior</th>
+                        <th>Fecha de cambio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.OwnerHistories != null && Model.OwnerHistories.Any())
+                    {
+                        @foreach (var history in Model.OwnerHistories!)
+                        {
+                            <tr>
+                                <td>@history.PreviousOwner</td>
+                                <td>@history.ChangeDate.ToString("dd/MM/yyyy")</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="2" class="text-center text-secondary">No hay historial de propietarios.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="button-group">
+        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">
+            <i class="fas fa-edit icon"></i> Editar
+        </a>
+        <a asp-action="Delete" asp-route-id="@Model?.Id" class="btn btn-danger">
+            <i class="fas fa-trash-alt icon"></i> Eliminar
+        </a>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left icon"></i> Volver a la lista
+        </a>
+    </div>
 </div>
 
 <script src="~/js/views.js"></script>
