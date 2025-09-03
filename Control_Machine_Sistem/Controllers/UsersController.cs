@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Control_Machine_Sistem.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "SuperAdmin")]
     public class UsersController : Controller
     {
         private readonly AppDbContext _context;

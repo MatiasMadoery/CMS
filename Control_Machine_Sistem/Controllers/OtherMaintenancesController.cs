@@ -2,13 +2,11 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Control_Machine_Sistem.Models;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Control_Machine_Sistem.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer")]
     public class OtherMaintenancesController : Controller
     {
         private readonly AppDbContext _context;
@@ -19,6 +17,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: OtherMaintenances?machineId=...
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer")]
         public async Task<IActionResult> Index(int? machineId)
         {
             IQueryable<OtherMaintenance> query = _context.OtherMaintenances.Include(o => o.Machine);
@@ -34,6 +33,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: OtherMaintenances/Details/5?machineId=...
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer")]
         public async Task<IActionResult> Details(int? id, int? machineId)
         {
             if (id == null)
@@ -54,6 +54,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: OtherMaintenances/Create?machineId=...
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         public IActionResult Create(int? machineId)
         {
             var otherMaintenance = new OtherMaintenance();
@@ -67,6 +68,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // POST: OtherMaintenances/Create
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,MachineId,WorkHours,ServiceDate,OrderNumber,Observations")] OtherMaintenance otherMaintenance, int? machineId)
@@ -82,6 +84,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: OtherMaintenances/Edit/5?machineId=...
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         public async Task<IActionResult> Edit(int? id, int? machineId)
         {
             if (id == null)
@@ -101,6 +104,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // POST: OtherMaintenances/Edit/5?machineId=...
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,MachineId,WorkHours,ServiceDate,OrderNumber,Observations")] OtherMaintenance otherMaintenance, int? machineId)
@@ -136,6 +140,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: OtherMaintenances/Delete/5?machineId=...
+        [Authorize(Roles = "Admin, SuperAdmin")]
         public async Task<IActionResult> Delete(int? id, int? machineId)
         {
             if (id == null)
@@ -156,6 +161,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // POST: OtherMaintenances/Delete/5?machineId=...
+        [Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id, int? machineId)

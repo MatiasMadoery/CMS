@@ -19,9 +19,8 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: QrCodes/GenerateQr/5
-        [Authorize(Roles = "Admin")]
-        [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
+        [HttpGet]       
         public async Task<IActionResult> GenerateQr(int machineId)
         {
             var machine = await _context.Machines
@@ -113,9 +112,8 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // QR generation
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
+        [HttpPost]        
         public async Task<IActionResult> postGenerateQr(int machineId)
         {
             var machine = await _context.Machines

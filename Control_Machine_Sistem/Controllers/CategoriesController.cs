@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Control_Machine_Sistem.Models;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Control_Machine_Sistem.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Viewer,Admin, Técnico, SuperAdmin")]
     public class CategoriesController : Controller
     {
         private readonly AppDbContext _context;
@@ -21,12 +16,14 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Categories
+        [Authorize(Roles = "Viewer, Admin, Técnico, SuperAdmin")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Categories.ToListAsync());
         }
 
         // GET: Categories/Details/5
+        [Authorize(Roles = "Viewer, Admin, Técnico, SuperAdmin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,14 +42,14 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Categories/Create
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         public IActionResult Create()
         {
             return View();
         }
 
         // POST: Categories/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] Category category)
@@ -67,6 +64,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Categories/Edit/5
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,8 +81,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // POST: Categories/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Category category)
@@ -118,6 +115,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Categories/Delete/5
+        [Authorize(Roles = "Admin, SuperAdmin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -136,6 +134,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // POST: Categories/Delete/5
+        [Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

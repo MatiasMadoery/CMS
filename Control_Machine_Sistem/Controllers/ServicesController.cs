@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Control_Machine_Sistem.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer")]
     public class ServicesController : Controller
     {
         private readonly AppDbContext _context;
@@ -18,6 +18,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Services?machineId=...
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer")]
         public async Task<IActionResult> Index(int? machineId)
         {
             IQueryable<Service> query = _context.Services.Include(s => s.Machine);
@@ -33,6 +34,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Services/Details/5?machineId=...
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer")]
         public async Task<IActionResult> Details(int? id, int? machineId)
         {
             if (id == null)
@@ -53,6 +55,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Services/Create?machineId=...&serviceHour=...
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         public IActionResult Create(int? machineId, int? serviceHour)
         {
             var service = new Service();
@@ -69,6 +72,7 @@ namespace Control_Machine_Sistem.Controllers
 
 
         // POST: Services/Create
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,MachineId,WorkHours,RealHours,ServiceHour,ServiceDate,OrderNumber,Observations,ServiceSheet")] Service service, int? machineId)
@@ -111,6 +115,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Services/Edit/5?machineId=...
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         public async Task<IActionResult> Edit(int? id, int? machineId)
         {
             if (id == null)
@@ -129,6 +134,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // POST: Services/Edit/5?machineId=...
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
@@ -205,6 +211,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Services/Delete/5?machineId=...
+        [Authorize(Roles = "Admin, SuperAdmin")]
         public async Task<IActionResult> Delete(int? id, int? machineId)
         {
             if (id == null)
@@ -225,6 +232,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // POST: Services/Delete/5?machineId=...
+        [Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id, int? machineId)

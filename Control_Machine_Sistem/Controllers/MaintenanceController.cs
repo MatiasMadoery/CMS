@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Control_Machine_Sistem.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer")]
     public class MaintenanceController : Controller
     {
         private readonly AppDbContext _context;
@@ -16,7 +16,8 @@ namespace Control_Machine_Sistem.Controllers
             _context = context;
         }
 
-        // GET: /Maintenance/Index        
+        // GET: /Maintenance/Index
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer")]
         public async Task<IActionResult> Index(string searchString, int page = 1, int pageSize = 5)
         {
             var machines = _context.Machines
@@ -54,7 +55,8 @@ namespace Control_Machine_Sistem.Controllers
             return View(pager);
         }
 
-        // GET: /Maintenance/MachineServices?machineId=5       
+        // GET: /Maintenance/MachineServices?machineId=5
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer")]
         public async Task<IActionResult> MachineServices(int machineId)
         {
             var machine = await _context.Machines
@@ -69,7 +71,8 @@ namespace Control_Machine_Sistem.Controllers
             return View(machine);
         }
 
-        // GET: /Maintenance/MachineMaintenances?machineId=5        
+        // GET: /Maintenance/MachineMaintenances?machineId=5
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer")]
         public async Task<IActionResult> MachineMaintenances(int machineId)
         {
             var machine = await _context.Machines

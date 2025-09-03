@@ -51,9 +51,12 @@
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="Maintenance" asp-action="Index">Mantenimientos</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Users" asp-action="Index">Usuarios</a>
-                </li>
+                @if (User.IsInRole("SuperAdmin"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Users" asp-action="Index">Usuarios</a>
+                    </li>
+                }                
             </ul>
         </div>
 
@@ -64,11 +67,17 @@
         </div>
         <nav class="menuMobile">
             <div id="menuQuery">
-                <a class="nav-link" asp-controller="Customers" asp-action="Index">Clientes</a>
-                <a class="nav-link" asp-controller="Models" asp-action="Index">Modelos</a>
-                <a class="nav-link" asp-controller="Machines" asp-action="Index">Productos Vendidos</a>
-                <a class="nav-link" asp-controller="Maintenance" asp-action="Index">Mantenimientos</a>
-                <a class="nav-link" asp-controller="Users" asp-action="Index">Usuarios</a>
+                @if (User.Identity!.IsAuthenticated && ViewData["BodyClass"] != "login-page")
+                {
+                    <a class="nav-link" asp-controller="Customers" asp-action="Index">Clientes</a>
+                    <a class="nav-link" asp-controller="Models" asp-action="Index">Modelos</a>
+                    <a class="nav-link" asp-controller="Machines" asp-action="Index">Productos Vendidos</a>
+                    <a class="nav-link" asp-controller="Maintenance" asp-action="Index">Mantenimientos</a>
+                    @if (User.IsInRole("SuperAdmin"))
+                    {
+                        <a class="nav-link" asp-controller="Users" asp-action="Index">Usuarios</a>
+                    }
+                }                           
             </div>
         </nav>
     }

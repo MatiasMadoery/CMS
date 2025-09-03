@@ -1,18 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Control_Machine_Sistem.Models;
-using System.Diagnostics;
-using System.Reflection.PortableExecutable;
-using NPOI.OpenXml4Net.OPC.Internal;
 using Control_Machine_Sistem.Services;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Authorization;
 
 
 namespace Control_Machine_Sistem.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer")]
     public class ModelsController : Controller
     {
         private readonly AppDbContext _context;
@@ -23,6 +19,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Models
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer")]
         public async Task<IActionResult> Index(int page = 1, int pageSize = 10, int? categoryId = null)
 
         {
@@ -52,6 +49,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Models/Details/5
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -71,6 +69,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Models/Create
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         public IActionResult Create()
         {
             ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
@@ -78,6 +77,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // POST: Models/Create     
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Manuals,SpareKits,CategoryId")] Model model)
@@ -135,6 +135,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Models/Edit/5
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -156,10 +157,10 @@ namespace Control_Machine_Sistem.Controllers
             return View(model);
         }
 
-        //// POST: Models/Edit/5        
+        // POST: Models/Edit/5
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,CategoryId")] Model model, List<string> ExistingManuals, List<IFormFile> Manuals, List<string> DeletedManuals, List<string> ExistingSpareKits, List<IFormFile> SpareKits, List<string> DeletedSpareKits)
 
         {
@@ -276,6 +277,7 @@ namespace Control_Machine_Sistem.Controllers
 
 
         // GET: Models/Delete/5
+        [Authorize(Roles = "Admin, SuperAdmin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -295,6 +297,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // POST: Models/Delete/5
+        [Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

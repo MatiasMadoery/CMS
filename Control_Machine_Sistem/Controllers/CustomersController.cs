@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Control_Machine_Sistem.Models;
 using NPOI.SS.UserModel;
@@ -12,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Control_Machine_Sistem.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer")]
     public class CustomersController : Controller
     {
         private readonly AppDbContext _context;
@@ -23,6 +18,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Customers
+        [Authorize(Roles = "Viewer, Admin, Técnico, SuperAdmin")]
         public async Task<IActionResult> Index(string searchString, int page = 1, int pageSize = 5)
         {
             var customer = from c in _context.Customers select c;
@@ -51,6 +47,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Customers/Details/5
+        [Authorize(Roles = "Viewer, Admin, Técnico, SuperAdmin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -69,14 +66,14 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Customers/Create
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         public IActionResult Create()
         {
             return View();
         }
 
         // POST: Customers/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,LastName,Cuit,Phone,Email,Address,City,PostalCode,Province,Country")] Customer customer)
@@ -91,6 +88,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Customers/Edit/5
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -107,8 +105,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // POST: Customers/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,LastName,Cuit,Phone,Email,Address,City,PostalCode,Province,Country")] Customer customer)
@@ -142,6 +139,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Customers/Delete/5
+        [Authorize(Roles = "Admin, SuperAdmin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -160,6 +158,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // POST: Customers/Delete/5
+        [Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -196,6 +195,7 @@ namespace Control_Machine_Sistem.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ImportExcel(IFormFile file)

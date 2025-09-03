@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Control_Machine_Sistem.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer")]
     public class MachinesController : Controller
     {
         private readonly AppDbContext _context;
@@ -18,6 +18,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Machines
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer")]
         public async Task<IActionResult> Index(string searchString,int? categoryId, int page = 1, int pageSize = 5)
         {
             var machine = _context.Machines!
@@ -58,9 +59,10 @@ namespace Control_Machine_Sistem.Controllers
             ViewBag.Categories = new SelectList(_context.Categories.ToList(), "Id" , "Name", categoryId);
 
             return View(pager);
-        }  
+        }
 
         // GET: Machines/Details/5
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -82,6 +84,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Machines/Create
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         public IActionResult Create()
         {
             ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
@@ -104,7 +107,8 @@ namespace Control_Machine_Sistem.Controllers
         }
 
 
-        // POST: Machines/Create           
+        // POST: Machines/Create
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,Documentations")] Machine machine)
@@ -152,6 +156,7 @@ namespace Control_Machine_Sistem.Controllers
 
 
         // GET: Machines/Edit/5
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -173,8 +178,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // POST: Machines/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.     
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,WarrantyExpirationDate")] Machine machine, List<string> ExistingDocs, List<IFormFile> Documentations, List<string> DeletedDocs)
@@ -276,6 +280,7 @@ namespace Control_Machine_Sistem.Controllers
 
 
         // GET: Machines/Delete/5
+        [Authorize(Roles = "Admin, SuperAdmin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -294,8 +299,9 @@ namespace Control_Machine_Sistem.Controllers
 
             return View(machine);
         }
-        
+
         // POST: Machines/Delete/5
+        [Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int? id)

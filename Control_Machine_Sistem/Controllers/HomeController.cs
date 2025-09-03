@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Control_Machine_Sistem.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
