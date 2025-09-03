@@ -34,6 +34,7 @@
                 <thead>
                     <tr>
                         <th>Cliente</th>
+                        <th>Producto</th>
                         <th>Modelo</th>
                         <th>Acciones</th>
                     </tr>
@@ -43,6 +44,7 @@
                     {
                         <tr>
                             <td>@item.CustomerName</td>
+                            <td>@item.MachineCategory</td>
                             <td>@item.MachineModel</td>
                             <td class="table-actions">
                                 <a class="btn btn-primary" asp-controller="Services" asp-action="Index" asp-route-machineId="@item.MachineId">
