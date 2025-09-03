@@ -23,6 +23,7 @@ namespace Control_Machine_Sistem.Controllers
             var machines = _context.Machines
                 .Include(m => m.Customer)
                 .Include(m => m.Model)
+                .Include(m => m.Model.Category)
                 .AsQueryable(); 
             
             if (!String.IsNullOrEmpty(searchString))
@@ -45,6 +46,7 @@ namespace Control_Machine_Sistem.Controllers
             {
                 MachineId = m.Id,
                 MachineModel = m.Model?.Name,
+                MachineCategory = m.Model?.Category?.Name,
                 CustomerName = m.Customer?.Name
             }).ToList();
            

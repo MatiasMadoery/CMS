@@ -4,7 +4,8 @@ bin/
 obj/
 
 # ASP.NET Core
-wwwroot/
+wwwroot/img
+wwwroot/lib
 *.user
 *.suo
 *.userosscache

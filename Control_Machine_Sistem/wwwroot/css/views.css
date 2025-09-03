@@ -1,0 +1,480 @@
+﻿/* Contenedor principal de la vista */
+.content-wrapper {
+    max-width: 1275px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h1.page-title {
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+}
+
+/* Sección de acciones y búsqueda */
+.action-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.search-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.input-search {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    width: 250px;
+    transition: border-color 0.3s ease;
+}
+
+    .input-search:focus {
+        outline: none;
+        border-color: #3498db;
+    }
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Estilos para los botones */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 18px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+}
+
+.btn-primary {
+    background-color: #3498db;
+}
+
+    .btn-primary:hover {
+        background-color: #2980b9;
+    }
+
+.btn-secondary {
+    background-color: #95a5a6;
+}
+
+    .btn-secondary:hover {
+        background-color: #7f8c8d;
+    }
+
+.btn-success {
+    background-color: #2ecc71;
+}
+
+    .btn-success:hover {
+        background-color: #27ae60;
+    }
+
+
+/*
+* Estilo específico para el botón de eliminar archivos en formularios
+* ============================
+*/
+.btn-file-delete {
+    padding: 6px 12px; /* Aumenta el padding para que sea más grande */
+    font-size: 0.9em; /* Ajusta el tamaño de la fuente */
+    border-radius: 4px; /* Bordes ligeramente redondeados */
+    background-color: #dc3545; /* Color rojo de peligro */
+    color: #fff; /* Texto blanco */
+    border: 1px solid #dc3545;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    display: inline-flex; /* Para alinear íconos y texto */
+    align-items: center;
+    gap: 5px; /* Espacio entre el ícono y el texto */
+    text-decoration: none; /* Asegura que no tenga subrayado si es un <a> */
+}
+
+    .btn-file-delete:hover {
+        background-color: #c82333;
+        border-color: #bd2130;
+    }
+
+/* Ajustes para la tabla de documentos para que el botón se vea bien */
+.document-management .data-table td.table-actions {
+    width: 120px; /* Un ancho fijo para la columna de acciones */
+    text-align: center; /* Centra el botón si hay espacio */
+    justify-content: center; /* Centra con flexbox */
+}
+
+.document-management .document-name {
+    display: block; /* Asegura que el enlace del nombre del archivo ocupe su propia línea */
+    word-break: break-all; /* Rompe palabras largas para evitar desbordamiento */
+}
+/* Estilos de los íconos en los botones */
+.btn .icon {
+    margin-right: 8px;
+}
+
+/* Estilos para la tabla */
+.data-table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+    .data-table th, .data-table td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .data-table thead th {
+        background-color: #f8f8f8;
+        font-weight: bold;
+        color: #555;
+        text-transform: uppercase;
+        font-size: 14px;
+    }
+
+    .data-table tbody tr:hover {
+        background-color: #f0f8ff;
+    }
+
+/* Columna de acciones en la tabla */
+.table-actions {
+    white-space: nowrap;
+}
+
+.btn-action {
+    padding: 8px;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #fff;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    transition: background-color 0.3s ease;
+    margin-right: 5px; /* Espacio entre botones de acción */
+}
+
+    .btn-action.details {
+        background-color: #3498db;
+    }
+
+    .btn-action.edit {
+        background-color: #f39c12;
+    }
+
+    .btn-action.delete {
+        background-color: #e74c3c;
+    }
+
+    .btn-action:hover {
+        filter: brightness(1.1);
+    }
+
+/* Estilos para la paginación */
+.pagination-container {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.pagination-list {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.page-item {
+    margin: 0 4px;
+}
+
+.page-link {
+    display: block;
+    padding: 10px 15px;
+    border-radius: 5px;
+    color: #555;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    transition: background-color 0.3s ease;
+}
+
+    .page-link:hover {
+        background-color: #eee;
+    }
+
+.page-item.active .page-link {
+    background-color: #3498db;
+    border-color: #3498db;
+    color: #fff;
+}
+
+.page-item.disabled .page-link {
+    cursor: not-allowed;
+    color: #ccc;
+    background-color: #f8f8f8;
+}
+
+/*
+* Estilos para los formularios
+* ============================
+*/
+
+/* Contenedor principal del formulario */
+.form-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+}
+
+.form-section-title {
+    color: #34495e;
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+}
+
+/* Estilos de la cuadrícula del formulario */
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.form-col {
+    flex: 1 1 300px; /* Permite que las columnas se adapten y se envuelvan */
+}
+
+/* Estilos de los grupos de control */
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    color: #333;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .form-control:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    }
+
+.text-danger {
+    color: #e74c3c;
+    font-size: 0.875rem;
+    margin-top: 5px;
+}
+
+/* Mensajes de alerta */
+.alert {
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    color: #664d03;
+    border: 1px solid #ffecb5;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #58151c;
+    border: 1px solid #f5c2c7;
+}
+
+.alert-success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    border: 1px solid #badbcc;
+}
+
+/*
+* Estilos para la vista de detalles
+* ============================
+*/
+
+.details-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.details-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px 40px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.details-item {
+    display: flex;
+    flex-direction: column;
+}
+
+    .details-item dt {
+        font-weight: 600;
+        color: #34495e;
+        margin-bottom: 5px;
+    }
+
+    .details-item dd {
+        margin: 0;
+        color: #555;
+    }
+
+.file-list-table {
+    width: 100%;
+    margin-top: 10px;
+    border-collapse: collapse;
+}
+
+    .file-list-table td {
+        padding: 8px;
+        border: 1px solid #ddd;
+        vertical-align: middle;
+    }
+
+    .file-list-table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+.file-name-link {
+    word-break: break-all;
+    display: block;
+    color: #007bff;
+    text-decoration: none;
+}
+
+    .file-name-link:hover {
+        text-decoration: underline;
+    }
+
+.file-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+    .file-list li {
+        margin-bottom: 5px;
+    }
+
+.input-group-addon {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+/*
+* Estilos para la tabla de modelos (añadidos a tu archivo views.css)
+* ============================
+*/
+.model-details-list {
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+    .model-details-list li {
+        list-style-type: none;
+        margin-bottom: 5px;
+    }
+
+.btn-group-actions {
+    display: flex;
+    gap: 5px;
+    white-space: nowrap;
+}
+
+/*
+* Estilos para la tabla de categorías (añadidos a tu archivo views.css)
+* ============================
+*/
+.table-actions {
+    display: flex;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+/*
+* Estilos para la tabla de datos
+* ============================
+*/
+.data-table td {
+    vertical-align: middle; /* Alinea verticalmente el contenido de las celdas */
+}
+
+.table-actions {
+    white-space: nowrap; /* Evita que los botones se envuelvan en varias líneas */
+    display: flex; /* Utiliza flexbox para una alineación flexible */
+    gap: 8px; /* Añade un espacio entre los botones */
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .action-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-form, .button-group {
+        width: 100%;
+        justify-content: center;
+    }
+}
