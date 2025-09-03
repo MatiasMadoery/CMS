@@ -14,51 +14,6 @@
 </head>
 <body>
 
-    @* IMPRESION EN VERTICAL UNA COLUMNA *@
-    @* <div class="qr-container">
-        <h1 class="center">Cliente: @Model.ClientName</h1>
-        <h1 class="center">Modelo: @Model.MachineModel</h1>
-
-        <div>
-            <img src="@Model.QrImageBase64" alt="QR Code" class="qr-image" />
-        </div>       
-        <div>
-            <button onclick="window.print()" class="btn btn-success no-print">Imprimir QR</button>
-        </div>
-
-        <br/>
-
-        <div>
-            <a asp-controller="Machines" asp-action="Index" class="btn btn-secondary no-print">Volver a la lista</a>
-        </div>
-
-        <div class="print-only">            
-            <div>
-                <img src="~/img/icons/QrPrintViewLogo.png" alt="Qr logo" class="qr-logo" />
-            </div>
-            <h2 class="center">Registro de Servicios</h2>
-            <table class="service-table">
-                <thead>
-                    <tr>
-                        <th>N° de Service</th>
-                        <th>Fecha</th>
-                        <th>Firma</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (int i = 1; i <= 8; i++)
-                    {
-                        <tr>
-                            <td>@i</td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div> *@
-
     @* IMPRESION EN DOS COLUMNAS HORIZONTAL *@
     <div class="qr-container">
         <div class="qr-left">
@@ -93,6 +48,7 @@
 
         <div class="no-print">
             <button onclick="window.print()" class="btn btn-success">Imprimir QR</button>
+            <br />
             <br />
             <a asp-controller="Machines" asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
         </div>
