@@ -21,10 +21,10 @@
                 <div class="form-group">
                     <label asp-for="CategoryId" class="form-label">Producto</label>
                     <div class="input-group-addon">
-                        <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-control">
+                        <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select">
                             <option value="">Selecciona un producto</option>
                         </select>
-                        <a asp-action="Create" asp-controller="Categories" class="btn btn-success" target="_blank">
+                        <a asp-action="Create" asp-controller="Categories" class="btn btn-success btn-custom-small" target="_blank">
                             <i class="fas fa-plus-circle icon"></i> Crear producto
                         </a>
                     </div>
@@ -40,7 +40,7 @@
             </div>
         </div>
 
-        <h4 class="form-section-title">Manuales</h4>
+        <h4 class="form-section-title">Documentación</h4>
         <div id="fileUploadContainer" class="form-row">
             <div class="form-col">
                 <div class="form-group">
@@ -55,8 +55,7 @@
                 <i class="fas fa-plus icon"></i> Agregar otro manual
             </button>
         </div>
-
-        <h4 class="form-section-title">Consumibles / Services</h4>
+       
         <div id="fileUploadContainer2" class="form-row">
             <div class="form-col">
                 <div class="form-group">

@@ -14,7 +14,7 @@
         <form method="get" id="filter-form" class="search-form">
             <input type="text" name="searchString" class="form-control" placeholder="Buscar cliente o modelo..." value="@ViewData["searchString"]" />
 
-            <select name="categoryId" class="form-control">
+            <select name="categoryId" class="form-select">
                 <option value="">Filtrar por producto...</option>
                 @foreach (var category in ViewBag.Categories)
                 {
@@ -49,7 +49,7 @@
                 <thead>
                     <tr>
                         <th>@Html.DisplayNameFor(model => model.Elements.First().Customer!.Name)</th>
-                        <th>@Html.DisplayNameFor(model => model.Elements.First().Model.Category.Name)</th>
+                        <th>@Html.DisplayNameFor(model => model.Elements.First().Model!.Category!.Name)</th>
                         <th>@Html.DisplayNameFor(model => model.Elements.First().Model!.Name)</th>
                         <th>@Html.DisplayNameFor(model => model.Elements.First().DeliveryDate)</th>
                         <th>@Html.DisplayNameFor(model => model.Elements.First().WarrantyExpirationDate)</th>
