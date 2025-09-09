@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_QrLayout.cshtml";
     ViewData["Title"] = "Servicios";
     var contextMachineId = ViewData["MachineId"];
-    var serviceHours = Enumerable.Range(1, 8).Select(i => i * 250);
+    var serviceHours = Enumerable.Range(1, 8).Select(i => i * 250).Prepend(150);
 }
 
 <link rel="stylesheet" href="~/css/qrCustomerView.css" />
