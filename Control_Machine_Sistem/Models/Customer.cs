@@ -11,6 +11,7 @@ namespace Control_Machine_Sistem.Models
         [Display(Name = "Razón Social")]
         public string? Name { get; set; }
 
+
         [StringLength(75, ErrorMessage = "El nombre de contacto no puede exceder los 100 caracteres.")]
         [Display(Name = "Persona de contacto")]
         public string? LastName { get; set; }
