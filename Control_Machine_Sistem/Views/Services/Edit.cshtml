@@ -5,86 +5,119 @@
     var machineId = ViewData["MachineId"];
 }
 
-<h1>Editar Service</h1>
-<hr />
-<div class="row">
-    <div class="col-md-6">        
-        <form asp-action="Edit" enctype="multipart/form-data" id="uploadForm">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                     
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="MachineId" />
-            
-            <div class="form-group">
-                <label asp-for="WorkHours" class="control-label"></label>
-                <input asp-for="WorkHours" class="form-control" />
-                <span asp-validation-for="WorkHours" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ServiceDate" class="control-label"></label>
-                <input asp-for="ServiceDate" type="date" class="form-control" />
-                <span asp-validation-for="ServiceDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="OrderNumber" class="control-label"></label>
-                <input asp-for="OrderNumber" class="form-control" />
-                <span asp-validation-for="OrderNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Observations" class="control-label"></label>
-                <input asp-for="Observations" class="form-control" />
-                <span asp-validation-for="Observations" class="text-danger"></span>
-            </div>            
-            <div class="form-group">
-                <label>Planillas cargadas</label>
-                <table class="table table-bordered">
-                    <tbody>
-                        @if (Model.ServiceSheetUrls != null && Model.ServiceSheetUrls.Any())
-                        {
-                            @for (int i = 0; i < Model.ServiceSheetUrls.Count; i++)
-                            {
-                                var fileUrl = Model.ServiceSheetUrls[i];
-                                var fileName = System.IO.Path.GetFileName(fileUrl);
+<link href="~/css/views.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-                                <tr>
-                                    <td>
-                                        <a href="@fileUrl" target="_blank" class="document-name" download>
-                                            @fileName
-                                        </a>
-                                        <input type="hidden" name="ExistingServiceSheets" value="@fileUrl" />
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm" onclick="removeExistingFile(this, 'DeletedServiceSheetUrls')">Eliminar</button>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                        else
+<div class="form-container">
+    <h1 class="form-title">@ViewData["Title"]</h1>
+    <hr />
+
+    <form asp-action="Edit" enctype="multipart/form-data" id="uploadForm">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="MachineId" />
+
+        <div class="form-row">
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="ServiceHour" class="form-label">Hora Programada</label>
+                    <input asp-for="ServiceHour" class="form-control" readonly />
+                    <span asp-validation-for="ServiceHour" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="WorkHours" class="form-label">Horas Reales *</label>
+                    <input asp-for="WorkHours" class="form-control" />
+                    <span asp-validation-for="WorkHours" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="ServiceDate" class="form-label">Fecha *</label>
+                    <input asp-for="ServiceDate" type="date" class="form-control" />
+                    <span asp-validation-for="ServiceDate" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="OrderNumber" class="form-label">N° Orden *</label>
+                    <input asp-for="OrderNumber" class="form-control" />
+                    <span asp-validation-for="OrderNumber" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="Observations" class="form-label"></label>
+                    <input asp-for="Observations" class="form-control" />
+                    <span asp-validation-for="Observations" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <h4 class="form-section-title">Archivos cargados</h4>
+        <div class="document-management">
+            <table class="data-table">
+                <tbody>
+                    @if (Model.ServiceSheetUrls != null && Model.ServiceSheetUrls.Any())
+                    {
+                        @for (int i = 0; i < Model.ServiceSheetUrls.Count; i++)
                         {
-                            <tr>
-                                <td colspan="2">No hay planillas cargadas.</td>
+                            var fileUrl = Model.ServiceSheetUrls[i];
+                            var fileName = System.IO.Path.GetFileName(fileUrl);
+
+                            <tr class="document-row">
+                                <td>
+                                    <a href="@fileUrl" target="_blank" class="document-name" download>
+                                        @fileName
+                                    </a>
+                                    <input type="hidden" name="ExistingServiceSheets" value="@fileUrl" />
+                                </td>
+                                <td class="table-actions">
+                                    <button type="button" class="btn-file-delete" onclick="removeExistingFile(this, 'DeletedServiceSheetUrls')">
+                                        <i class="fas fa-trash-alt icon"></i> Eliminar
+                                    </button>
+                                </td>
                             </tr>
                         }
-                    </tbody>
-                </table>
-            </div>            
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="2" class="text-center text-secondary">No hay planillas cargadas.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <h4 class="form-section-title">Agregar nuevos documentos</h4>
+        <div id="fileUploadContainer">
             <div class="form-group">
-                <label asp-for="ServiceSheet" class="control-label"></label>
-                <div id="fileUploadContainer">
-                    <input type="file" name="ServiceSheet" class="form-control" />
-                    <span asp-validation-for="ServiceSheet" class="text-danger"></span>
-                    <br />
-                </div>
-                <button type="button" class="btn btn-primary" onclick="addMoreFiles('fileUploadContainer', 'ServiceSheet')">Agregar otro archivo</button>
-            </div>            
-            <div id="deletedFilesContainer"></div>
-            <br />
-            <div class="form-group">
-                <input type="submit" value="Guardar" class="btn btn-success" /> |
-                <a asp-action="Index" asp-route-machineId="@(machineId)" class="btn btn-secondary">Volver a la lista</a>
+                <label asp-for="ServiceSheet" class="form-label"></label>
+                <input type="file" name="ServiceSheet" class="form-control" multiple />
+                <span asp-validation-for="ServiceSheet" class="text-danger"></span>
             </div>
-        </form>
-    </div>
+        </div>
+
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" onclick="addMoreFiles('fileUploadContainer', 'ServiceSheet')">
+                <i class="fas fa-plus icon"></i> Agregar otro archivo
+            </button>
+        </div>
+
+        <div id="deletedFilesContainer"></div>
+
+        <div class="button-group">
+            <input type="submit" value="Guardar" class="btn btn-success" />
+            <a asp-action="Index" asp-route-machineId="@(machineId)" class="btn btn-secondary">
+                <i class="fas fa-arrow-left icon"></i> Volver a la lista
+            </a>
+        </div>
+    </form>
 </div>
 
 @section Scripts {

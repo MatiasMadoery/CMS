@@ -14,6 +14,7 @@ namespace Control_Machine_Sistem.Models
         [Required(ErrorMessage = "Debe ingresar las Horas Reales")]
         [Display(Name = "Horas Reales")]
         public int? WorkHours { get; set; }
+        [Required(ErrorMessage = "Debe ingresar la Fecha del Service")]
         [Display(Name = "Fecha")]
         public DateTime? ServiceDate { get; set; }
         [Required(ErrorMessage = "Debe ingresar un N° de Orden")]

@@ -1,77 +1,97 @@
 ﻿@model Control_Machine_Sistem.Models.Service
 
 @{
-    ViewData["Title"] = "Detalle";
+    ViewData["Title"] = "Detalle del Service";
     var machineId = ViewData["MachineId"];
 }
 
-<h1>Detalle</h1>
+<link href="~/css/views.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-<div>
-    <h4>Service</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.WorkHours)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.WorkHours)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ServiceDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Model.ServiceDate?.ToString("dd/MM/yyyy")
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.OrderNumber)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.OrderNumber)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Observations)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Observations)
-        </dd>
-    </dl>
-</div>
+<div class="content-wrapper">
+    <h1 class="page-title">@ViewData["Title"]</h1>
+    <div class="details-container">
+        <dl class="details-list">
+            <div class="details-item">
+                <dt>
+                    @Html.DisplayNameFor(model => model.ServiceHour)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.ServiceHour)
+                </dd>
+            </div>
+            <div class="details-item">
+                <dt>
+                    @Html.DisplayNameFor(model => model.WorkHours)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.WorkHours)
+                </dd>
+            </div>
+            <div class="details-item">
+                <dt>
+                    @Html.DisplayNameFor(model => model.ServiceDate)
+                </dt>
+                <dd>
+                    @Model.ServiceDate?.ToString("dd/MM/yyyy")
+                </dd>
+            </div>
+            <div class="details-item">
+                <dt>
+                    @Html.DisplayNameFor(model => model.OrderNumber)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.OrderNumber)
+                </dd>
+            </div>
+            <div class="details-item">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Observations)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Observations)
+                </dd>
+            </div>
+        </dl>
+    </div>
 
-<div class="form-group">
-    <label>Planillas cargadas</label>
-    <table class="table table-bordered">
-        <tbody>
-            @if (Model.ServiceSheetUrls != null && Model.ServiceSheetUrls.Any())
-            {
-                @for (int i = 0; i < Model.ServiceSheetUrls.Count; i++)
+    <h4 class="form-section-title">Archivos cargados</h4>
+    <div class="document-management">
+        <table class="data-table">
+            <tbody>
+                @if (Model.ServiceSheetUrls != null && Model.ServiceSheetUrls.Any())
                 {
-                    var fileUrl = Model.ServiceSheetUrls[i];
-                    var fileName = System.IO.Path.GetFileName(fileUrl);
-
+                    @for (int i = 0; i < Model.ServiceSheetUrls.Count; i++)
+                    {
+                        var fileUrl = Model.ServiceSheetUrls[i];
+                        var fileName = System.IO.Path.GetFileName(fileUrl);
+                        <tr>
+                            <td>
+                                <a href="@fileUrl" target="_blank" class="document-name" download>
+                                    @fileName
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
                     <tr>
-                        <td>
-                            <a href="@fileUrl" target="_blank" class="document-name" download>
-                                @fileName
-                            </a>
-                            <input type="hidden" name="ExistingServiceSheets" value="@fileUrl" />
-                        </td>
+                        <td class="text-center text-secondary">No hay planillas cargadas.</td>
                     </tr>
                 }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="2">No hay planillas cargadas.</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+    </div>
 
-<div>
-    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.Id" asp-route-machineId="@(machineId)">Editar</a> |
-    <a class="btn btn-secondary" asp-action="Index" asp-route-machineId="@(machineId)">Volver a la lista</a>
+    <div class="button-group" style="margin-top: 20px;">
+        <a asp-action="Edit" asp-route-id="@Model.Id" asp-route-machineId="@(machineId)" class="btn btn-primary">
+            <i class="fas fa-edit icon"></i> Editar
+        </a>
+        <a asp-action="Index" asp-route-machineId="@(machineId)" class="btn btn-secondary">
+            <i class="fas fa-arrow-left icon"></i> Volver a la lista
+        </a>
+    </div>
 </div>
 
 @section Scripts {
