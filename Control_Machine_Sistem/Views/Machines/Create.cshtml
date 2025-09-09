@@ -19,7 +19,7 @@
         <div class="form-row">
             <div class="form-col">
                 <div class="form-group">
-                    <label asp-for="CustomerId" class="form-label">Cliente</label>
+                    <label asp-for="CustomerId" class="form-label">Cliente *</label>
                     <select asp-for="CustomerId" class="form-control select2" data-url="@Url.Action("GetCustomers", "Machines")">
                         <option value="">Seleccione un Cliente...</option>
                     </select>
@@ -28,7 +28,7 @@
             </div>
             <div class="form-col">
                 <div class="form-group">
-                    <label for="CategoryId" class="form-label">Producto</label>
+                    <label for="CategoryId" class="form-label">Producto *</label>
                     <select id="CategoryId" class="form-select">
                         <option value="">Seleccione un producto...</option>
                         @foreach (var category in ViewBag.Categories)
@@ -40,8 +40,8 @@
             </div>
             <div class="form-col">
                 <div class="form-group">
-                    <label asp-for="ModelId" class="form-label">Modelo</label>
-                    <select asp-for="ModelId" id="ModelId" class="form-control">
+                    <label asp-for="ModelId" class="form-label">Modelo *</label>
+                    <select asp-for="ModelId" id="ModelId" class="form-select">
                         <option value="">Seleccione un modelo...</option>
                     </select>
                     <span asp-validation-for="ModelId" class="text-danger"></span>
@@ -52,14 +52,14 @@
         <div class="form-row">
             <div class="form-col">
                 <div class="form-group">
-                    <label asp-for="ChasisNumber" class="form-label"></label>
+                    <label asp-for="ChasisNumber" class="form-label">Número de chasis *</label>
                     <input asp-for="ChasisNumber" class="form-control" />
                     <span asp-validation-for="ChasisNumber" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-col">
                 <div class="form-group">
-                    <label asp-for="EngineNumber" class="form-label"></label>
+                    <label asp-for="EngineNumber" class="form-label">Número de motor *</label>
                     <input asp-for="EngineNumber" class="form-control" />
                     <span asp-validation-for="EngineNumber" class="text-danger"></span>
                 </div>
@@ -69,7 +69,7 @@
         <div class="form-row">
             <div class="form-col">
                 <div class="form-group">
-                    <label asp-for="DeliveryDate" class="form-label"></label>
+                    <label asp-for="DeliveryDate" class="form-label">Fecha de entrega técnica *</label>
                     <input asp-for="DeliveryDate" class="form-control" type="date" />
                     <span asp-validation-for="DeliveryDate" class="text-danger"></span>
                 </div>

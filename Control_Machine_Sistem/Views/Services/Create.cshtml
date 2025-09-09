@@ -1,66 +1,87 @@
 ﻿@model Control_Machine_Sistem.Models.Service
 
 @{
-    ViewData["Title"] = "Crear";
+    ViewData["Title"] = "Crear Service";
 }
 
-<h4>Service</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<link href="~/css/views.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-            <input type="hidden" asp-for="MachineId" />
-            <div class="form-group">
-                <label asp-for="ServiceHour" class="control-label"></label>
-                <input asp-for="ServiceHour" class="form-control" readonly />
-                <span asp-validation-for="ServiceHour" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="WorkHours" class="control-label"></label>
-                <input asp-for="WorkHours" class="form-control" />
-                <span asp-validation-for="WorkHours" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ServiceDate" class="control-label"></label>
-                <input asp-for="ServiceDate" type="date" class="form-control" />
-                <span asp-validation-for="ServiceDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="OrderNumber" class="control-label">N° Orden *</label>
-                <input asp-for="OrderNumber" class="form-control" />
-                <span asp-validation-for="OrderNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Observations" class="control-label"></label>
-                <input asp-for="Observations" class="form-control" />
-                <span asp-validation-for="Observations" class="text-danger"></span>
-            </div>
-            <div id="fileUploadContainer">
+<div class="form-container">
+    <h1 class="form-title">@ViewData["Title"]</h1>
+    <hr />
+
+    <form asp-action="Create" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+        <input type="hidden" asp-for="MachineId" />
+
+        <div class="form-row">
+            <div class="form-col">
                 <div class="form-group">
-                    <label asp-for="ServiceSheet" class="control-label"></label>
-                    <input type="file" name="ServiceSheet" class="form-control" />
-                    <span asp-validation-for="ServiceSheet" class="text-danger"></span>
-                    <br />
+                    <label asp-for="ServiceHour" class="form-label">Hora Programada</label>
+                    <input asp-for="ServiceHour" class="form-control" readonly/>
+                    <span asp-validation-for="ServiceHour" class="text-danger"></span>
                 </div>
             </div>
-            <div class="form-group">
-                <button type="button" class="btn btn-primary" onclick="addMoreFiles('fileUploadContainer', 'ServiceSheet')">Agregar otro archivo</button>
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="WorkHours" class="form-label">Horas Reales *</label>
+                    <input asp-for="WorkHours" class="form-control" />
+                    <span asp-validation-for="WorkHours" class="text-danger"></span>
+                </div>
             </div>
-            <br />
-            <div class="form-group">
-                <input type="submit" value="Crear" class="btn btn-success" /> |
-                <a class="btn btn-secondary" asp-action="Index" asp-route-machineId="@Model.MachineId">Volver a la lista</a>
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="ServiceDate" class="form-label">Fecha *</label>
+                    <input asp-for="ServiceDate" type="date" class="form-control" />
+                    <span asp-validation-for="ServiceDate" class="text-danger"></span>
+                </div>
             </div>
-        </form>
-    </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="OrderNumber" class="form-label">N° Orden *</label>
+                    <input asp-for="OrderNumber" class="form-control" />
+                    <span asp-validation-for="OrderNumber" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="Observations" class="form-label"></label>
+                    <input asp-for="Observations" class="form-control" />
+                    <span asp-validation-for="Observations" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <h4 class="form-section-title">Archivos</h4>
+        <div id="fileUploadContainer">
+            <div class="form-group">
+                <label asp-for="ServiceSheet" class="form-label"></label>
+                <input type="file" name="ServiceSheet" class="form-control" multiple />
+                <span asp-validation-for="ServiceSheet" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" onclick="addMoreFiles('fileUploadContainer', 'ServiceSheet')">
+                <i class="fas fa-plus icon"></i> Agregar otro archivo
+            </button>
+        </div>
+
+        <div class="button-group">
+            <input type="submit" value="Guardar" class="btn btn-success" />
+            <a asp-action="Index" asp-route-machineId="@Model.MachineId" class="btn btn-secondary">
+                <i class="fas fa-arrow-left icon"></i> Volver a la lista
+            </a>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
-
     <script src="~/js/views.js"></script>
-
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
