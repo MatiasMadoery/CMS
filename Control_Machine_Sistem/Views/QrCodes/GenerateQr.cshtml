@@ -14,36 +14,20 @@
 </head>
 <body>
 
-    @* IMPRESION EN DOS COLUMNAS HORIZONTAL *@
+    @* IMPRESION *@
     <div class="qr-container">
-        <div class="qr-left">
-            <h1 class="center">Cliente: @Model.ClientName</h1>
-            <h1 class="center">Modelo: @Model.MachineModel</h1>
-            <img src="@Model.QrImageBase64" alt="QR Code" class="qr-image" />
-        </div>
-
-        <div class="qr-right print-only">
-            <img src="~/img/icons/QrPrintViewLogo.png" alt="Qr logo" class="qr-logo" />
-            <h2 class="center">Registro de Servicios</h2>
-            <table class="service-table">
-                <thead>
-                    <tr>
-                        <th>N° de Service</th>
-                        <th>Fecha</th>
-                        <th>Firma</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (int i = 1; i <= 8; i++)
-                    {
-                        <tr>
-                            <td>@i</td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+        <div class="qr-print-content">
+            <h1 class="print-title">MANTENIMIENTO Y DOCUMENTACION</h1>
+            <img src="@Model.QrImageBase64" alt="QR Code" class="qr-image-print" />
+            <div class="machine-info">
+                <h2>MODELO: @Model.MachineModel</h2>
+                <h2>N° DE CHASIS: </h2>
+            </div>
+            <div class="contact-info">
+                <h2 class="contact-title">GUARDIA POSVENTA:</h2>
+                <p>SERVICIO: +54 03564 - 15572642</p>
+                <p>REPUESTOS: +54 03564-572816</p>
+            </div>
         </div>
 
         <div class="no-print">
@@ -55,3 +39,7 @@
     </div>
 </body>
 </html>
+
+
+
+@* <img src="~/img/icons/QrPrintViewLogo.png" alt="Qr logo" class="qr-logo" /> *@  

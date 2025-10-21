@@ -12,17 +12,20 @@
 
     <div class="action-bar">
         <form method="get" id="filter-form" class="search-form">
-            <input type="text" name="searchString" class="form-control" placeholder="Buscar cliente o modelo..." value="@ViewData["searchString"]" />
-
-            <select name="categoryId" class="form-select">
-                <option value="">Filtrar por producto...</option>
-                @foreach (var category in ViewBag.Categories)
-                {
-                    <option value="@category.Value" selected="@(category.Value == ViewBag.SelectedCategory?.ToString())">
-                        @category.Text
-                    </option>
-                }
-            </select>
+            <div>
+                <input type="text" name="searchString" class="form-control" placeholder="Buscar cliente o modelo..." value="@ViewData["searchString"]" />
+            </div>
+            <div>
+                <select name="categoryId" class="form-select">
+                    <option value="">Filtrar por producto...</option>
+                    @foreach (var category in ViewBag.Categories)
+                    {
+                        <option value="@category.Value" selected="@(category.Value == ViewBag.SelectedCategory?.ToString())">
+                            @category.Text
+                        </option>
+                    }
+                </select>
+            </div>
             <button type="submit" class="btn btn-primary">
                 <i class="fas fa-search icon"></i> Buscar
             </button>
@@ -62,7 +65,7 @@
                     {
                         <tr>
                             <td>@Html.DisplayFor(modelItem => item.Customer!.Name)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Model!.Category.Name)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Model!.Category!.Name)</td>
                             <td>@Html.DisplayFor(modelItem => item.Model!.Name)</td>
                             <td>@item.DeliveryDate?.ToString("dd/MM/yyyy")</td>
                             <td>@item.WarrantyExpirationDate?.ToString("dd/MM/yyyy")</td>

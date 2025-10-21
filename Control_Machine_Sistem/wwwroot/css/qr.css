@@ -18,6 +18,153 @@
     max-width: 600px;
 }
 
+/* Nuevos estilos para la visualización en pantalla */
+.qr-print-content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.print-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.qr-image-print {
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 20px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+}
+
+.machine-info h2, .contact-info h2 {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.contact-info p {
+    font-size: 16px;
+    margin: 2px 0;
+}
+
+.btn-success {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+    .btn-success:hover {
+        background-color: #218838;
+    }
+
+.no-print {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Estilos para la impresión */
+@media print {
+    @page {
+        size: A4;
+        margin: 0;
+    }
+
+    body {
+        display: block;
+        background-color: white !important; /* Mantener el body en blanco si no quieres el fondo en toda la hoja */
+        -webkit-print-color-adjust: exact;
+    }
+
+    .qr-container {
+        /* Este contenedor principal es el que contendrá el recuadro negro y el fondo #eabe2e */
+        display: block;
+        width: 11cm; /* Fija el ancho del contenedor a 12cm */
+        height: 13cm; /* Fija la altura del contenedor a 15cm */
+        max-width: none; /* Desactiva el max-width que podría interferir */
+        max-height: none; /* Desactiva el max-height */
+        padding: 5mm;
+        box-shadow: none;
+        border-radius: 0;
+        border: 1px solid black; /* Recuadro negro */
+        background-color: #eabe2e !important; /* Fondo #eabe2e */
+        margin: 0; /* Asegúrate de que no haya márgenes alrededor del recuadro */
+        position: absolute; /* Posiciona el contenedor absolutamente */
+        top: 0; /* Lo alinea a la parte superior */
+        left: 0; /* Lo alinea a la parte izquierda */
+        overflow: hidden; /* Asegura que nada se salga del recuadro si el contenido es muy grande */
+    }
+
+    .qr-print-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        width: 100%; /* El contenido ocupa todo el ancho del qr-container */
+        height: 100%; /* El contenido ocupa todo el alto del qr-container */
+        box-sizing: border-box; /* Incluye padding y borde en el width/height */
+    }
+
+    .print-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .qr-image-print {
+        max-width: 100px;
+        height: auto;
+    }
+
+    .machine-info, .contact-info {
+        margin: 10px 0;
+        text-align: center;
+    }
+
+        .machine-info h2, .contact-info h2 {
+            font-size: 12px;
+            margin: 2px 0;
+        }
+
+        .contact-info p {
+            font-size: 10px;
+            margin: 1px 0;
+        }
+
+    .no-print {
+        display: none;
+    }
+}
+/*body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #eabe2e !important;
+}
+
+.qr-container {
+    background-color: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 80%;
+    max-width: 600px;
+}
+
 .qr-image {
     width: 100%;
     max-width: 300px;
@@ -41,22 +188,6 @@
         background-color: #218838;
     }
 
-.service-table {
-    display: table;
-    width: 100%;
-    margin-top: 20px;
-    border-collapse: collapse;
-}
-
-    .service-table th, .service-table td {
-        border: 1px solid black;
-        padding: 8px;
-        text-align: center;
-    }
-
-    .service-table th {
-        background-color: #f2f2f2;
-    }
 
 .print-only {
     display: none;    
@@ -64,66 +195,11 @@
 
 @page {
     margin: 0;
-}
-
-/*CSS IMPRESION VERTICAL*/
-/*@media print {
-    .no-print {
-        display: none;
-    }
-
-    .print-only {
-        display: block;*/
-        /*background-color: #eabe2e !important;*/
-    /*}   
-
-    body {
-        margin: 10px;
-        padding: 0;*/
-       /* background-color: #eabe2e !important;
-        -webkit-print-color-adjust: exact;*/
-        /*border-radius: 5px;
-    }
-    .qr-container {
-        background-color: white;
-        border-radius: 15px;
-        padding: 30px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        width: 80%;
-        max-width: 600px;*/
-       /* background-color: #eabe2e !important;*/
-    /*}
-
-    .qr-image {
-        width: 100%;
-        max-width: 300px;
-        margin-top: 20px;
-        border: 2px solid #ddd;
-        border-radius: 10px;
-    }
-
-    .qr-logo {
-        width: 15%;
-        margin-bottom: 5px;        
-    }
-
-    .service-table {
-        width: 100%;
-        table-layout: fixed;
-        background-color: none;
-    }
-
-        .service-table th, .service-table td {
-            width: 50%;
-            padding: 15px;
-            background-color: white;
-        }
 }*/
 
 
-    /*CSS IMPRESION HORIZONTAL*/
-@media print {
+    /*CSS IMPRESION */
+/*@media print {
     @page {
         size: A4 landscape;
         margin: 10mm;
@@ -162,18 +238,7 @@
     .qr-image {
         max-width: 50%;
         height: auto;
-    }
-
-    .service-table {
-        font-size: 12px;
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-        .service-table th, .service-table td {
-            padding: 6px;
-            border: 1px solid black;
-        }
+    } 
 
     .print-only {
         display: block;
@@ -188,15 +253,88 @@
         margin-bottom: 5px;
     }
 
-    .service-table th:nth-child(1),
-    .service-table td:nth-child(1) {
-        width: 20%;
+    .qr-right {
+        text-align: center;
     }
 
-    .service-table th:nth-child(2),
-    .service-table td:nth-child(2),
-    .service-table th:nth-child(3),
-    .service-table td:nth-child(3) {
-        width: 40%;
+    .print-title {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        text-align: center;
     }
-}
+
+    .qr-image-print {
+        width: 100%;
+        max-width: 250px;
+        height: auto;
+        margin-bottom: 20px;
+    }
+
+    .machine-info h2, .contact-info h2 {
+        font-size: 14px;
+        font-weight: bold;
+        margin: 5px 0;
+    }
+
+    .contact-info p {
+        font-size: 12px;
+        margin: 2px 0;
+    }
+ 
+}*/
+
+/*CSS IMPRESION VERTICAL*/
+/*@media print {
+    .no-print {
+        display: none;
+    }
+
+    .print-only {
+        display: block;*/
+/*background-color: #eabe2e !important;*/
+/*}   
+
+    body {
+        margin: 10px;
+        padding: 0;*/
+/* background-color: #eabe2e !important;
+        -webkit-print-color-adjust: exact;*/
+/*border-radius: 5px;
+    }
+    .qr-container {
+        background-color: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 80%;
+        max-width: 600px;*/
+/* background-color: #eabe2e !important;*/
+/*}
+
+    .qr-image {
+        width: 100%;
+        max-width: 300px;
+        margin-top: 20px;
+        border: 2px solid #ddd;
+        border-radius: 10px;
+    }
+
+    .qr-logo {
+        width: 15%;
+        margin-bottom: 5px;        
+    }
+
+    .service-table {
+        width: 100%;
+        table-layout: fixed;
+        background-color: none;
+    }
+
+        .service-table th, .service-table td {
+            width: 50%;
+            padding: 15px;
+            background-color: white;
+        }
+}*/
