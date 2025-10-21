@@ -104,10 +104,10 @@ body {
         width: 6.5cm;
         height: 3.5cm;
         padding: 0;
-        margin: 0; /* Ubica la etiqueta en la esquina superior izquierda */
+        margin: 0;
         border: none;
         overflow: hidden;
-        box-sizing: border-box; /* Incluye padding y border en el width/height */
+        box-sizing: border-box;
         background-color: white;
         font-family: 'Exo', sans-serif;
         font-weight: 800;
@@ -116,7 +116,7 @@ body {
     .print-qr-content {
         display: flex;
         height: 100%;
-        padding: 0.2cm 0.1cm 0.1cm 0.1cm; /* Pequeño margen interno (top, right, bottom, left) */
+        padding: 0.2cm 0.1cm 0.1cm 0.1cm;
         box-sizing: border-box;
         align-items: flex-start;
         justify-content: flex-start;
@@ -141,15 +141,13 @@ body {
         padding: 0;
     }
 
-    /* CLAVE DE LA CORRECCIÓN: Eliminar height fijo y ajustar line-height */
     .print-model-label,
     .print-chasis-label {
         font-size: 0.3cm;
-        line-height: 1; /* Reduce el espacio alrededor del texto */
+        line-height: 1;
         margin: 0;
         padding: 0;
-        /* ELIMINAR O COMENTAR: height: 0.6cm; */
-        display: block; /* Vuelve a block para simplificar el flujo, ya no necesitamos flex para el centrado interno */
+        display: block;
     }
 
     .print-model-value,
@@ -157,8 +155,7 @@ body {
         font-size: 0.35cm;
         line-height: 1;
         margin: 0;
-        /* ELIMINAR O REDUCIR: padding: 0 0 0.1cm 0; si es excesivo */
-        padding: 0 0 0.1cm 0; /* Mantenemos un padding-bottom para la separación con la línea */
+        padding: 0 0 0.1cm 0;
         text-transform: uppercase;
         overflow: hidden;
         white-space: nowrap;
@@ -171,22 +168,22 @@ body {
     /* MODELO: Alineado al tope */
     .print-model-label {
         margin-top: 0;
-        margin-bottom: 0; /* Asegurarse de que no haya margen extra con el valor */
+        margin-bottom: 0;
     }
 
     .print-model-value {
-        margin-bottom: 0.2cm; /* Espacio para separar el bloque de Modelo del Chasis */
-        padding-top: 0; /* Asegurarse de que el valor esté pegado a la etiqueta */
+        margin-bottom: 0.2cm;
+        padding-top: 0;
     }
 
     /* N° DE CHASIS: Alineado al fondo */
     .print-chasis-label {
-        margin-top: 0; /* No debe empujar desde arriba */
+        margin-top: 0;
         margin-bottom: 0;
     }
 
     .print-chasis-value {
-        margin-bottom: 0; /* Pegado al borde inferior del contenedor */
+        margin-bottom: 0;
         padding-top: 0;
     }
 
