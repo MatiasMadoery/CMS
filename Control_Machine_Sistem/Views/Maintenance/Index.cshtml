@@ -62,13 +62,43 @@
     </div>
 
     <div class="pagination-container">
+        @{
+            // Parámetros de configuración para el rango visible
+            int maxPagesToShow = 3; // Mostrar 3 páginas a cada lado de la actual (total de 7 si es posible)
+
+            // Cargar parámetro de filtro para mantener el estado
+            string searchString = ViewData["searchString"]?.ToString();
+
+            // 1. Determinar el rango visible inicial
+            int startPage = Math.Max(1, Model.CurrentPage - maxPagesToShow);
+            int endPage = Math.Min(Model.TotalPages, Model.CurrentPage + maxPagesToShow);
+
+            // 2. Ajustar el rango para compensar si estamos al principio o al final
+            // Esto asegura que se muestre una ventana de páginas consistente (máximo 7)
+            int pagesInWindow = endPage - startPage + 1;
+            if (pagesInWindow < (maxPagesToShow * 2 + 1))
+            {
+                if (startPage == 1)
+                {
+                    endPage = Math.Min(Model.TotalPages, startPage + maxPagesToShow * 2);
+                }
+                else if (endPage == Model.TotalPages)
+                {
+                    startPage = Math.Max(1, endPage - maxPagesToShow * 2);
+                }
+            }
+        }
+
         <ul class="pagination-list">
+
+            @* Botón de Página Anterior *@
             @if (Model.PreviousPage)
             {
                 <li class="page-item">
-                    <a class="page-link" asp-action="Index"
+                    <a class="page-link"
+                       asp-action="Index"
                        asp-route-page="@(Model.CurrentPage - 1)"
-                       asp-route-searchString="@ViewData["searchString"]">« Anterior</a>
+                       asp-route-searchString="@searchString">« Anterior</a>
                 </li>
             }
             else
@@ -78,30 +108,62 @@
                 </li>
             }
 
-            @for (int i = 1; i <= Model.TotalPages; i++)
+            @* 1. Botón de la primera página (si hay un salto) *@
+            @if (startPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-page="1"
+                       asp-route-searchString="@searchString">1</a>
+                </li>
+                @if (startPage > 2)
+                {
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                }
+            }
+
+            @* 2. Bucle principal para el rango visible *@
+            @for (int i = startPage; i <= endPage; i++)
             {
                 if (i == Model.CurrentPage)
                 {
-                    <li class="page-item active">
-                        <span class="page-link">@i</span>
-                    </li>
+                    <li class="page-item active"><span class="page-link">@i</span></li>
                 }
                 else
                 {
                     <li class="page-item">
-                        <a class="page-link" asp-action="Index"
+                        <a class="page-link"
+                           asp-action="Index"
                            asp-route-page="@i"
-                           asp-route-searchString="@ViewData["searchString"]">@i</a>
+                           asp-route-searchString="@searchString">@i</a>
                     </li>
                 }
             }
 
+            @* 3. Botón de la última página (si hay un salto) *@
+            @if (endPage < Model.TotalPages)
+            {
+                @if (endPage < Model.TotalPages - 1)
+                {
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                }
+                <li class="page-item">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-page="@Model.TotalPages"
+                       asp-route-searchString="@searchString">@Model.TotalPages</a>
+                </li>
+            }
+
+            @* Botón de Página Siguiente *@
             @if (Model.NextPage)
             {
                 <li class="page-item">
-                    <a class="page-link" asp-action="Index"
+                    <a class="page-link"
+                       asp-action="Index"
                        asp-route-page="@(Model.CurrentPage + 1)"
-                       asp-route-searchString="@ViewData["searchString"]">Siguiente »</a>
+                       asp-route-searchString="@searchString">Siguiente »</a>
                 </li>
             }
             else

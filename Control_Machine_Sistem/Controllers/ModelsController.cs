@@ -20,7 +20,7 @@ namespace Control_Machine_Sistem.Controllers
 
         // GET: Models
         [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer")]
-        public async Task<IActionResult> Index(int page = 1, int pageSize = 10, int? categoryId = null)
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 5, int? categoryId = null)
 
         {
             var models = _context.Models.Include(m => m.Category).AsQueryable();

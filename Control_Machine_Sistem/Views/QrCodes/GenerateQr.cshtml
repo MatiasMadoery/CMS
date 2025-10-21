@@ -14,20 +14,12 @@
 </head>
 <body>
 
-    @* IMPRESION *@
-    <div class="qr-container">
-        <div class="qr-print-content">
-            <h1 class="print-title">MANTENIMIENTO Y DOCUMENTACION</h1>
-            <img src="@Model.QrImageBase64" alt="QR Code" class="qr-image-print" />
-            <div class="machine-info">
-                <h2>MODELO: @Model.MachineModel</h2>
-                <h2>N° DE CHASIS: </h2>
-            </div>
-            <div class="contact-info">
-                <h2 class="contact-title">GUARDIA POSVENTA:</h2>
-                <p>SERVICIO: +54 03564 - 15572642</p>
-                <p>REPUESTOS: +54 03564-572816</p>
-            </div>
+    @* VISTA EN PANTALLA (FONDO AMARILLO) *@
+    <div class="qr-container no-print">
+        <div class="qr-left">
+            <h1 class="center">Modelo: @Model.MachineModel</h1>
+            <h1 class="center">N° De Chasis: @Model.ChasisNumber</h1>
+            <img src="@Model.QrImageBase64" alt="QR Code" class="qr-image" />
         </div>
 
         <div class="no-print">
@@ -37,9 +29,18 @@
             <a asp-controller="Machines" asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
         </div>
     </div>
+
+    @* ESTRUCTURA DE IMPRESIÓN (OCULTA EN PANTALLA) *@
+    <div class="print-qr-card print-only">
+        <div class="print-qr-content">
+            <img src="@Model.QrImageBase64" alt="QR Code" class="print-qr-image" />
+            <div class="print-qr-details">
+                <p class="print-model-label">MODELO:</p>
+                <p class="print-model-value">@Model.MachineModel</p>
+                <p class="print-chasis-label">N° DE CHASIS:</p>
+                <p class="print-chasis-value">@Model.ChasisNumber</p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
-
-
-
-@* <img src="~/img/icons/QrPrintViewLogo.png" alt="Qr logo" class="qr-logo" /> *@  

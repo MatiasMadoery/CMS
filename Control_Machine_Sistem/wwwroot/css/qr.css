@@ -1,151 +1,5 @@
-﻿body {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #eabe2e !important;
-}
-
-.qr-container {
-    background-color: white;
-    border-radius: 15px;
-    padding: 30px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    width: 80%;
-    max-width: 600px;
-}
-
-/* Nuevos estilos para la visualización en pantalla */
-.qr-print-content {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.print-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
-.qr-image-print {
-    width: 100%;
-    max-width: 300px;
-    margin-bottom: 20px;
-    border: 2px solid #ddd;
-    border-radius: 10px;
-}
-
-.machine-info h2, .contact-info h2 {
-    font-size: 18px;
-    font-weight: bold;
-    margin: 5px 0;
-}
-
-.contact-info p {
-    font-size: 16px;
-    margin: 2px 0;
-}
-
-.btn-success {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-    .btn-success:hover {
-        background-color: #218838;
-    }
-
-.no-print {
-    text-align: center;
-    margin-top: 20px;
-}
-
-/* Estilos para la impresión */
-@media print {
-    @page {
-        size: A4;
-        margin: 0;
-    }
-
-    body {
-        display: block;
-        background-color: white !important; /* Mantener el body en blanco si no quieres el fondo en toda la hoja */
-        -webkit-print-color-adjust: exact;
-    }
-
-    .qr-container {
-        /* Este contenedor principal es el que contendrá el recuadro negro y el fondo #eabe2e */
-        display: block;
-        width: 11cm; /* Fija el ancho del contenedor a 12cm */
-        height: 13cm; /* Fija la altura del contenedor a 15cm */
-        max-width: none; /* Desactiva el max-width que podría interferir */
-        max-height: none; /* Desactiva el max-height */
-        padding: 5mm;
-        box-shadow: none;
-        border-radius: 0;
-        border: 1px solid black; /* Recuadro negro */
-        background-color: #eabe2e !important; /* Fondo #eabe2e */
-        margin: 0; /* Asegúrate de que no haya márgenes alrededor del recuadro */
-        position: absolute; /* Posiciona el contenedor absolutamente */
-        top: 0; /* Lo alinea a la parte superior */
-        left: 0; /* Lo alinea a la parte izquierda */
-        overflow: hidden; /* Asegura que nada se salga del recuadro si el contenido es muy grande */
-    }
-
-    .qr-print-content {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        width: 100%; /* El contenido ocupa todo el ancho del qr-container */
-        height: 100%; /* El contenido ocupa todo el alto del qr-container */
-        box-sizing: border-box; /* Incluye padding y borde en el width/height */
-    }
-
-    .print-title {
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 10px;
-        text-align: center;
-    }
-
-    .qr-image-print {
-        max-width: 100px;
-        height: auto;
-    }
-
-    .machine-info, .contact-info {
-        margin: 10px 0;
-        text-align: center;
-    }
-
-        .machine-info h2, .contact-info h2 {
-            font-size: 12px;
-            margin: 2px 0;
-        }
-
-        .contact-info p {
-            font-size: 10px;
-            margin: 1px 0;
-        }
-
-    .no-print {
-        display: none;
-    }
-}
-/*body {
+﻿@import url('https://fonts.googleapis.com/css2?family=Exo:wght@800&display=swap');
+body {
     margin: 0;
     padding: 0;
     display: flex;
@@ -188,153 +42,166 @@
         background-color: #218838;
     }
 
+.service-table {
+    display: table;
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+    .service-table th, .service-table td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: center;
+    }
+
+    .service-table th {
+        background-color: #f2f2f2;
+    }
 
 .print-only {
-    display: none;    
+    display: none;
 }
 
 @page {
     margin: 0;
-}*/
+}
 
 
-    /*CSS IMPRESION */
-/*@media print {
+
+   /* --- ESTILOS DE IMPRESIÓN ESPECÍFICOS PARA LA ETIQUETA --- */
+@media print {
+    /* Configuración de página: Elimina márgenes */
     @page {
-        size: A4 landscape;
-        margin: 10mm;
+        size: auto;
+        margin: 0;
     }
 
+    /* Asegura que el cuerpo de la impresión no tenga fondo ni padding */
     body {
         display: block;
+        width: auto;
+        height: auto;
         margin: 0;
         padding: 0;
         background-color: white !important;
         -webkit-print-color-adjust: exact;
     }
 
-    .qr-container {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: flex-start;
-        width: 100%;
-        max-width: 100%;
-        padding: 10px;
-        box-shadow: none;
-        border-radius: 0;
-        page-break-inside: avoid;
+    /* Oculta la vista en pantalla (fondo amarillo) */
+    .qr-container, .no-print {
+        display: none;
     }
 
-    .qr-left, .qr-right {
-        width: 48%;
-    }
-
-        .qr-left h1, .qr-right h2 {
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-
-    .qr-image {
-        max-width: 50%;
-        height: auto;
-    } 
-
+    /* Hace visible la estructura de impresión */
     .print-only {
         display: block;
     }
 
-    .no-print {
-        display: none;
-    }
-
-    .qr-logo {
-        width: 50px;
-        margin-bottom: 5px;
-    }
-
-    .qr-right {
-        text-align: center;
-    }
-
-    .print-title {
-        font-size: 16px;
-        font-weight: bold;
-        margin-bottom: 15px;
-        text-align: center;
-    }
-
-    .qr-image-print {
-        width: 100%;
-        max-width: 250px;
-        height: auto;
-        margin-bottom: 20px;
-    }
-
-    .machine-info h2, .contact-info h2 {
-        font-size: 14px;
-        font-weight: bold;
-        margin: 5px 0;
-    }
-
-    .contact-info p {
-        font-size: 12px;
-        margin: 2px 0;
-    }
- 
-}*/
-
-/*CSS IMPRESION VERTICAL*/
-/*@media print {
-    .no-print {
-        display: none;
-    }
-
-    .print-only {
-        display: block;*/
-/*background-color: #eabe2e !important;*/
-/*}   
-
-    body {
-        margin: 10px;
-        padding: 0;*/
-/* background-color: #eabe2e !important;
-        -webkit-print-color-adjust: exact;*/
-/*border-radius: 5px;
-    }
-    .qr-container {
+    /* Contenedor principal para la impresión: 6.5cm x 3.5cm */
+    .print-qr-card {
+        width: 6.5cm;
+        height: 3.5cm;
+        padding: 0;
+        margin: 0; /* Ubica la etiqueta en la esquina superior izquierda */
+        border: none;
+        overflow: hidden;
+        box-sizing: border-box; /* Incluye padding y border en el width/height */
         background-color: white;
-        border-radius: 15px;
-        padding: 30px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        width: 80%;
-        max-width: 600px;*/
-/* background-color: #eabe2e !important;*/
-/*}
-
-    .qr-image {
-        width: 100%;
-        max-width: 300px;
-        margin-top: 20px;
-        border: 2px solid #ddd;
-        border-radius: 10px;
+        font-family: 'Exo', sans-serif;
+        font-weight: 750;
     }
 
-    .qr-logo {
-        width: 15%;
-        margin-bottom: 5px;        
+    .print-qr-content {
+        display: flex;
+        height: 100%;
+        padding: 0.2cm 0.1cm 0.1cm 0.1cm; /* Pequeño margen interno (top, right, bottom, left) */
+        box-sizing: border-box;
+        align-items: flex-start;
+        justify-content: flex-start;
     }
 
-    .service-table {
-        width: 100%;
-        table-layout: fixed;
-        background-color: none;
+    /* Estilos del código QR */
+    .print-qr-image {
+        width: 3.5cm;
+        height: 3.5cm;
+        object-fit: contain;
+        margin-right: 0;
+        padding: 0;
     }
 
-        .service-table th, .service-table td {
-            width: 50%;
-            padding: 15px;
-            background-color: white;
-        }
-}*/
+    /* Estilos del texto */
+    .print-qr-details {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 2.8cm;
+        height: 100%;
+        padding: 0;
+    }
+
+    /* CLAVE DE LA CORRECCIÓN: Eliminar height fijo y ajustar line-height */
+    .print-model-label,
+    .print-chasis-label {
+        font-size: 0.35cm;
+        line-height: 1; /* Reduce el espacio alrededor del texto */
+        margin: 0;
+        padding: 0;
+        /* ELIMINAR O COMENTAR: height: 0.6cm; */
+        display: block; /* Vuelve a block para simplificar el flujo, ya no necesitamos flex para el centrado interno */
+    }
+
+    .print-model-value {
+        font-size: 0.35cm;
+        line-height: 1;
+        margin: 0;
+        /* ELIMINAR O REDUCIR: padding: 0 0 0.1cm 0; si es excesivo */
+        padding: 0 0 0.1cm 0; /* Mantenemos un padding-bottom para la separación con la línea */
+        text-transform: uppercase;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        border-bottom: 1px solid black;
+    }
+
+    .print-chasis-value {
+        font-size: 0.28cm;
+        line-height: 1;
+        margin: 0;
+        /* ELIMINAR O REDUCIR: padding: 0 0 0.1cm 0; si es excesivo */
+        padding: 0 0 0.1cm 0; /* Mantenemos un padding-bottom para la separación con la línea */
+        text-transform: uppercase;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        border-bottom: 1px solid black;
+    }
+
+    /* --- AJUSTES FINOS DE ALINEACIÓN PARA MODELO Y CHASIS --- */
+
+    /* MODELO: Alineado al tope */
+    .print-model-label {
+        margin-top: 0;
+        margin-bottom: 0; /* Asegurarse de que no haya margen extra con el valor */
+    }
+
+    .print-model-value {
+        margin-bottom: 0.2cm; /* Espacio para separar el bloque de Modelo del Chasis */
+        padding-top: 0; /* Asegurarse de que el valor esté pegado a la etiqueta */
+    }
+
+    /* N° DE CHASIS: Alineado al fondo */
+    .print-chasis-label {
+        margin-top: 0; /* No debe empujar desde arriba */
+        margin-bottom: 0;
+    }
+
+    .print-chasis-value {
+        margin-bottom: 0; /* Pegado al borde inferior del contenedor */
+        padding-top: 0;
+    }
+
+    .print-model-label{
+        margin-top: 12px;
+    }
+}
