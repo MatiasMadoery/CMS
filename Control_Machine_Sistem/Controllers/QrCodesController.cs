@@ -76,7 +76,8 @@ namespace Control_Machine_Sistem.Controllers
                 ServiceUrl = serviceUrl,
                 QrContentUrl = qrContentUrl,
                 QrImageBase64 = qrImageBase64,             
-                MachineId = machineId     
+                MachineId = machineId,
+                ChasisNumber = machine.ChasisNumber
             };
 
             return View(model);

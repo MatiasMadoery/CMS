@@ -14,36 +14,12 @@
 </head>
 <body>
 
-    @* IMPRESION EN DOS COLUMNAS HORIZONTAL *@
-    <div class="qr-container">
+    @* VISTA EN PANTALLA (FONDO AMARILLO) *@
+    <div class="qr-container no-print">
         <div class="qr-left">
-            <h1 class="center">Cliente: @Model.ClientName</h1>
             <h1 class="center">Modelo: @Model.MachineModel</h1>
+            <h1 class="center">N° De Chasis: @Model.ChasisNumber</h1>
             <img src="@Model.QrImageBase64" alt="QR Code" class="qr-image" />
-        </div>
-
-        <div class="qr-right print-only">
-            <img src="~/img/icons/QrPrintViewLogo.png" alt="Qr logo" class="qr-logo" />
-            <h2 class="center">Registro de Servicios</h2>
-            <table class="service-table">
-                <thead>
-                    <tr>
-                        <th>N° de Service</th>
-                        <th>Fecha</th>
-                        <th>Firma</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (int i = 1; i <= 8; i++)
-                    {
-                        <tr>
-                            <td>@i</td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
         </div>
 
         <div class="no-print">
@@ -51,6 +27,19 @@
             <br />
             <br />
             <a asp-controller="Machines" asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
+        </div>
+    </div>
+
+    @* ESTRUCTURA DE IMPRESIÓN (OCULTA EN PANTALLA) *@
+    <div class="print-qr-card print-only">
+        <div class="print-qr-content">
+            <img src="@Model.QrImageBase64" alt="QR Code" class="print-qr-image" />
+            <div class="print-qr-details">
+                <p class="print-model-label">MODELO:</p>
+                <p class="print-model-value">@Model.MachineModel</p>
+                <p class="print-chasis-label">N° DE CHASIS:</p>
+                <p class="print-chasis-value">@Model.ChasisNumber</p>
+            </div>
         </div>
     </div>
 </body>

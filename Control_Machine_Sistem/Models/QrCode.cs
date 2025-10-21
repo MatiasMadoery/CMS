@@ -10,6 +10,7 @@
         public string? ServiceUrl {  get; set; }
         public DateTime? DeliveryDate { get; set; }
         public int MachineId { get; set; }
+        public string? ChasisNumber { get; set; }
 
         // Properties for printing
         public string? QrImageBase64 { get; set; }
