@@ -169,7 +169,7 @@
             @* Enlaces de página limitados *@
             @for (int i = startPage; i <= endPage; i++)
             {
-                string categoryId = ViewBag.SelectedCategory?.ToString(); // Obtener el ID de la categoría
+                string categoryId = ViewBag.SelectedCategory?.ToString();
 
                 if (i == Model.CurrentPage)
                 {

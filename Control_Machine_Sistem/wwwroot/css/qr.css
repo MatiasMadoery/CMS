@@ -60,7 +60,7 @@ body {
     }
 
 .print-only {
-    display: none;    
+    display: none;
 }
 
 @page {
@@ -71,7 +71,6 @@ body {
 
    /* --- ESTILOS DE IMPRESIÓN ESPECÍFICOS PARA LA ETIQUETA --- */
 @media print {
-    
     /* Configuración de página: Elimina márgenes */
     @page {
         size: auto;
@@ -80,7 +79,7 @@ body {
 
     /* Asegura que el cuerpo de la impresión no tenga fondo ni padding */
     body {
-        display: block; 
+        display: block;
         width: auto;
         height: auto;
         margin: 0;
@@ -110,7 +109,7 @@ body {
         box-sizing: border-box;
         background-color: white;
         font-family: 'Exo', sans-serif;
-        font-weight: 800;
+        font-weight: 750;
     }
 
     .print-qr-content {
@@ -124,10 +123,10 @@ body {
 
     /* Estilos del código QR */
     .print-qr-image {
-        width: 3.5cm; 
+        width: 3.5cm;
         height: 3.5cm;
         object-fit: contain;
-        margin-right: 0.2cm;
+        margin-right: 0;
         padding: 0;
     }
 
@@ -143,19 +142,31 @@ body {
 
     .print-model-label,
     .print-chasis-label {
-        font-size: 0.3cm;
-        line-height: 1;
+        font-size: 0.35cm;
+        line-height: 1; /* Reduce el espacio alrededor del texto */
         margin: 0;
         padding: 0;
         display: block;
     }
 
-    .print-model-value,
-    .print-chasis-value {
+    .print-model-value {
         font-size: 0.35cm;
         line-height: 1;
         margin: 0;
         padding: 0 0 0.1cm 0;
+        text-transform: uppercase;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        border-bottom: 1px solid black;
+    }
+
+    .print-chasis-value {
+        font-size: 0.28cm;
+        line-height: 1;
+        margin: 0;
+        /* ELIMINAR O REDUCIR: padding: 0 0 0.1cm 0; si es excesivo */
+        padding: 0 0 0.1cm 0; /* Mantenemos un padding-bottom para la separación con la línea */
         text-transform: uppercase;
         overflow: hidden;
         white-space: nowrap;
