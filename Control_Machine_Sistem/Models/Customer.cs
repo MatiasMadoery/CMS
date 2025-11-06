@@ -11,10 +11,10 @@ namespace Control_Machine_Sistem.Models
         [Display(Name = "Razón Social")]
         public string? Name { get; set; }
 
-
         [StringLength(75, ErrorMessage = "El nombre de contacto no puede exceder los 100 caracteres.")]
         [Display(Name = "Persona de contacto")]
         public string? LastName { get; set; }
+
         [Required(ErrorMessage = "Debe ingresar el CUIT.")]
         [RegularExpression("^[0-9]+$", ErrorMessage = "El CUIT debe contener solo números.")]
         public string? Cuit { get; set; }
@@ -41,8 +41,8 @@ namespace Control_Machine_Sistem.Models
         public string? Province { get; set; }
 
         [Display(Name = "País")]
-        public string? Country { get; set; }     
-        
+        public string? Country { get; set; }
+
         public ICollection<Machine>? Machines { get; set; } = new List<Machine>();
 
         [Display(Name = "Cliente")]
