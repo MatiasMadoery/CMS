@@ -111,6 +111,7 @@ namespace Control_Machine_Sistem.Controllers
         [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [RequestSizeLimit(104857600)]
         public async Task<IActionResult> Create([Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,Documentations")] Machine machine)
         {          
 
@@ -181,6 +182,7 @@ namespace Control_Machine_Sistem.Controllers
         [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [RequestSizeLimit(104857600)]
         public async Task<IActionResult> Edit(int id, [Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,WarrantyExpirationDate")] Machine machine, List<string> ExistingDocs, List<IFormFile> Documentations, List<string> DeletedDocs)
         {
             if (id != machine.Id)
