@@ -452,11 +452,18 @@ h1.page-title {
 * ============================
 */
 .table-actions {
-    display: flex;
-    gap: 8px;
-    white-space: nowrap;
+    white-space: nowrap !important; /* Fuerza a que no haya saltos de línea */
+    width: 1%; /* Obliga a la celda a ajustarse al contenido */
+    min-width: 140px; /* Reserva el espacio mínimo para los 3 botones */
+    text-align: right;
+    vertical-align: middle;
 }
 
+    /* Ajuste para los botones dentro de la celda */
+    .table-actions .btn-action {
+        display: inline-flex !important; /* Cambiamos flex por inline-flex */
+        margin: 0 2px; /* Espaciado manual entre botones */
+    }
 /*
 * Estilos para la tabla de datos
 * ============================
@@ -465,11 +472,6 @@ h1.page-title {
     vertical-align: middle; /* Alinea verticalmente el contenido de las celdas */
 }
 
-.table-actions {
-    white-space: nowrap; /* Evita que los botones se envuelvan en varias líneas */
-    display: flex; /* Utiliza flexbox para una alineación flexible */
-    gap: 8px; /* Añade un espacio entre los botones */
-}
 
 /* Estilos responsivos */
 @media (max-width: 768px) {
