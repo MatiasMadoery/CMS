@@ -61,6 +61,6 @@ namespace Control_Machine_Sistem.Models
         public DbSet<OwnerHistory> OwnerHistories { get; set; } = default!;
         public DbSet<Service> Services { get; set; } = default!;
         public DbSet<OtherMaintenance> OtherMaintenances { get; set; } = default!;
-
+        public DbSet<Accessory> Accessories { get; set; } = default!;
     }
 }

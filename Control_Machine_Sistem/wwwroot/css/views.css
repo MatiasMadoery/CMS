@@ -472,6 +472,24 @@ h1.page-title {
     vertical-align: middle; /* Alinea verticalmente el contenido de las celdas */
 }
 
+.stock-selector {
+    margin-bottom: 25px;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 15px;
+}
+
+.btn-tab {
+    background-color: #f8f8f8;
+    color: #555;
+    border: 1px solid #ddd;
+    margin-right: 10px;
+}
+
+    .btn-tab.active {
+        background-color: #3498db;
+        color: #fff;
+        border-color: #3498db;
+    }
 
 /* Estilos responsivos */
 @media (max-width: 768px) {

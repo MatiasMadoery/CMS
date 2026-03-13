@@ -22,6 +22,34 @@ namespace Control_Machine_Sistem.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Control_Machine_Sistem.Models.Accessory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("LoadCapacity")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Model")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("SaleDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("Accessories");
+                });
+
             modelBuilder.Entity("Control_Machine_Sistem.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -57,6 +85,7 @@ namespace Control_Machine_Sistem.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Cuit")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -64,11 +93,13 @@ namespace Control_Machine_Sistem.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(75)
+                        .HasColumnType("nvarchar(75)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(75)
+                        .HasColumnType("nvarchar(75)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
@@ -94,12 +125,13 @@ namespace Control_Machine_Sistem.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ChasisNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CustomerId")
+                    b.Property<int?>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("DeliveryDate")
+                    b.Property<DateTime>("DeliveryDate")
                         .HasColumnType("datetime2");
 
                     b.PrimitiveCollection<string>("DocUrls")
@@ -107,6 +139,7 @@ namespace Control_Machine_Sistem.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EngineNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ModelId")
@@ -169,6 +202,7 @@ namespace Control_Machine_Sistem.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OrderNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ServiceDate")
@@ -223,9 +257,10 @@ namespace Control_Machine_Sistem.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OrderNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("ServiceDate")
+                    b.Property<DateTime>("ServiceDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("ServiceHour")
@@ -235,7 +270,7 @@ namespace Control_Machine_Sistem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("WorkHours")
+                    b.Property<int>("WorkHours")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -276,13 +311,21 @@ namespace Control_Machine_Sistem.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Control_Machine_Sistem.Models.Accessory", b =>
+                {
+                    b.HasOne("Control_Machine_Sistem.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId");
+
+                    b.Navigation("Customer");
+                });
+
             modelBuilder.Entity("Control_Machine_Sistem.Models.Machine", b =>
                 {
                     b.HasOne("Control_Machine_Sistem.Models.Customer", "Customer")
                         .WithMany("Machines")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Control_Machine_Sistem.Models.Model", "Model")
                         .WithMany("Machines")

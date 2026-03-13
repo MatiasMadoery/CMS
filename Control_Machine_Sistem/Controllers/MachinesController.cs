@@ -85,8 +85,9 @@ namespace Control_Machine_Sistem.Controllers
 
         // GET: Machines/Create
         [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
-        public IActionResult Create()
+        public IActionResult Create(bool isStock = false)
         {
+            ViewBag.IsStock = isStock;
             ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
             ViewBag.ModelId = new SelectList(new List<Model>(), "Id", "Name");
             ViewBag.Customers = new SelectList(_context.Customers.Select(c => new { c.Id, c.Name}), "Id", "Name");
@@ -112,8 +113,15 @@ namespace Control_Machine_Sistem.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [RequestSizeLimit(104857600)]
-        public async Task<IActionResult> Create([Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,Documentations")] Machine machine)
-        {          
+        public async Task<IActionResult> Create([Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,Documentations")] Machine machine, bool isStock = false)
+        {
+            if (isStock)
+            {
+                machine.CustomerId = null;
+                machine.DeliveryDate = null;
+                ModelState.Remove("CustomerId");
+                ModelState.Remove("DeliveryDate");
+            }
 
             if (ModelState.IsValid)
             {
@@ -146,9 +154,12 @@ namespace Control_Machine_Sistem.Controllers
                 };
                 _context.Add(newMachine);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+
+                return isStock ? RedirectToAction("Index", "Stock") : RedirectToAction(nameof(Index));
             }
 
+            ViewBag.IsStock = isStock;
             ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
             ViewBag.ModelId = new SelectList(new List<Model>(), "Id", "Name");
             ViewBag.Customers = new SelectList(_context.Customers.Select(c => new { c.Id, c.Name }), "Id", "Name");
