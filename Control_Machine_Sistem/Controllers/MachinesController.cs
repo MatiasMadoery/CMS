@@ -40,19 +40,15 @@ namespace Control_Machine_Sistem.Controllers
                 machine = machine.Where(s => s.Model!.CategoryId == categoryId.Value);
             }
 
-            // Get total machines 
             var totalMachines = await machine.CountAsync();
 
-            // Apply pagination
             var machinePager = await machine
                            .Skip((page - 1) * pageSize)
                            .Take(pageSize)
                            .ToListAsync();
 
-            // Create the paginator with the paginated list
             var pager = new Pager<Machine>(machinePager, totalMachines, page, pageSize);
 
-            //To maintain the value of the lookup field when the user changes pages
             ViewData["searchString"] = searchString;
             ViewData["categoryId"] = categoryId;
 
@@ -74,6 +70,7 @@ namespace Control_Machine_Sistem.Controllers
                 .Include(m => m.Customer)
                 .Include(m => m.Model)
                 .Include(m => m.OwnerHistories)
+                .Include(m => m.Ubication)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (machine == null)
@@ -93,11 +90,11 @@ namespace Control_Machine_Sistem.Controllers
             ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
             ViewBag.ModelId = new SelectList(new List<Model>(), "Id", "Name");
             ViewBag.Customers = new SelectList(_context.Customers.Select(c => new { c.Id, c.Name}), "Id", "Name");
+            ViewBag.UbicationId = new SelectList(_context.Ubications.OrderBy(u => u.Name), "Id", "Name");
 
             return View();
         }
 
-        //Metodo para devolver modelos por categoria
         [HttpGet]
         public async Task<JsonResult> GetModelsByCategory(int categoryId)
         {
@@ -115,7 +112,7 @@ namespace Control_Machine_Sistem.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [RequestSizeLimit(104857600)]
-        public async Task<IActionResult> Create([Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,Documentations")] Machine machine, bool isStock = false)
+        public async Task<IActionResult> Create([Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,Documentations,ManufactureYear,SerialNumber,UserHours,UbicationId")] Machine machine, bool isStock = false)
         {
             if (isStock)
             {
@@ -129,7 +126,6 @@ namespace Control_Machine_Sistem.Controllers
             }
             else
             {
-                // Si no es stock, calculamos la garantía
                 if (machine.DeliveryDate.HasValue)
                 {
                     machine.WarrantyExpirationDate = machine.DeliveryDate.Value.AddDays(365);
@@ -164,6 +160,10 @@ namespace Control_Machine_Sistem.Controllers
                     DeliveryDate = machine.DeliveryDate,
                     WarrantyExpirationDate = machine.DeliveryDate?.AddDays(365),
                     DocUrls = docUrls,
+                    ManufactureYear = machine.ManufactureYear,
+                    SerialNumber = machine.SerialNumber,
+                    UserHours = machine.UserHours,
+                    UbicationId = machine.UbicationId
                 };
                 _context.Add(newMachine);
                 await _context.SaveChangesAsync();
@@ -176,6 +176,7 @@ namespace Control_Machine_Sistem.Controllers
             ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
             ViewBag.ModelId = new SelectList(new List<Model>(), "Id", "Name");
             ViewBag.Customers = new SelectList(_context.Customers.Select(c => new { c.Id, c.Name }), "Id", "Name");
+            ViewBag.UbicationId = new SelectList(_context.Ubications, "Id", "Name", machine.UbicationId);
             return View(machine);
         }
 
@@ -202,6 +203,7 @@ namespace Control_Machine_Sistem.Controllers
             ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Name", machine.CustomerId);
             ViewData["ModelId"] = new SelectList(_context.Models, "Id", "Name", machine.ModelId);
             ViewBag.CustomerName = machine.Customer?.Name;
+            ViewBag.UbicationId = new SelectList(_context.Ubications.OrderBy(u => u.Name), "Id", "Name", machine.UbicationId);
 
             return View(machine);
         }
@@ -213,7 +215,7 @@ namespace Control_Machine_Sistem.Controllers
         [RequestSizeLimit(104857600)]
         public async Task<IActionResult> Edit(
             int id, 
-            [Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,WarrantyExpirationDate")] Machine machine, 
+            [Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,WarrantyExpirationDate,ManufactureYear,SerialNumber,UserHours,UbicationId")] Machine machine, 
             List<string> ExistingDocs, 
             List<IFormFile> Documentations, 
             List<string> DeletedDocs,
@@ -264,6 +266,10 @@ namespace Control_Machine_Sistem.Controllers
                     existingMachine.EngineNumber = machine.EngineNumber;
                     existingMachine.DeliveryDate = machine.DeliveryDate;
                     existingMachine.WarrantyExpirationDate = machine.DeliveryDate?.AddDays(365);
+                    existingMachine.ManufactureYear = machine.ManufactureYear;
+                    existingMachine.SerialNumber = machine.SerialNumber;
+                    existingMachine.UserHours = machine.UserHours;
+                    existingMachine.UbicationId = machine.UbicationId;
 
                     List<string> docUrls = ExistingDocs ?? new List<string>();
 

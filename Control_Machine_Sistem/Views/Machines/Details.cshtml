@@ -22,6 +22,10 @@
                 </div>
             }
             <div class="details-item">
+                <dt>@Html.DisplayNameFor(model => model.Ubication!.Name)</dt>
+                <dd>@Html.DisplayFor(model => model.Ubication!.Name)</dd>
+            </div>
+            <div class="details-item">
                 <dt>@Html.DisplayNameFor(model => model.Model!.Name)</dt>
                 <dd>@Html.DisplayFor(model => model.Model!.Name)</dd>
             </div>
@@ -32,6 +36,18 @@
             <div class="details-item">
                 <dt>@Html.DisplayNameFor(model => model.EngineNumber)</dt>
                 <dd>@Html.DisplayFor(model => model.EngineNumber)</dd>
+            </div>
+            <div class="details-item">
+                <dt>@Html.DisplayNameFor(model => model.SerialNumber)</dt>
+                <dd>@Html.DisplayFor(model => model.SerialNumber)</dd>
+            </div>
+            <div class="details-item">
+                <dt>Año de Fabricación</dt>
+                <dd>@Html.DisplayFor(model => model.ManufactureYear)</dd>
+            </div>
+            <div class="details-item">
+                <dt>Horas de Uso</dt>
+                <dd>@Html.DisplayFor(model => model.UserHours) hs</dd>
             </div>
             @if (!isStock)
             {

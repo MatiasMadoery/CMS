@@ -69,8 +69,39 @@
                     <span asp-validation-for="EngineNumber" class="text-danger"></span>
                 </div>
             </div>
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="SerialNumber" class="form-label">Número de Serie</label>
+                    <input asp-for="SerialNumber" class="form-control" />
+                    <span asp-validation-for="SerialNumber" class="text-danger"></span>
+                </div>
+            </div>
         </div>
-
+        <div class="form-row">
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="ManufactureYear" class="form-label">Año de Fabricación</label>
+                    <input asp-for="ManufactureYear" class="form-control" type="number" min="1900" max="@DateTime.Now.Year" />
+                    <span asp-validation-for="ManufactureYear" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="UserHours" class="form-label">Horas de uso</label>
+                    <input asp-for="UserHours" class="form-control" type="number" step="0.1" />
+                    <span asp-validation-for="UserHours" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="UbicationId" class="form-label">Sucursal / Ubicación *</label>
+                    <select asp-for="UbicationId" class="form-select" asp-items="ViewBag.UbicationId">
+                        <option value="">-- Seleccionar Ubicación --</option>
+                    </select>
+                    <span asp-validation-for="UbicationId" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
         @* AGREGADO: Solo mostrar fechas si NO es stock *@
         @if (!isStock)
         {
