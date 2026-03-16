@@ -131,7 +131,7 @@ namespace Control_Machine_Sistem.Migrations
                     b.Property<int?>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DeliveryDate")
+                    b.Property<DateTime?>("DeliveryDate")
                         .HasColumnType("datetime2");
 
                     b.PrimitiveCollection<string>("DocUrls")
@@ -142,7 +142,20 @@ namespace Control_Machine_Sistem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ManufactureYear")
+                        .HasColumnType("int");
+
                     b.Property<int>("ModelId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SerialNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UbicationId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserHours")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("WarrantyExpirationDate")
@@ -153,6 +166,8 @@ namespace Control_Machine_Sistem.Migrations
                     b.HasIndex("CustomerId");
 
                     b.HasIndex("ModelId");
+
+                    b.HasIndex("UbicationId");
 
                     b.ToTable("Machines");
                 });
@@ -280,6 +295,26 @@ namespace Control_Machine_Sistem.Migrations
                     b.ToTable("Services");
                 });
 
+            modelBuilder.Entity("Control_Machine_Sistem.Models.Ubication", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Ubications");
+                });
+
             modelBuilder.Entity("Control_Machine_Sistem.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -333,9 +368,17 @@ namespace Control_Machine_Sistem.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Control_Machine_Sistem.Models.Ubication", "Ubication")
+                        .WithMany("Machines")
+                        .HasForeignKey("UbicationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Customer");
 
                     b.Navigation("Model");
+
+                    b.Navigation("Ubication");
                 });
 
             modelBuilder.Entity("Control_Machine_Sistem.Models.Model", b =>
@@ -400,6 +443,11 @@ namespace Control_Machine_Sistem.Migrations
                 });
 
             modelBuilder.Entity("Control_Machine_Sistem.Models.Model", b =>
+                {
+                    b.Navigation("Machines");
+                });
+
+            modelBuilder.Entity("Control_Machine_Sistem.Models.Ubication", b =>
                 {
                     b.Navigation("Machines");
                 });

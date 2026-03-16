@@ -9,16 +9,25 @@
 <div class="content-wrapper">
     <h1 class="page-title">@ViewData["Title"]</h1>
 
-    <div class="stock-selector">
-        <div class="button-group">
-            <button type="button" id="btn-machines" class="btn btn-tab @(Model.ActiveTab == "machines" ? "active" : "")"
-                    onclick="switchTab('machines')">
-                <i class="fas fa-tractor icon"></i> Máquinas
-            </button>
-            <button type="button" id="btn-accessories" class="btn btn-tab @(Model.ActiveTab == "accessories" ? "active" : "")"
-                    onclick="switchTab('accessories')">
-                <i class="fas fa-tools icon"></i> Accesorios
-            </button>
+    <div class="stock-header-nav">
+        <div class="stock-selector">
+            <div class="button-group">
+                <button type="button" id="btn-machines" class="btn btn-tab @(Model.ActiveTab == "machines" ? "active" : "")"
+                        onclick="switchTab('machines')">
+                    <i class="fas fa-tractor icon"></i> Máquinas
+                </button>
+                <button type="button" id="btn-accessories" class="btn btn-tab @(Model.ActiveTab == "accessories" ? "active" : "")"
+                        onclick="switchTab('accessories')">
+                    <i class="fas fa-tools icon"></i> Accesorios
+                </button>
+            </div>
+        </div>
+
+        @* Botón a la derecha *@
+        <div class="branch-management">
+            <a asp-action="Index" asp-controller="Ubications" class="btn btn-outline-primary shadow-sm">
+                <i class="fas fa-map-marked-alt icon"></i> Gestionar Sucursales
+            </a>
         </div>
     </div>
 
