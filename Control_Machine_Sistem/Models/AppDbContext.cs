@@ -52,6 +52,15 @@ namespace Control_Machine_Sistem.Models
                 .HasForeignKey(m => m.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+
+            modelBuilder.Entity<Machine>()
+                .Property(m => m.DeliveryDate)
+                .IsRequired(false);
+
+            modelBuilder.Entity<Machine>()
+                .Property(m => m.WarrantyExpirationDate)
+                .IsRequired(false);
+
         }
         public DbSet<Customer> Customers{ get; set; } = default!;
         public DbSet<Machine> Machines { get; set; } = default!;        

@@ -18,7 +18,7 @@ namespace Control_Machine_Sistem.Controllers
             _context = context;
         }
 
-        // GET: Accessories
+        // GET: Accessories (Historial general)
         public async Task<IActionResult> Index()
         {
             var appDbContext = _context.Accessories.Include(a => a.Customer);
@@ -26,21 +26,17 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Accessories/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, bool isStock = false)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var accessory = await _context.Accessories
                 .Include(a => a.Customer)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (accessory == null)
-            {
-                return NotFound();
-            }
 
+            if (accessory == null) return NotFound();
+
+            ViewBag.IsStock = isStock;
             return View(accessory);
         }
 
@@ -48,13 +44,10 @@ namespace Control_Machine_Sistem.Controllers
         public IActionResult Create(bool isStock = false)
         {
             ViewBag.IsStock = isStock;
-            ViewBag.Customers = new SelectList(_context.Customers.Select(c => new { c.Id, c.Name }), "Id", "Name");
+            ViewBag.Customers = new SelectList(_context.Customers, "Id", "Name");
             return View();
         }
 
-        // POST: Accessories/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Model,LoadCapacity,SaleDate,CustomerId")] Accessory accessory, bool isStock = false)
@@ -64,6 +57,7 @@ namespace Control_Machine_Sistem.Controllers
                 accessory.CustomerId = null;
                 accessory.SaleDate = null;
                 ModelState.Remove("CustomerId");
+                ModelState.Remove("SaleDate");
             }
 
             if (ModelState.IsValid)
@@ -71,41 +65,39 @@ namespace Control_Machine_Sistem.Controllers
                 _context.Add(accessory);
                 await _context.SaveChangesAsync();
 
-                return isStock ? RedirectToAction("Index", "Stock") : RedirectToAction(nameof(Index));
+                return isStock ? RedirectToAction("Index", "Stock") : RedirectToAction("Vendidos", "Stock");
             }
 
             ViewBag.IsStock = isStock;
-            ViewBag.Customers = new SelectList(_context.Customers.Select(c => new { c.Id, c.Name }), "Id", "Name", accessory.CustomerId);
+            ViewBag.Customers = new SelectList(_context.Customers, "Id", "Name", accessory.CustomerId);
             return View(accessory);
         }
 
         // GET: Accessories/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, bool isStock = false)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var accessory = await _context.Accessories.FindAsync(id);
-            if (accessory == null)
-            {
-                return NotFound();
-            }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Cuit", accessory.CustomerId);
+            if (accessory == null) return NotFound();
+
+            ViewBag.IsStock = isStock;
+            ViewBag.Customers = new SelectList(_context.Customers, "Id", "Name", accessory.CustomerId);
             return View(accessory);
         }
 
-        // POST: Accessories/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Model,LoadCapacity,SaleDate,CustomerId")] Accessory accessory)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Model,LoadCapacity,SaleDate,CustomerId")] Accessory accessory, bool isStock = false)
         {
-            if (id != accessory.Id)
+            if (id != accessory.Id) return NotFound();
+
+            if (isStock)
             {
-                return NotFound();
+                accessory.CustomerId = null;
+                accessory.SaleDate = null;
+                ModelState.Remove("CustomerId");
+                ModelState.Remove("SaleDate");
             }
 
             if (ModelState.IsValid)
@@ -117,53 +109,46 @@ namespace Control_Machine_Sistem.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AccessoryExists(accessory.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!AccessoryExists(accessory.Id)) return NotFound();
+                    else throw;
                 }
-                return RedirectToAction(nameof(Index));
+
+                return isStock ? RedirectToAction("Index", "Stock") : RedirectToAction("Vendidos", "Stock");
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Cuit", accessory.CustomerId);
+
+            ViewBag.IsStock = isStock;
+            ViewBag.Customers = new SelectList(_context.Customers, "Id", "Name", accessory.CustomerId);
             return View(accessory);
         }
 
         // GET: Accessories/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id, bool isStock = false)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var accessory = await _context.Accessories
                 .Include(a => a.Customer)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (accessory == null)
-            {
-                return NotFound();
-            }
 
+            if (accessory == null) return NotFound();
+
+            ViewBag.IsStock = isStock;
             return View(accessory);
         }
 
         // POST: Accessories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, bool isStock = false)
         {
             var accessory = await _context.Accessories.FindAsync(id);
             if (accessory != null)
             {
                 _context.Accessories.Remove(accessory);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return isStock ? RedirectToAction("Index", "Stock") : RedirectToAction("Vendidos", "Stock");
         }
 
         private bool AccessoryExists(int id)
@@ -174,22 +159,14 @@ namespace Control_Machine_Sistem.Controllers
         [HttpGet]
         public async Task<JsonResult> GetCustomers(string term)
         {
-            if (string.IsNullOrEmpty(term))
-            {
-                return Json(new List<object>());
-            }
+            if (string.IsNullOrEmpty(term)) return Json(new List<object>());
 
             var customers = await _context.Customers
-                                          .Where(c => c.Name!.ToLower().Contains(term.ToLower()))
-                                          .Select(c => new
-                                          {
-                                              id = c.Id,
-                                              text = c.Name
-                                          })
-                                          .Take(10)
-                                          .ToListAsync();
+                .Where(c => c.Name!.ToLower().Contains(term.ToLower()))
+                .Select(c => new { id = c.Id, text = c.Name })
+                .Take(10)
+                .ToListAsync();
 
-            Console.WriteLine($"Clientes encontrados: {customers.Count}");
             return Json(customers);
         }
     }

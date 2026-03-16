@@ -1,11 +1,11 @@
-﻿namespace Control_Machine_Sistem.ViewModels
+﻿using Control_Machine_Sistem.Models;
+
+namespace Control_Machine_Sistem.ViewModels
 {
     public class SoldItemViewModel
     {
-        public int Id { get; set; }
-        public string ProductName { get; set; }
-        public string CustomerName { get; set; }
-        public DateTime? Date { get; set; }
-        public string ItemType { get; set; } // "Machine" o "Accessory"
+        public List<Machine> SoldMachines { get; set; } = new List<Machine>();
+        public List<Accessory> SoldAccessories { get; set; } = new List<Accessory>();
+        public string ActiveTab { get; set; } = "machines";
     }
 }

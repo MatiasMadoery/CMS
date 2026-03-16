@@ -46,11 +46,12 @@
                     <a class="nav-link" asp-controller="Models" asp-action="Index">Modelos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Machines" asp-action="Index">Productos Vendidos</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" asp-controller="Stock" asp-action="Index">Stock</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Stock" asp-action="Vendidos">Productos Vendidos</a>
+                </li>
+                
 
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="Maintenance" asp-action="Index">Mantenimientos</a>
@@ -75,7 +76,8 @@
                 {
                     <a class="nav-link" asp-controller="Customers" asp-action="Index">Clientes</a>
                     <a class="nav-link" asp-controller="Models" asp-action="Index">Modelos</a>
-                    <a class="nav-link" asp-controller="Machines" asp-action="Index">Productos Vendidos</a>
+                    <a class="nav-link" asp-controller="Stock" asp-action="Index">Stock</a>
+                    <a class="nav-link" asp-controller="Stock" asp-action="Vendidos">Productos Vendidos</a>
                     <a class="nav-link" asp-controller="Maintenance" asp-action="Index">Mantenimientos</a>
                     @if (User.IsInRole("SuperAdmin"))
                     {

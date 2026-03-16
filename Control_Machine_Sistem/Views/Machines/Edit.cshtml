@@ -1,7 +1,8 @@
 ﻿@model Control_Machine_Sistem.Models.Machine
 
 @{
-    ViewData["Title"] = "Editar Venta";
+    bool isStock = ViewBag.IsStock ?? false;
+    ViewData["Title"] = isStock ? "Editar Máquina en Stock" : "Editar Venta de Máquina";
 }
 
 <link href="~/css/views.css" rel="stylesheet" />
@@ -9,25 +10,30 @@
 
 <div class="form-container">
     <h1 class="form-title">@ViewData["Title"]</h1>
+    <h4 class="form-sub-title">Modifique los datos necesarios</h4>
     <hr />
 
-    <form asp-action="Edit" enctype="multipart/form-data" id="uploadForm">
+    <form asp-action="Edit" enctype="multipart/form-data" id="uploadForm" asp-route-isStock="@isStock">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
 
         <div class="form-row">
-            <div class="form-col">
-                <div class="form-group">
-                    <label asp-for="CustomerId" class="form-label"></label>
-                    <select asp-for="CustomerId" class="form-control select2" data-url="@Url.Action("GetCustomers", "Machines")">
-                        <option value="">Seleccione un Cliente...</option>
-                        @if (Model.CustomerId != null && ViewBag.CustomerName != null)
-                        {
-                            <option value="@Model.CustomerId" selected="selected">@ViewBag.CustomerName</option>
-                        }
-                    </select>
+            @if (!isStock)
+            {
+                <div class="form-col">
+                    <div class="form-group">
+                        <label asp-for="CustomerId" class="form-label">Cliente / Propietario</label>
+                        <select asp-for="CustomerId" class="form-control select2" data-url="@Url.Action("GetCustomers", "Machines")">
+                            <option value="">Seleccione un Cliente...</option>
+                            @if (Model.CustomerId != null && ViewBag.CustomerName != null)
+                            {
+                                <option value="@Model.CustomerId" selected="selected">@ViewBag.CustomerName</option>
+                            }
+                        </select>
+                        <span asp-validation-for="CustomerId" class="text-danger"></span>
+                    </div>
                 </div>
-            </div>
+            }
             <div class="form-col">
                 <div class="form-group">
                     <label asp-for="ModelId" class="form-label"></label>
@@ -117,9 +123,11 @@
         </div>
 
         <div class="button-group">
-            <input type="submit" value="Guardar" class="btn btn-success" />
-            <a asp-action="Index" class="btn btn-secondary">
-                <i class="fas fa-arrow-left icon"></i> Volver a la lista
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-save icon"></i> Guardar Cambios
+            </button>
+            <a asp-controller="Stock" asp-action="@(isStock ? "Index" : "Vendidos")" class="btn btn-secondary">
+                <i class="fas fa-arrow-left icon"></i> Cancelar
             </a>
         </div>
     </form>

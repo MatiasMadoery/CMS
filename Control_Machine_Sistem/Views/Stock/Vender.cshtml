@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Confirmar Venta";
+}
+
+<link href="~/css/views.css" rel="stylesheet" />
+
+<div class="form-container">
+    <h1 class="form-title">@ViewData["Title"]</h1>
+    <h4 class="form-sub-title">Vas a vender: <strong>@ViewBag.ProductName</strong></h4>
+    <hr />
+
+    <form asp-action="Vender" method="post">
+        @* Campos ocultos para mantener la referencia *@
+        <input type="hidden" name="id" value="@ViewBag.Id" />
+        <input type="hidden" name="type" value="@ViewBag.Type" />
+
+        <div class="form-row">
+            <div class="form-col">
+                <div class="form-group">
+                    <label class="form-label">Seleccionar Cliente *</label>
+                    <select name="customerId" class="form-control" asp-items="ViewBag.Customers" required>
+                        <option value="">-- Seleccione el comprador --</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-col">
+                <div class="form-group">
+                    <label class="form-label">Fecha de Entrega/Venta *</label>
+                    <input name="deliveryDate" type="date" class="form-control" required value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                </div>
+            </div>
+        </div>
+
+        <div class="button-group" style="margin-top: 30px;">
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-check-circle icon"></i> Confirmar Venta
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-times icon"></i> Cancelar
+            </a>
+        </div>
+    </form>
+</div>

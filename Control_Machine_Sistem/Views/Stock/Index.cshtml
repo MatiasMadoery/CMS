@@ -1,4 +1,7 @@
 ﻿@model Control_Machine_Sistem.ViewModels.StockViewModel
+@{
+    ViewData["Title"] = "Stock de Productos";
+}
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <link href="~/css/views.css" rel="stylesheet" />
@@ -53,16 +56,16 @@
                                 <td>@item.ChasisNumber</td>
                                 <td>@item.EngineNumber</td>
                                 <td class="table-actions">
-                                    <a asp-action="Vender" asp-route-id="@item.Id" asp-route-type="Machine" class="btn-action details" style="background-color: #2ecc71;" title="Vender">
+                                    <a asp-action="Vender" asp-controller="Stock" asp-route-id="@item.Id" asp-route-type="Machine" class="btn-action details" style="background-color: #2ecc71;" title="Vender" asp-route-isStock="true">
                                         <i class="fas fa-shopping-cart"></i>
                                     </a>
-                                    <a asp-action="Details" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action details" title="Ver Detalles">
+                                    <a asp-action="Details" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action details" title="Ver Detalles" asp-route-isStock="true">
                                         <i class="fas fa-info-circle"></i>
                                     </a>
-                                    <a asp-action="Edit" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action edit" title="Editar">
+                                    <a asp-action="Edit" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action edit" title="Editar" asp-route-isStock="true">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a asp-action="Delete" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action delete" title="Eliminar">
+                                    <a asp-action="Delete" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action delete" title="Eliminar" asp-route-isStock="true">
                                         <i class="fas fa-trash-alt"></i>
                                     </a>
                                 </td>
@@ -107,16 +110,16 @@
                                 <td>@item.Model</td>
                                 <td>@item.LoadCapacity kg</td>
                                 <td class="table-actions">
-                                    <a asp-action="Vender" asp-route-id="@item.Id" asp-route-type="Accessory" class="btn-action details" style="background-color: #2ecc71;" title="Vender">
+                                    <a asp-action="Vender" asp-controller="Stock" asp-route-id="@item.Id" asp-route-type="Accessory" class="btn-action details" style="background-color: #2ecc71;" title="Vender" asp-route-isStock="true">
                                         <i class="fas fa-shopping-cart"></i>
                                     </a>
-                                    <a asp-action="Details" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action details" title="Ver Detalles">
+                                    <a asp-action="Details" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action details" title="Ver Detalles" asp-route-isStock="true">
                                         <i class="fas fa-info-circle"></i>
                                     </a>
-                                    <a asp-action="Edit" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action edit" title="Editar">
+                                    <a asp-action="Edit" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action edit" title="Editar" asp-route-isStock="true">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a asp-action="Delete" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action delete" title="Eliminar">
+                                    <a asp-action="Delete" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action delete" title="Eliminar" asp-route-isStock="true">
                                         <i class="fas fa-trash-alt"></i>
                                     </a>
                                 </td>
@@ -125,7 +128,6 @@
                     </tbody>
                 </table>
             </div>
-            @* Aquí podrías incluir tu componente de paginación para Accesorios *@
         }
     </div>
 </div>
@@ -134,6 +136,5 @@
     function switchTab(tabName) {
         document.getElementById('section-machines').style.display = tabName === 'machines' ? 'block' : 'none';
         document.getElementById('section-accessories').style.display = tabName === 'accessories' ? 'block' : 'none';
-        // Opcional: Actualizar URL para mantener estado al recargar
     }
 </script>
