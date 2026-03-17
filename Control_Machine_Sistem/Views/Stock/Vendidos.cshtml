@@ -1,0 +1,169 @@
+﻿@model Control_Machine_Sistem.ViewModels.SoldItemViewModel
+@{
+    ViewData["Title"] = "Historial de Ventas";
+}
+
+<link href="~/css/views.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<div class="content-wrapper">
+    <h1 class="page-title">@ViewData["Title"]</h1>
+
+    <div class="action-bar">
+        @* Selector de pestañas con tu estilo de botones *@
+        <div class="button-group">
+            <button type="button" id="btn-machines" class="btn btn-primary" onclick="switchTab('machines')">
+                <i class="fas fa-tractor icon"></i> Máquinas
+            </button>
+            <button type="button" id="btn-accessories" class="btn btn-secondary" onclick="switchTab('accessories')">
+                <i class="fas fa-tools icon"></i> Accesorios
+            </button>
+        </div>
+
+        <div class="button-group">
+            @* Botón para volver al stock rápidamente *@
+            <a asp-action="Index" asp-controller="Stock" class="btn btn-success">
+                <i class="fas fa-boxes icon"></i> Ver Stock Actual
+            </a>
+        </div>
+    </div>
+
+    <hr />
+
+    @* --- SECCIÓN MÁQUINAS VENDIDAS --- *@
+    <div id="section-machines">
+        @if (!Model.SoldMachines.Any())
+        {
+            <div class="alert alert-warning" role="alert">
+                <i class="fas fa-info-circle icon"></i> No hay máquinas vendidas registradas.
+            </div>
+        }
+        else
+        {
+            <div class="data-table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Razón Social</th>
+                            <th>Categoría</th>
+                            <th>Modelo</th>
+                            <th>Entrega Técnica</th>
+                            <th>Garantía</th>
+                            <th>Documentación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.SoldMachines)
+                        {
+                            <tr>
+                                <td><strong>@item.Customer?.Name</strong></td>
+                                <td>@item.Model?.Category?.Name</td>
+                                <td>@item.Model?.Name</td>
+                                <td>@item.DeliveryDate?.ToString("dd/MM/yyyy")</td>
+                                <td>
+                                    <span class="badge @(item.WarrantyExpirationDate > DateTime.Now ? "text-success" : "text-danger")">
+                                        @item.WarrantyExpirationDate?.ToString("dd/MM/yyyy")
+                                    </span>
+                                </td>
+                                <td>
+                                    @if (item.DocUrls != null && item.DocUrls.Any())
+                                    {
+                                        <ul class="file-list">
+                                            @foreach (var doc in item.DocUrls)
+                                            {
+                                                <li>
+                                                    <a class="document-name" href="@doc" download>
+                                                        <i class="fas fa-file-pdf"></i> @System.IO.Path.GetFileName(doc)
+                                                    </a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Sin documentos</span>
+                                    }
+                                </td>
+                                <td class="table-actions">
+                                    <a asp-action="Details" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action details" title="Detalles">
+                                        <i class="fas fa-info-circle"></i>
+                                    </a>
+                                    <a asp-action="Edit" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action edit" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action delete" title="Eliminar">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+
+    @* --- SECCIÓN ACCESORIOS VENDIDOS --- *@
+    <div id="section-accessories" style="display:none">
+        @if (!Model.SoldAccessories.Any())
+        {
+            <div class="alert alert-warning" role="alert">
+                <i class="fas fa-info-circle icon"></i> No hay accesorios vendidos registrados.
+            </div>
+        }
+        else
+        {
+            <div class="data-table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Razón Social</th>
+                            <th>Accesorio / Modelo</th>
+                            <th>Capacidad</th>
+                            <th>Fecha de Venta</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.SoldAccessories)
+                        {
+                            <tr>
+                                <td><strong>@item.Customer?.Name</strong></td>
+                                <td>@item.Model</td>
+                                <td>@item.LoadCapacity</td>
+                                <td>@item.SaleDate?.ToString("dd/MM/yyyy")</td>
+                                <td class="table-actions">
+                                    <a asp-action="Details" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action details" title="Detalles">
+                                        <i class="fas fa-info-circle"></i>
+                                    </a>
+                                    <a asp-action="Edit" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action edit" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action delete" title="Eliminar">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/views.js"></script>
+    <script>
+        function switchTab(tabName) {
+            const isMachines = tabName === 'machines';
+            document.getElementById('section-machines').style.display = isMachines ? 'block' : 'none';
+            document.getElementById('section-accessories').style.display = isMachines ? 'none' : 'block';
+
+            // Cambio de clases de botones para resaltar el activo
+            document.getElementById('btn-machines').className = isMachines ? 'btn btn-primary' : 'btn btn-secondary';
+            document.getElementById('btn-accessories').className = isMachines ? 'btn btn-secondary' : 'btn btn-primary';
+        }
+    </script>
+}

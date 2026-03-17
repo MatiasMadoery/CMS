@@ -75,6 +75,7 @@ namespace Control_Machine_Sistem.Controllers
         [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [RequestSizeLimit(104857600)]
         public async Task<IActionResult> Create([Bind("Id,MachineId,WorkHours,RealHours,ServiceHour,ServiceDate,OrderNumber,Observations,ServiceSheet")] Service service, int? machineId)
         {
             if (ModelState.IsValid)
@@ -137,6 +138,7 @@ namespace Control_Machine_Sistem.Controllers
         [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [RequestSizeLimit(104857600)]
         public async Task<IActionResult> Edit(
             int id,
             [Bind("Id,MachineId,WorkHours,ServiceDate,OrderNumber,Observations,ServiceSheet")] Service service,

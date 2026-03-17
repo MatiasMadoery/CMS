@@ -1,7 +1,8 @@
 ﻿@model Control_Machine_Sistem.Models.Machine
 
 @{
-    ViewData["Title"] = "Detalle de Máquina";
+    bool isStock = ViewBag.IsStock ?? false;
+    ViewData["Title"] = isStock ? "Detalle de Stock" : "Detalle de Máquina";
 }
 
 <link href="~/css/views.css" rel="stylesheet" />
@@ -13,9 +14,16 @@
 
     <div class="details-container">
         <dl class="details-list">
+            @if (!isStock)
+            {
+                <div class="details-item">
+                    <dt>@Html.DisplayNameFor(model => model.Customer!.Name)</dt>
+                    <dd>@Html.DisplayFor(model => model.Customer!.Name)</dd>
+                </div>
+            }
             <div class="details-item">
-                <dt>@Html.DisplayNameFor(model => model.Customer!.Name)</dt>
-                <dd>@Html.DisplayFor(model => model.Customer!.Name)</dd>
+                <dt>@Html.DisplayNameFor(model => model.Ubication!.Name)</dt>
+                <dd>@Html.DisplayFor(model => model.Ubication!.Name)</dd>
             </div>
             <div class="details-item">
                 <dt>@Html.DisplayNameFor(model => model.Model!.Name)</dt>
@@ -30,13 +38,28 @@
                 <dd>@Html.DisplayFor(model => model.EngineNumber)</dd>
             </div>
             <div class="details-item">
-                <dt>@Html.DisplayNameFor(model => model.DeliveryDate)</dt>
-                <dd>@Model.DeliveryDate?.ToString("dd/MM/yyyy")</dd>
+                <dt>@Html.DisplayNameFor(model => model.SerialNumber)</dt>
+                <dd>@Html.DisplayFor(model => model.SerialNumber)</dd>
             </div>
             <div class="details-item">
-                <dt>@Html.DisplayNameFor(model => model.WarrantyExpirationDate)</dt>
-                <dd>@Model.WarrantyExpirationDate?.ToString("dd/MM/yyyy")</dd>
+                <dt>Año de Fabricación</dt>
+                <dd>@Html.DisplayFor(model => model.ManufactureYear)</dd>
             </div>
+            <div class="details-item">
+                <dt>Horas de Uso</dt>
+                <dd>@Html.DisplayFor(model => model.UserHours) hs</dd>
+            </div>
+            @if (!isStock)
+            {
+                <div class="details-item">
+                    <dt>@Html.DisplayNameFor(model => model.DeliveryDate)</dt>
+                    <dd>@Model.DeliveryDate?.ToString("dd/MM/yyyy")</dd>
+                </div>
+                <div class="details-item">
+                    <dt>@Html.DisplayNameFor(model => model.WarrantyExpirationDate)</dt>
+                    <dd>@Model.WarrantyExpirationDate?.ToString("dd/MM/yyyy")</dd>
+                </div>
+            }
             <div class="details-item">
                 <dt>@Html.DisplayNameFor(model => model.DocUrls)</dt>
                 <dd>
@@ -62,49 +85,53 @@
 
     <hr />
 
-    <div class="document-management">
-        <h4 class="form-section-title">Historial de propietarios</h4>
-        <div class="data-table-container">
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Propietario anterior</th>
-                        <th>Fecha de cambio</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model.OwnerHistories != null && Model.OwnerHistories.Any())
-                    {
-                        @foreach (var history in Model.OwnerHistories!)
+    @if (!isStock)
+    {
+        <hr />
+        <div class="document-management">
+            <h4 class="form-section-title">Historial de propietarios</h4>
+            <div class="data-table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Propietario anterior</th>
+                            <th>Fecha de cambio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.OwnerHistories != null && Model.OwnerHistories.Any())
+                        {
+                            @foreach (var history in Model.OwnerHistories!)
+                            {
+                                <tr>
+                                    <td>@history.PreviousOwner</td>
+                                    <td>@history.ChangeDate.ToString("dd/MM/yyyy")</td>
+                                </tr>
+                            }
+                        }
+                        else
                         {
                             <tr>
-                                <td>@history.PreviousOwner</td>
-                                <td>@history.ChangeDate.ToString("dd/MM/yyyy")</td>
+                                <td colspan="2" class="text-center text-secondary">No hay historial de propietarios.</td>
                             </tr>
                         }
-                    }
-                    else
-                    {
-                        <tr>
-                            <td colspan="2" class="text-center text-secondary">No hay historial de propietarios.</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
+    }
 
     <hr />
 
     <div class="button-group">
-        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">
+        <a asp-action="Edit" asp-route-id="@Model?.Id" asp-route-isStock="@isStock" class="btn btn-primary">
             <i class="fas fa-edit icon"></i> Editar
         </a>
-        <a asp-action="Delete" asp-route-id="@Model?.Id" class="btn btn-danger">
+        <a asp-action="Delete" asp-route-id="@Model?.Id" asp-route-isStock="@isStock" class="btn btn-danger">
             <i class="fas fa-trash-alt icon"></i> Eliminar
         </a>
-        <a asp-action="Index" class="btn btn-secondary">
-            <i class="fas fa-arrow-left icon"></i> Volver a la lista
+        <a asp-controller="Stock" asp-action="@(isStock ? "Index" : "Vendidos")" class="btn btn-secondary">
+            <i class="fas fa-arrow-left icon"></i> Volver
         </a>
     </div>
 </div>

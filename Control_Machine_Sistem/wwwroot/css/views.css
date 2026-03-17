@@ -452,11 +452,18 @@ h1.page-title {
 * ============================
 */
 .table-actions {
-    display: flex;
-    gap: 8px;
-    white-space: nowrap;
+    white-space: nowrap !important; /* Fuerza a que no haya saltos de línea */
+    width: 1%; /* Obliga a la celda a ajustarse al contenido */
+    min-width: 140px; /* Reserva el espacio mínimo para los 3 botones */
+    text-align: right;
+    vertical-align: middle;
 }
 
+    /* Ajuste para los botones dentro de la celda */
+    .table-actions .btn-action {
+        display: inline-flex !important; /* Cambiamos flex por inline-flex */
+        margin: 0 2px; /* Espaciado manual entre botones */
+    }
 /*
 * Estilos para la tabla de datos
 * ============================
@@ -465,11 +472,64 @@ h1.page-title {
     vertical-align: middle; /* Alinea verticalmente el contenido de las celdas */
 }
 
-.table-actions {
-    white-space: nowrap; /* Evita que los botones se envuelvan en varias líneas */
-    display: flex; /* Utiliza flexbox para una alineación flexible */
-    gap: 8px; /* Añade un espacio entre los botones */
+.stock-selector {
+    margin-bottom: 25px;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 15px;
 }
+
+.btn-tab {
+    background-color: #f8f8f8;
+    color: #555;
+    border: 1px solid #ddd;
+    margin-right: 10px;
+}
+
+    .btn-tab.active {
+        background-color: #3498db;
+        color: #fff;
+        border-color: #3498db;
+    }
+
+
+/* * Ajustes para la navegación de Stock (Pestañas + Sucursales)
+* ============================
+*/
+
+/* Contenedor flexible para alinear pestañas a la izquierda y gestión a la derecha */
+.stock-header-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 15px;
+}
+
+    /* Sobrescribimos el margen del stock-selector original si se usa dentro del header nav */
+    .stock-header-nav .stock-selector {
+        margin-bottom: 0;
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+/* Botón de gestión con estilo de borde (Outline) */
+.btn-outline-primary {
+    background-color: transparent;
+    color: #3498db;
+    border: 2px solid #3498db;
+}
+
+    .btn-outline-primary:hover {
+        background-color: #3498db;
+        color: #fff;
+    }
+
+/* Sombra suave para destacar el botón de gestión */
+.shadow-sm {
+    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) !important;
+}
+
 
 /* Estilos responsivos */
 @media (max-width: 768px) {

@@ -8,7 +8,6 @@ namespace Control_Machine_Sistem.Models
     public class Machine
     {
         public int Id { get; set; }
-        [Required(ErrorMessage = "Debe seleccionar un cliente.")]
         [Display(Name = "Cliente")]
         public int? CustomerId { get; set; }
         public Customer? Customer { get; set; }
@@ -30,6 +29,23 @@ namespace Control_Machine_Sistem.Models
         [Display(Name = "Fecha vencimiento garantía")]
         public DateTime? WarrantyExpirationDate { get; set; }
 
+
+
+        //Nuevas Propiedades Para Stock
+        [Required]
+        [Display(Name = "Año de fabricación")]
+        public int? ManufactureYear { get; set; }
+        [Required]
+        [Display(Name = "Número de serie")]
+        public string? SerialNumber { get; set; }
+        [Display(Name = "Horas de uso")]
+        public int? UserHours { get; set; }
+        [Required]
+        [Display(Name = "Ubicación")]
+        public int? UbicationId { get; set; }
+        public Ubication? Ubication { get; set; }
+
+        //
         [NotMapped]
         [Display(Name = "Documentación")]
         public IEnumerable<IFormFile>? Documentations { get; set; }

@@ -52,6 +52,21 @@ namespace Control_Machine_Sistem.Models
                 .HasForeignKey(m => m.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+
+            modelBuilder.Entity<Machine>()
+                .Property(m => m.DeliveryDate)
+                .IsRequired(false);
+
+            modelBuilder.Entity<Machine>()
+                .Property(m => m.WarrantyExpirationDate)
+                .IsRequired(false);
+
+            modelBuilder.Entity<Machine>()
+                .HasOne(m => m.Ubication)
+                .WithMany(u => u.Machines)
+                .HasForeignKey(m => m.UbicationId)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
         public DbSet<Customer> Customers{ get; set; } = default!;
         public DbSet<Machine> Machines { get; set; } = default!;        
@@ -61,6 +76,7 @@ namespace Control_Machine_Sistem.Models
         public DbSet<OwnerHistory> OwnerHistories { get; set; } = default!;
         public DbSet<Service> Services { get; set; } = default!;
         public DbSet<OtherMaintenance> OtherMaintenances { get; set; } = default!;
-
+        public DbSet<Accessory> Accessories { get; set; } = default!;
+        public DbSet<Ubication> Ubications { get; set; } = default!;
     }
 }

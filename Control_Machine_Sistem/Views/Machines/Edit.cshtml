@@ -1,7 +1,8 @@
 ﻿@model Control_Machine_Sistem.Models.Machine
 
 @{
-    ViewData["Title"] = "Editar Venta";
+    bool isStock = ViewBag.IsStock ?? false;
+    ViewData["Title"] = isStock ? "Editar Máquina en Stock" : "Editar Venta de Máquina";
 }
 
 <link href="~/css/views.css" rel="stylesheet" />
@@ -9,25 +10,30 @@
 
 <div class="form-container">
     <h1 class="form-title">@ViewData["Title"]</h1>
+    <h4 class="form-sub-title">Modifique los datos necesarios</h4>
     <hr />
 
-    <form asp-action="Edit" enctype="multipart/form-data" id="uploadForm">
+    <form asp-action="Edit" enctype="multipart/form-data" id="uploadForm" asp-route-isStock="@isStock">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
 
         <div class="form-row">
-            <div class="form-col">
-                <div class="form-group">
-                    <label asp-for="CustomerId" class="form-label"></label>
-                    <select asp-for="CustomerId" class="form-control select2" data-url="@Url.Action("GetCustomers", "Machines")">
-                        <option value="">Seleccione un Cliente...</option>
-                        @if (Model.CustomerId != null && ViewBag.CustomerName != null)
-                        {
-                            <option value="@Model.CustomerId" selected="selected">@ViewBag.CustomerName</option>
-                        }
-                    </select>
+            @if (!isStock)
+            {
+                <div class="form-col">
+                    <div class="form-group">
+                        <label asp-for="CustomerId" class="form-label">Cliente / Propietario</label>
+                        <select asp-for="CustomerId" class="form-control select2" data-url="@Url.Action("GetCustomers", "Machines")">
+                            <option value="">Seleccione un Cliente...</option>
+                            @if (Model.CustomerId != null && ViewBag.CustomerName != null)
+                            {
+                                <option value="@Model.CustomerId" selected="selected">@ViewBag.CustomerName</option>
+                            }
+                        </select>
+                        <span asp-validation-for="CustomerId" class="text-danger"></span>
+                    </div>
                 </div>
-            </div>
+            }
             <div class="form-col">
                 <div class="form-group">
                     <label asp-for="ModelId" class="form-label"></label>
@@ -39,16 +45,23 @@
         <div class="form-row">
             <div class="form-col">
                 <div class="form-group">
-                    <label asp-for="ChasisNumber" class="form-label"></label>
+                    <label asp-for="ChasisNumber" class="form-label">Número de Chasis</label>
                     <input asp-for="ChasisNumber" class="form-control" />
                     <span asp-validation-for="ChasisNumber" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-col">
                 <div class="form-group">
-                    <label asp-for="EngineNumber" class="form-label"></label>
+                    <label asp-for="EngineNumber" class="form-label">Número de Motor</label>
                     <input asp-for="EngineNumber" class="form-control" />
                     <span asp-validation-for="EngineNumber" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="SerialNumber" class="form-label">Número de Serie</label>
+                    <input asp-for="SerialNumber" class="form-control" />
+                    <span asp-validation-for="SerialNumber" class="text-danger"></span>
                 </div>
             </div>
         </div>
@@ -56,19 +69,49 @@
         <div class="form-row">
             <div class="form-col">
                 <div class="form-group">
-                    <label asp-for="DeliveryDate" class="form-label"></label>
-                    <input asp-for="DeliveryDate" class="form-control" type="date" />
-                    <span asp-validation-for="DeliveryDate" class="text-danger"></span>
+                    <label asp-for="ManufactureYear" class="form-label">Año de Fabricación</label>
+                    <input asp-for="ManufactureYear" class="form-control" type="number" />
+                    <span asp-validation-for="ManufactureYear" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-col">
                 <div class="form-group">
-                    <label asp-for="WarrantyExpirationDate" class="form-label"></label>
-                    <input asp-for="WarrantyExpirationDate" type="date" class="form-control" readonly id="WarrantyExpirationDate" />
-                    <span asp-validation-for="WarrantyExpirationDate" class="text-danger"></span>
+                    <label asp-for="UserHours" class="form-label">Horas de Uso</label>
+                    <input asp-for="UserHours" class="form-control" type="number" step="0.1" />
+                    <span asp-validation-for="UserHours" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="UbicationId" class="form-label">Ubicación / Sucursal</label>
+                    <select asp-for="UbicationId" class="form-select" asp-items="ViewBag.UbicationId">
+                        <option value="">-- Seleccionar Ubicación --</option>
+                    </select>
+                    <span asp-validation-for="UbicationId" class="text-danger"></span>
                 </div>
             </div>
         </div>
+
+        @if (!isStock)
+        {
+            <h4 class="form-section-title"><i class="fas fa-calendar-alt icon"></i> Entrega y Garantía</h4>
+            <div class="form-row">
+                <div class="form-col">
+                    <div class="form-group">
+                        <label asp-for="DeliveryDate" class="form-label">Fecha de Entrega Técnica</label>
+                        <input asp-for="DeliveryDate" class="form-control" type="date" />
+                        <span asp-validation-for="DeliveryDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-col">
+                    <div class="form-group">
+                        <label asp-for="WarrantyExpirationDate" class="form-label">Vencimiento de Garantía</label>
+                        <input asp-for="WarrantyExpirationDate" type="date" class="form-control" readonly id="WarrantyExpirationDate" />
+                        <span asp-validation-for="WarrantyExpirationDate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        }
 
         <h4 class="form-section-title">Archivos cargados</h4>
         <div class="document-management">
@@ -117,9 +160,11 @@
         </div>
 
         <div class="button-group">
-            <input type="submit" value="Guardar" class="btn btn-success" />
-            <a asp-action="Index" class="btn btn-secondary">
-                <i class="fas fa-arrow-left icon"></i> Volver a la lista
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-save icon"></i> Guardar Cambios
+            </button>
+            <a asp-controller="Stock" asp-action="@(isStock ? "Index" : "Vendidos")" class="btn btn-secondary">
+                <i class="fas fa-arrow-left icon"></i> Cancelar
             </a>
         </div>
     </form>

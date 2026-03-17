@@ -80,6 +80,7 @@ namespace Control_Machine_Sistem.Controllers
         [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [RequestSizeLimit(104857600)]
         public async Task<IActionResult> Create([Bind("Id,Name,Manuals,SpareKits,CategoryId")] Model model)
         {
             if (ModelState.IsValid)
@@ -161,6 +162,7 @@ namespace Control_Machine_Sistem.Controllers
         [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [RequestSizeLimit(104857600)]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,CategoryId")] Model model, List<string> ExistingManuals, List<IFormFile> Manuals, List<string> DeletedManuals, List<string> ExistingSpareKits, List<IFormFile> SpareKits, List<string> DeletedSpareKits)
 
         {

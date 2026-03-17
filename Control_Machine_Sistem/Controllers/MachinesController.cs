@@ -40,19 +40,15 @@ namespace Control_Machine_Sistem.Controllers
                 machine = machine.Where(s => s.Model!.CategoryId == categoryId.Value);
             }
 
-            // Get total machines 
             var totalMachines = await machine.CountAsync();
 
-            // Apply pagination
             var machinePager = await machine
                            .Skip((page - 1) * pageSize)
                            .Take(pageSize)
                            .ToListAsync();
 
-            // Create the paginator with the paginated list
             var pager = new Pager<Machine>(machinePager, totalMachines, page, pageSize);
 
-            //To maintain the value of the lookup field when the user changes pages
             ViewData["searchString"] = searchString;
             ViewData["categoryId"] = categoryId;
 
@@ -63,7 +59,7 @@ namespace Control_Machine_Sistem.Controllers
 
         // GET: Machines/Details/5
         [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer")]
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, bool isStock = false)
         {
             if (id == null)
             {
@@ -74,27 +70,31 @@ namespace Control_Machine_Sistem.Controllers
                 .Include(m => m.Customer)
                 .Include(m => m.Model)
                 .Include(m => m.OwnerHistories)
+                .Include(m => m.Ubication)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (machine == null)
             {
                 return NotFound();
             }
 
+            ViewBag.IsStock = isStock;
             return View(machine);
         }
 
         // GET: Machines/Create
         [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
-        public IActionResult Create()
+        public IActionResult Create(bool isStock = false)
         {
+            ViewBag.IsStock = isStock;
             ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
             ViewBag.ModelId = new SelectList(new List<Model>(), "Id", "Name");
             ViewBag.Customers = new SelectList(_context.Customers.Select(c => new { c.Id, c.Name}), "Id", "Name");
+            ViewBag.UbicationId = new SelectList(_context.Ubications.OrderBy(u => u.Name), "Id", "Name");
 
             return View();
         }
 
-        //Metodo para devolver modelos por categoria
         [HttpGet]
         public async Task<JsonResult> GetModelsByCategory(int categoryId)
         {
@@ -111,8 +111,26 @@ namespace Control_Machine_Sistem.Controllers
         [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,Documentations")] Machine machine)
-        {          
+        [RequestSizeLimit(104857600)]
+        public async Task<IActionResult> Create([Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,Documentations,ManufactureYear,SerialNumber,UserHours,UbicationId")] Machine machine, bool isStock = false)
+        {
+            if (isStock)
+            {
+                machine.CustomerId = null;
+                machine.DeliveryDate = null;
+                machine.WarrantyExpirationDate = null;
+
+
+                ModelState.Remove("CustomerId");
+                ModelState.Remove("DeliveryDate");
+            }
+            else
+            {
+                if (machine.DeliveryDate.HasValue)
+                {
+                    machine.WarrantyExpirationDate = machine.DeliveryDate.Value.AddDays(365);
+                }
+            }
 
             if (ModelState.IsValid)
             {
@@ -142,27 +160,36 @@ namespace Control_Machine_Sistem.Controllers
                     DeliveryDate = machine.DeliveryDate,
                     WarrantyExpirationDate = machine.DeliveryDate?.AddDays(365),
                     DocUrls = docUrls,
+                    ManufactureYear = machine.ManufactureYear,
+                    SerialNumber = machine.SerialNumber,
+                    UserHours = machine.UserHours,
+                    UbicationId = machine.UbicationId
                 };
                 _context.Add(newMachine);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+
+                return isStock ? RedirectToAction("Index", "Stock") : RedirectToAction("Vendidos", "Stock");
             }
 
+            ViewBag.IsStock = isStock;
             ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
             ViewBag.ModelId = new SelectList(new List<Model>(), "Id", "Name");
             ViewBag.Customers = new SelectList(_context.Customers.Select(c => new { c.Id, c.Name }), "Id", "Name");
+            ViewBag.UbicationId = new SelectList(_context.Ubications, "Id", "Name", machine.UbicationId);
             return View(machine);
         }
 
 
         // GET: Machines/Edit/5
         [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, bool isStock = false)
         {
             if (id == null)
             {
                 return NotFound();
             }
+
             var machine = await _context.Machines
             .Include(m => m.Customer)
             .FirstOrDefaultAsync(m => m.Id == id);
@@ -171,9 +198,13 @@ namespace Control_Machine_Sistem.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.IsStock = isStock;
             ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Name", machine.CustomerId);
             ViewData["ModelId"] = new SelectList(_context.Models, "Id", "Name", machine.ModelId);
             ViewBag.CustomerName = machine.Customer?.Name;
+            ViewBag.UbicationId = new SelectList(_context.Ubications.OrderBy(u => u.Name), "Id", "Name", machine.UbicationId);
+
             return View(machine);
         }
 
@@ -181,11 +212,27 @@ namespace Control_Machine_Sistem.Controllers
         [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,WarrantyExpirationDate")] Machine machine, List<string> ExistingDocs, List<IFormFile> Documentations, List<string> DeletedDocs)
+        [RequestSizeLimit(104857600)]
+        public async Task<IActionResult> Edit(
+            int id, 
+            [Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,WarrantyExpirationDate,ManufactureYear,SerialNumber,UserHours,UbicationId")] Machine machine, 
+            List<string> ExistingDocs, 
+            List<IFormFile> Documentations, 
+            List<string> DeletedDocs,
+            bool isStock = false
+            )
         {
             if (id != machine.Id)
             {
                 return NotFound();
+            }
+
+            if (isStock)
+            {
+                machine.CustomerId = null;
+                machine.DeliveryDate = null;
+                ModelState.Remove("CustomerId");
+                ModelState.Remove("DeliveryDate");
             }
 
             if (ModelState.IsValid)
@@ -202,17 +249,14 @@ namespace Control_Machine_Sistem.Controllers
                         return NotFound();
                     }
 
-                    if (existingMachine.CustomerId != machine.CustomerId && existingMachine.Customer != null)
+                    if (!isStock && existingMachine.CustomerId != machine.CustomerId && existingMachine.Customer != null)
                     {
-                        var ownerHistory = new OwnerHistory
+                        _context.OwnerHistories.Add(new OwnerHistory
                         {
                             MachineId = existingMachine.Id,
                             PreviousOwner = existingMachine.Customer.Name,
                             ChangeDate = DateTime.Now
-                        };
-
-                        _context.OwnerHistories.Add(ownerHistory);
-                        existingMachine.CustomerId = machine.CustomerId;
+                        });
                     }
 
 
@@ -222,6 +266,10 @@ namespace Control_Machine_Sistem.Controllers
                     existingMachine.EngineNumber = machine.EngineNumber;
                     existingMachine.DeliveryDate = machine.DeliveryDate;
                     existingMachine.WarrantyExpirationDate = machine.DeliveryDate?.AddDays(365);
+                    existingMachine.ManufactureYear = machine.ManufactureYear;
+                    existingMachine.SerialNumber = machine.SerialNumber;
+                    existingMachine.UserHours = machine.UserHours;
+                    existingMachine.UbicationId = machine.UbicationId;
 
                     List<string> docUrls = ExistingDocs ?? new List<string>();
 
@@ -270,18 +318,21 @@ namespace Control_Machine_Sistem.Controllers
                     {
                         throw;
                     }
+
                 }
-                return RedirectToAction(nameof(Index));
+                return isStock ? RedirectToAction("Index", "Stock") : RedirectToAction("Vendidos", "Stock");
             }
+
             ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Id", machine.CustomerId);
             ViewData["ModelId"] = new SelectList(_context.Models, "Id", "Id", machine.ModelId);
+            ViewBag.IsStock = isStock;
             return View(machine);
         }
 
 
         // GET: Machines/Delete/5
         [Authorize(Roles = "Admin, SuperAdmin")]
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id, bool isStock = false)
         {
             if (id == null)
             {
@@ -297,6 +348,7 @@ namespace Control_Machine_Sistem.Controllers
                 return NotFound();
             }
 
+            ViewBag.IsStock = isStock;
             return View(machine);
         }
 
@@ -304,7 +356,7 @@ namespace Control_Machine_Sistem.Controllers
         [Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int? id)
+        public async Task<IActionResult> DeleteConfirmed(int? id, bool isStock = false)
         {
             var machine = await _context.Machines.FindAsync(id);
             if (machine != null)
@@ -327,7 +379,7 @@ namespace Control_Machine_Sistem.Controllers
                 TempData["ErrorMessage"] = "No se encontró la máquina a eliminar.";
             }
 
-            return RedirectToAction(nameof(Index));
+            return isStock ? RedirectToAction("Index", "Stock") : RedirectToAction("Vendidos", "Stock");
         }
 
         private bool MachineExists(int id)

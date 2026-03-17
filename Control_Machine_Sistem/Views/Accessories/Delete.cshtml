@@ -1,0 +1,46 @@
+﻿@model Control_Machine_Sistem.Models.Accessory
+
+@{
+    bool isStock = ViewBag.IsStock ?? false;
+    ViewData["Title"] = "Eliminar Accesorio";
+}
+
+<link href="~/css/views.css" rel="stylesheet" />
+
+<div class="form-container">
+    <h1 class="form-title text-danger">@ViewData["Title"]</h1>
+    <h3 class="form-sub-title">¿Estás seguro de que quieres eliminar este registro?</h3>
+    <hr />
+
+    <div class="details-section">
+        <dl class="row">
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Model)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Model)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.LoadCapacity)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.LoadCapacity)</dd>
+
+            @if (!isStock)
+            {
+                <dt class="col-sm-3">@Html.DisplayNameFor(model => model.SaleDate)</dt>
+                <dd class="col-sm-9">@Model.SaleDate?.ToString("dd/MM/yyyy")</dd>
+
+                <dt class="col-sm-3">Cliente</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Customer.Name)</dd>
+            }
+        </dl>
+    </div>
+
+    @* El asp-route-isStock aquí asegura que el POST reciba el parámetro *@
+    <form asp-action="Delete" asp-route-isStock="@isStock" class="button-group" style="margin-top: 30px;">
+        <input type="hidden" asp-for="Id" />
+
+        <button type="submit" class="btn btn-danger">
+            <i class="fas fa-trash-alt icon"></i> Confirmar Eliminación
+        </button>
+
+        <a asp-controller="Stock" asp-action="@(isStock ? "Index" : "Vendidos")" class="btn btn-secondary">
+            <i class="fas fa-times icon"></i> Cancelar
+        </a>
+    </form>
+</div>

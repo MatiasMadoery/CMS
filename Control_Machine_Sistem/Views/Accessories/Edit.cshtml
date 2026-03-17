@@ -1,0 +1,73 @@
+﻿@model Control_Machine_Sistem.Models.Accessory
+
+@{
+    bool isStock = ViewBag.IsStock ?? false;
+    ViewData["Title"] = isStock ? "Editar Accesorio en Stock" : "Editar Venta de Accesorio";
+}
+
+
+<link href="~/css/views.css" rel="stylesheet" />
+
+<div class="form-container">
+    <h1 class="form-title">@ViewData["Title"]</h1>
+    <hr />
+
+    <form asp-action="Edit" asp-route-isStock="@isStock" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+
+        <div class="form-row">
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="Model" class="form-label">Modelo/Nombre *</label>
+                    <input asp-for="Model" class="form-control" />
+                    <span asp-validation-for="Model" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="LoadCapacity" class="form-label">Capacidad de Carga</label>
+                    <input asp-for="LoadCapacity" class="form-control" />
+                    <span asp-validation-for="LoadCapacity" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        @if (!isStock)
+        {
+            <div class="form-row">
+                <div class="form-col">
+                    <div class="form-group">
+                        <label asp-for="CustomerId" class="form-label">Cliente</label>
+                        <select asp-for="CustomerId" class="form-control" asp-items="ViewBag.Customers">
+                            <option value="">-- Seleccionar Cliente --</option>
+                        </select>
+                        <span asp-validation-for="CustomerId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-col">
+                    <div class="form-group">
+                        <label asp-for="SaleDate" class="form-label">Fecha de Venta</label>
+                        <input asp-for="SaleDate" class="form-control" type="date" />
+                        <span asp-validation-for="SaleDate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="button-group">
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-save icon"></i> Guardar Cambios
+            </button>
+            <a asp-controller="Stock" asp-action="@(isStock ? "Index" : "Vendidos")" class="btn btn-secondary">
+                <i class="fas fa-arrow-left icon"></i> Volver
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
