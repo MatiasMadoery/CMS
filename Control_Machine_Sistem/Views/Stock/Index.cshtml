@@ -9,6 +9,42 @@
 <div class="content-wrapper">
     <h1 class="page-title">@ViewData["Title"]</h1>
 
+    @* --- PANEL DE FILTROS --- *@
+    <div class="filter-card shadow-sm mb-4" style="background: #fdfdfd; border: 1px solid #eee; padding: 20px; border-radius: 12px;">
+        <form asp-action="Index" method="get" id="filterForm">
+            <input type="hidden" name="activeTab" id="inputActiveTab" value="@Model.ActiveTab" />
+
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label small fw-bold">Sucursal</label>
+                    <select name="ubicationId" class="form-select" asp-items="ViewBag.Ubications">
+                        <option value="">-- Todas --</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-bold">Categoría</label>
+                    <select id="filterCategory" name="categoryId" class="form-select" asp-items="ViewBag.Categories">
+                        <option value="">-- Todas --</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-bold">Modelo</label>
+                    <select id="filterModel" name="modelId" class="form-select" asp-items="ViewBag.Models">
+                        <option value="">-- Todos --</option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-filter icon"></i> Filtrar
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary w-100">
+                        <i class="fas fa-sync-alt icon"></i> Limpiar
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+
     <div class="stock-header-nav">
         <div class="stock-selector">
             <div class="button-group">
@@ -23,7 +59,6 @@
             </div>
         </div>
 
-        @* Botón a la derecha *@
         <div class="branch-management">
             <a asp-action="Index" asp-controller="Ubications" class="btn btn-outline-primary shadow-sm">
                 <i class="fas fa-map-marked-alt icon"></i> Gestionar Sucursales
@@ -31,6 +66,7 @@
         </div>
     </div>
 
+    @* --- SECCIÓN MÁQUINAS --- *@
     <div id="section-machines" style="@(Model.ActiveTab == "machines" ? "" : "display:none")">
         <div class="action-bar">
             <h2 class="form-section-title"><i class="fas fa-list icon"></i> Stock de Maquinaria</h2>
@@ -43,7 +79,7 @@
 
         @if (!Model.Machines.Elements.Any())
         {
-            <div class="alert alert-warning">No hay máquinas disponibles en stock.</div>
+            <div class="alert alert-warning">No hay máquinas que coincidan con los filtros.</div>
         }
         else
         {
@@ -53,7 +89,7 @@
                         <tr>
                             <th>Modelo</th>
                             <th>Nº Chasis</th>
-                            <th>Nº Motor</th>
+                            <th>Sucursal</th> @* Agregado para ver el filtro *@
                             <th class="table-actions">Acciones</th>
                         </tr>
                     </thead>
@@ -63,18 +99,18 @@
                             <tr>
                                 <td>@item.Model?.Name</td>
                                 <td>@item.ChasisNumber</td>
-                                <td>@item.EngineNumber</td>
+                                <td><span class="badge bg-light text-dark">@item.Ubication?.Name</span></td>
                                 <td class="table-actions">
                                     <a asp-action="Vender" asp-controller="Stock" asp-route-id="@item.Id" asp-route-type="Machine" class="btn-action details" style="background-color: #2ecc71;" title="Vender" asp-route-isStock="true">
                                         <i class="fas fa-shopping-cart"></i>
                                     </a>
-                                    <a asp-action="Details" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action details" title="Ver Detalles" asp-route-isStock="true">
+                                    <a asp-action="Details" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action details" title="Ver Detalles" asp-route-isStock="true" asp-route-activeTab="machines">
                                         <i class="fas fa-info-circle"></i>
                                     </a>
-                                    <a asp-action="Edit" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action edit" title="Editar" asp-route-isStock="true">
+                                    <a asp-action="Edit" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action edit" title="Editar" asp-route-isStock="true" asp-route-activeTab="machines">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a asp-action="Delete" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action delete" title="Eliminar" asp-route-isStock="true">
+                                    <a asp-action="Delete" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action delete" title="Eliminar" asp-route-isStock="true" asp-route-activeTab="machines">
                                         <i class="fas fa-trash-alt"></i>
                                     </a>
                                 </td>
@@ -83,67 +119,168 @@
                     </tbody>
                 </table>
             </div>
-            @* Aquí podrías incluir tu componente de paginación para Máquinas *@
         }
     </div>
 
+    @* --- SECCIÓN ACCESORIOS --- *@
     <div id="section-accessories" style="@(Model.ActiveTab == "accessories" ? "" : "display:none")">
+
         <div class="action-bar">
+
             <h2 class="form-section-title"><i class="fas fa-boxes icon"></i> Stock de Accesorios</h2>
+
             <div class="button-group">
+
                 <a asp-action="Create" asp-controller="Accessories" asp-route-isStock="true" class="btn btn-success">
+
                     <i class="fas fa-plus-circle icon"></i> Nuevo Accesorio
+
                 </a>
+
             </div>
+
         </div>
 
-        @if (!Model.Accessories.Elements.Any())
-        {
-            <div class="alert alert-warning">No hay accesorios disponibles en stock.</div>
-        }
-        else
-        {
-            <div class="data-table-container">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Modelo/Descripción</th>
-                            <th>Capacidad de Carga</th>
-                            <th class="table-actions">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.Accessories.Elements)
-                        {
-                            <tr>
-                                <td>@item.Model</td>
-                                <td>@item.LoadCapacity kg</td>
-                                <td class="table-actions">
-                                    <a asp-action="Vender" asp-controller="Stock" asp-route-id="@item.Id" asp-route-type="Accessory" class="btn-action details" style="background-color: #2ecc71;" title="Vender" asp-route-isStock="true">
-                                        <i class="fas fa-shopping-cart"></i>
-                                    </a>
-                                    <a asp-action="Details" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action details" title="Ver Detalles" asp-route-isStock="true">
-                                        <i class="fas fa-info-circle"></i>
-                                    </a>
-                                    <a asp-action="Edit" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action edit" title="Editar" asp-route-isStock="true">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <a asp-action="Delete" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action delete" title="Eliminar" asp-route-isStock="true">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        }
-    </div>
-</div>
 
-<script>
-    function switchTab(tabName) {
-        document.getElementById('section-machines').style.display = tabName === 'machines' ? 'block' : 'none';
-        document.getElementById('section-accessories').style.display = tabName === 'accessories' ? 'block' : 'none';
-    }
-</script>
+
+        @if (!Model.Accessories.Elements.Any())
+
+        {
+
+            <div class="alert alert-warning">No hay accesorios disponibles en stock.</div>
+
+        }
+
+        else
+
+        {
+
+            <div class="data-table-container">
+
+                <table class="data-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Modelo/Descripción</th>
+
+                            <th>Capacidad de Carga</th>
+
+                            <th class="table-actions">Acciones</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var item in Model.Accessories.Elements)
+
+                        {
+
+                            <tr>
+
+                                <td>@item.Model</td>
+
+                                <td>@item.LoadCapacity kg</td>
+
+                                <td class="table-actions">
+
+                                    <a asp-action="Vender" asp-controller="Stock" asp-route-id="@item.Id" asp-route-type="Accessory" class="btn-action details" style="background-color: #2ecc71;" title="Vender" asp-route-isStock="true">
+
+                                        <i class="fas fa-shopping-cart"></i>
+
+                                    </a>
+
+                                    <a asp-action="Details" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action details" title="Ver Detalles" asp-route-isStock="true">
+
+                                        <i class="fas fa-info-circle"></i>
+
+                                    </a>
+
+                                    <a asp-action="Edit" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action edit" title="Editar" asp-route-isStock="true">
+
+                                        <i class="fas fa-edit"></i>
+
+                                    </a>
+
+                                    <a asp-action="Delete" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action delete" title="Eliminar" asp-route-isStock="true">
+
+                                        <i class="fas fa-trash-alt"></i>
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        }
+
+    </div>
+
+
+@section Scripts {
+    <script>
+        // Cambiar entre pestañas
+        function switchTab(tabName) {
+            document.getElementById('section-machines').style.display = tabName === 'machines' ? 'block' : 'none';
+            document.getElementById('section-accessories').style.display = tabName === 'accessories' ? 'block' : 'none';
+
+            // Actualizar botones
+            document.getElementById('btn-machines').classList.toggle('active', tabName === 'machines');
+            document.getElementById('btn-accessories').classList.toggle('active', tabName === 'accessories');
+
+            // Guardar en el input hidden para que al filtrar se mantenga en esta pestaña
+            document.getElementById('inputActiveTab').value = tabName;
+        }
+
+        // Cascada de Categoría -> Modelo
+                // Localiza el select de categoría
+        const categorySelect = document.getElementById('filterCategory');
+        const modelSelect = document.getElementById('filterModel');
+
+        categorySelect.addEventListener('change', function() {
+            const categoryId = this.value;
+
+            // Limpiamos y dejamos la opción por defecto
+            modelSelect.innerHTML = '<option value="">-- Todos --</option>';
+
+            if (categoryId) {
+                // Usamos la URL absoluta generada por Razor para evitar errores de ruta
+                const url = '@Url.Action("GetModelsByCategory", "Stock")' + '?categoryId=' + categoryId;
+
+                fetch(url)
+                    .then(response => {
+                        if (!response.ok) throw new Error("Error en la red");
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("Modelos recibidos:", data); // Mira esto en la consola (F12)
+
+                        data.forEach(m => {
+                            const opt = document.createElement('option');
+                            // Probamos ambos casos por si el serializador JSON cambia las mayúsculas
+                            opt.value = m.id || m.Id;
+                            opt.text = m.name || m.Name;
+                            modelSelect.appendChild(opt);
+                        });
+                    })
+                    .catch(error => console.error('Error al cargar modelos:', error));
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+             const currentTab = "@Model.ActiveTab";
+             switchTab(currentTab);
+        });
+    </script>
+}

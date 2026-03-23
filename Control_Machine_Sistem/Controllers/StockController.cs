@@ -14,14 +14,38 @@ namespace Control_Machine_Sistem.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(int machinePage = 1, int accessoryPage = 1, string activeTab = "machines")
+        public async Task<IActionResult> Index(int? ubicationId, int? categoryId, int? modelId, int machinePage = 1, int accessoryPage = 1, string activeTab = "machines")
         {
+            // Persistencia para la vista
+            ViewBag.ActiveTab = activeTab;
+            ViewBag.SelectedUbication = ubicationId;
+            ViewBag.SelectedCategory = categoryId;
+            ViewBag.SelectedModel = modelId;
+
+            // Carga de Selects para filtros
+            ViewBag.Ubications = new SelectList(await _context.Ubications.ToListAsync(), "Id", "Name", ubicationId);
+            ViewBag.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Name", categoryId);
+
+            if (categoryId.HasValue)
+            {
+                ViewBag.Models = new SelectList(await _context.Models.Where(m => m.CategoryId == categoryId).ToListAsync(), "Id", "Name", modelId);
+            }
+
             int pageSize = 10;
 
             // Query Máquinas en Stock
-            var mQuery = _context.Machines.Include(m => m.Model).Where(m => m.CustomerId == null);
+            var mQuery = _context.Machines
+                .Include(m => m.Model)
+                .Include(m => m.Ubication)
+                .Where(m => m.CustomerId == null);
+
+            if (ubicationId.HasValue) mQuery = mQuery.Where(m => m.UbicationId == ubicationId);
+            if (categoryId.HasValue) mQuery = mQuery.Where(m => m.Model.CategoryId == categoryId);
+            if (modelId.HasValue) mQuery = mQuery.Where(m => m.ModelId == modelId);
+
+            var mCount = await mQuery.CountAsync();
             var mElements = await mQuery.Skip((machinePage - 1) * pageSize).Take(pageSize).ToListAsync();
-            var mPager = new Pager<Machine>(mElements, await mQuery.CountAsync(), machinePage, pageSize);
+            var mPager = new Pager<Machine>(mElements, mCount, machinePage, pageSize);
 
             // Query Accesorios en Stock
             var aQuery = _context.Accessories.Where(a => a.CustomerId == null);
@@ -141,6 +165,18 @@ namespace Control_Machine_Sistem.Controllers
             };
 
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetModelsByCategory(int categoryId)
+        {
+            var models = await _context.Models
+                .Where(m => m.CategoryId == categoryId)
+                .OrderBy(m => m.Name)
+                .Select(m => new { id = m.Id, name = m.Name })
+                .ToListAsync();
+
+            return Json(models);
         }
     }
 }
