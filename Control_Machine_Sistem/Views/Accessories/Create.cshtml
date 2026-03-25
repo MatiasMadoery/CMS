@@ -59,10 +59,10 @@
         </div>
 
         <div class="button-group" style="margin-top: 20px;">
-            <button type="submit" class="btn btn-success">
+            <button type="submit" class="btn btn-success" asp-route-activeTab="accessories">
                 <i class="fas fa-plus-circle icon"></i> Crear Registro
             </button>
-            <a asp-controller="Stock" asp-action="@(isStock ? "Index" : "Vendidos")" class="btn btn-secondary">
+            <a asp-controller="Stock" asp-action="@(isStock ? "Index" : "Vendidos")" class="btn btn-secondary" asp-route-activeTab="accessories">
                 <i class="fas fa-arrow-left icon"></i> Volver
             </a>
         </div>
@@ -73,5 +73,4 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    @* Si usas Select2 para el buscador de clientes, asegúrate de inicializarlo aquí *@
 }

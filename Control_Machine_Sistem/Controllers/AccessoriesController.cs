@@ -26,7 +26,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Accessories/Details/5
-        public async Task<IActionResult> Details(int? id, bool isStock = false)
+        public async Task<IActionResult> Details(int? id, bool isStock = false, string activeTab = "machines")
         {
             if (id == null) return NotFound();
 
@@ -37,20 +37,22 @@ namespace Control_Machine_Sistem.Controllers
             if (accessory == null) return NotFound();
 
             ViewBag.IsStock = isStock;
+            ViewBag.ActiveTab = activeTab;
             return View(accessory);
         }
 
         // GET: Accessories/Create
-        public IActionResult Create(bool isStock = false)
+        public IActionResult Create(bool isStock = false, string activeTab = "machines")
         {
             ViewBag.IsStock = isStock;
+            ViewBag.ActiveTab = activeTab;
             ViewBag.Customers = new SelectList(_context.Customers, "Id", "Name");
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Model,LoadCapacity,SaleDate,CustomerId")] Accessory accessory, bool isStock = false)
+        public async Task<IActionResult> Create([Bind("Id,Model,LoadCapacity,SaleDate,CustomerId")] Accessory accessory, bool isStock = false, string activeTab = "machines")
         {
             if (isStock)
             {
@@ -69,12 +71,13 @@ namespace Control_Machine_Sistem.Controllers
             }
 
             ViewBag.IsStock = isStock;
+            ViewBag.ActiveTab = activeTab;
             ViewBag.Customers = new SelectList(_context.Customers, "Id", "Name", accessory.CustomerId);
             return View(accessory);
         }
 
         // GET: Accessories/Edit/5
-        public async Task<IActionResult> Edit(int? id, bool isStock = false)
+        public async Task<IActionResult> Edit(int? id, bool isStock = false, string activeTab = "machines")
         {
             if (id == null) return NotFound();
 
@@ -82,13 +85,14 @@ namespace Control_Machine_Sistem.Controllers
             if (accessory == null) return NotFound();
 
             ViewBag.IsStock = isStock;
+            ViewBag.ActiveTab = activeTab;
             ViewBag.Customers = new SelectList(_context.Customers, "Id", "Name", accessory.CustomerId);
             return View(accessory);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Model,LoadCapacity,SaleDate,CustomerId")] Accessory accessory, bool isStock = false)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Model,LoadCapacity,SaleDate,CustomerId")] Accessory accessory, bool isStock = false, string activeTab = "machines")
         {
             if (id != accessory.Id) return NotFound();
 
@@ -113,16 +117,19 @@ namespace Control_Machine_Sistem.Controllers
                     else throw;
                 }
 
-                return isStock ? RedirectToAction("Index", "Stock") : RedirectToAction("Vendidos", "Stock");
+                return isStock
+                    ? RedirectToAction("Index", "Stock", new { activeTab = activeTab })
+                    : RedirectToAction("Vendidos", "Stock", new { activeTab = activeTab });
             }
 
             ViewBag.IsStock = isStock;
+            ViewBag.ActiveTab = activeTab;
             ViewBag.Customers = new SelectList(_context.Customers, "Id", "Name", accessory.CustomerId);
             return View(accessory);
         }
 
         // GET: Accessories/Delete/5
-        public async Task<IActionResult> Delete(int? id, bool isStock = false)
+        public async Task<IActionResult> Delete(int? id, bool isStock = false, string activeTab = "machines")
         {
             if (id == null) return NotFound();
 
@@ -133,13 +140,14 @@ namespace Control_Machine_Sistem.Controllers
             if (accessory == null) return NotFound();
 
             ViewBag.IsStock = isStock;
+            ViewBag.ActiveTab = activeTab;
             return View(accessory);
         }
 
         // POST: Accessories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id, bool isStock = false)
+        public async Task<IActionResult> DeleteConfirmed(int id, bool isStock = false, string activeTab = "machines")
         {
             var accessory = await _context.Accessories.FindAsync(id);
             if (accessory != null)
@@ -147,7 +155,7 @@ namespace Control_Machine_Sistem.Controllers
                 _context.Accessories.Remove(accessory);
                 await _context.SaveChangesAsync();
             }
-
+            ViewBag.ActiveTab = activeTab;
             return isStock ? RedirectToAction("Index", "Stock") : RedirectToAction("Vendidos", "Stock");
         }
 

@@ -15,6 +15,8 @@
     <form asp-action="Edit" asp-route-isStock="@isStock" method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
+        <input type="hidden" name="isStock" value="@(ViewBag.IsStock ? "true" : "false")" />
+        <input type="hidden" name="activeTab" value="@ViewBag.ActiveTab" />
 
         <div class="form-row">
             <div class="form-col">
@@ -56,10 +58,10 @@
         }
 
         <div class="button-group">
-            <button type="submit" class="btn btn-success">
+            <button type="submit" class="btn btn-success" asp-route-activeTab="accessories">
                 <i class="fas fa-save icon"></i> Guardar Cambios
             </button>
-            <a asp-controller="Stock" asp-action="@(isStock ? "Index" : "Vendidos")" class="btn btn-secondary">
+            <a asp-controller="Stock" asp-action="@(isStock ? "Index" : "Vendidos")" class="btn btn-secondary" asp-route-activeTab="accessories">
                 <i class="fas fa-arrow-left icon"></i> Volver
             </a>
         </div>

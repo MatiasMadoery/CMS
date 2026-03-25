@@ -37,8 +37,7 @@
             <i class="fas fa-edit icon"></i> Editar
         </a>
 
-        @* Volver al Index o a Vendidos según corresponda *@
-        <a asp-controller="Stock" asp-action="@(isStock ? "Index" : "Vendidos")" class="btn btn-secondary">
+        <a asp-controller="Stock" asp-action="@(isStock ? "Index" : "Vendidos")" class="btn btn-secondary" asp-route-activeTab="@ViewBag.ActiveTab">
             <i class="fas fa-arrow-left icon"></i> Volver a la lista
         </a>
     </div>
