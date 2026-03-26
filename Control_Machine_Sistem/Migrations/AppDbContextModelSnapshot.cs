@@ -142,6 +142,10 @@ namespace Control_Machine_Sistem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImageUrls")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ManufactureYear")
                         .HasColumnType("int");
 

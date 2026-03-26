@@ -136,6 +136,24 @@
             </button>
         </div>
 
+        @* --- SECCIÓN NUEVA: FOTOS DE LA MÁQUINA (Solo si es Stock) --- *@
+        @if (isStock)
+        {
+            <h4 class="form-section-title">Fotos de la Unidad</h4>
+            <div class="form-row">
+                <div class="form-col">
+                    <div class="form-group">
+                        <label asp-for="ImageFiles" class="form-label">Imágenes de Stock (Máximo 4) *</label>
+                        <input asp-for="ImageFiles" type="file" class="form-control" multiple accept="image/*" id="imageInput" />
+                        <span asp-validation-for="ImageFiles" class="text-danger"></span>
+                        <small class="text-muted">Formatos permitidos: JPG, PNG. Se recomienda seleccionar las 4 fotos juntas.</small>
+                    </div>
+                </div>
+            </div>
+            @* Contenedor opcional para ver miniaturas antes de subir *@
+            <div id="imagePreviewContainer" class="d-flex flex-wrap gap-2 mb-3"></div>
+        }
+
         <div class="button-group">
             <input type="submit" value="@(isStock ? "Cargar a Stock" : "Crear Venta")" class="btn btn-success" />
             @* AJUSTADO: El volver depende de si es stock *@
@@ -151,6 +169,32 @@
     <script src="~/js/views.js"></script>
     <script src="~/js/machineCreateForm.js"></script>
     <script>
+
+document.getElementById('imageInput')?.addEventListener('change', function (e) {
+    const previewContainer = document.getElementById('imagePreviewContainer');
+    previewContainer.innerHTML = ''; // Limpiar previsualización
+
+    if (this.files.length > 4) {
+        alert("Atención: Solo se permite un máximo de 4 fotos. Se descartarán las excedentes.");
+        // Opcional: podrías resetear el input si quieres ser estricto
+    }
+
+    // Mostrar miniaturas rápidas
+    Array.from(this.files).slice(0, 4).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            const img = document.createElement('img');
+            img.src = event.target.result;
+            img.style.width = '100px';
+            img.style.height = '100px';
+            img.style.objectFit = 'cover';
+            img.style.borderRadius = '8px';
+            img.className = 'img-thumbnail';
+            previewContainer.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    });
+});
         // Solo ejecutar el cálculo de garantía si el elemento existe (si no es stock)
         var deliveryInput = document.getElementById("DeliveryDate");
         if (deliveryInput) {

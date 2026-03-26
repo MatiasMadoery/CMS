@@ -178,10 +178,11 @@
 
             await Task.CompletedTask;
         }
+
         public static async Task DeleteServiceSheetAsync(string fileUrl)
-        {            
-            var fileName = Path.GetFileName(fileUrl);           
-            var rootPath = Directory.GetCurrentDirectory();          
+        {
+            var fileName = Path.GetFileName(fileUrl);
+            var rootPath = Directory.GetCurrentDirectory();
             var filePath = Path.Combine(rootPath, "App_Data", "documentation", "serviceSheets", fileName);
 
             if (File.Exists(filePath))
@@ -191,12 +192,11 @@
                     File.Delete(filePath);
                 }
                 catch (Exception ex)
-                {                    
+                {
                     throw new Exception($"Error al eliminar el archivo en {filePath}", ex);
                 }
             }
             await Task.CompletedTask;
         }
-
     }
 }

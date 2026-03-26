@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Control_Machine_Sistem.Models;
+﻿using Control_Machine_Sistem.Models;
 using Control_Machine_Sistem.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using static Control_Machine_Sistem.Services.FileService;
 
 namespace Control_Machine_Sistem.Controllers
 {
@@ -11,15 +12,17 @@ namespace Control_Machine_Sistem.Controllers
     public class MachinesController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IImageStorageService _imageStorageService; // <--- AGREGAR ESTO
 
-        public MachinesController(AppDbContext context)
+        public MachinesController(AppDbContext context, IImageStorageService imageStorageService)
         {
             _context = context;
+            _imageStorageService = imageStorageService; // <--- ASIGNAR
         }
 
         // GET: Machines
         [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer")]
-        public async Task<IActionResult> Index(string searchString,int? categoryId, int page = 1, int pageSize = 5)
+        public async Task<IActionResult> Index(string searchString, int? categoryId, int page = 1, int pageSize = 5)
         {
             var machine = _context.Machines!
                           .Include(m => m.Customer)
@@ -52,7 +55,7 @@ namespace Control_Machine_Sistem.Controllers
             ViewData["searchString"] = searchString;
             ViewData["categoryId"] = categoryId;
 
-            ViewBag.Categories = new SelectList(_context.Categories.ToList(), "Id" , "Name", categoryId);
+            ViewBag.Categories = new SelectList(_context.Categories.ToList(), "Id", "Name", categoryId);
 
             return View(pager);
         }
@@ -89,7 +92,7 @@ namespace Control_Machine_Sistem.Controllers
             ViewBag.IsStock = isStock;
             ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
             ViewBag.ModelId = new SelectList(new List<Model>(), "Id", "Name");
-            ViewBag.Customers = new SelectList(_context.Customers.Select(c => new { c.Id, c.Name}), "Id", "Name");
+            ViewBag.Customers = new SelectList(_context.Customers.Select(c => new { c.Id, c.Name }), "Id", "Name");
             ViewBag.UbicationId = new SelectList(_context.Ubications.OrderBy(u => u.Name), "Id", "Name");
 
             return View();
@@ -106,20 +109,18 @@ namespace Control_Machine_Sistem.Controllers
             return Json(models);
         }
 
-
         // POST: Machines/Create
         [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         [RequestSizeLimit(104857600)]
-        public async Task<IActionResult> Create([Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,Documentations,ManufactureYear,SerialNumber,UserHours,UbicationId")] Machine machine, bool isStock = false)
+        public async Task<IActionResult> Create([Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,Documentations,ImageFiles,ManufactureYear,SerialNumber,UserHours,UbicationId")] Machine machine, bool isStock = false)
         {
             if (isStock)
             {
                 machine.CustomerId = null;
                 machine.DeliveryDate = null;
                 machine.WarrantyExpirationDate = null;
-
 
                 ModelState.Remove("CustomerId");
                 ModelState.Remove("DeliveryDate");
@@ -150,6 +151,20 @@ namespace Control_Machine_Sistem.Controllers
                     docUrls = await FileService.SaveDocAsync(machine.Documentations.ToList(), "documentation/machines");
                 }
 
+                // --- NUEVA LÓGICA: PROCESAR IMÁGENES PARA AZURE ---
+                List<string> imageUrls = new List<string>();
+                if (machine.ImageFiles != null && machine.ImageFiles.Any())
+                {
+                    foreach (var photo in machine.ImageFiles.Take(4)) // Limitamos a 4 por seguridad
+                    {
+                        // Subimos a Azure y obtenemos la URL
+                        string url = await _imageStorageService.UploadImageAsync(photo, "machine-photos");
+                        if (!string.IsNullOrEmpty(url))
+                        {
+                            imageUrls.Add(url);
+                        }
+                    }
+                }
 
                 var newMachine = new Machine
                 {
@@ -160,6 +175,7 @@ namespace Control_Machine_Sistem.Controllers
                     DeliveryDate = machine.DeliveryDate,
                     WarrantyExpirationDate = machine.DeliveryDate?.AddDays(365),
                     DocUrls = docUrls,
+                    ImageUrls = imageUrls, // <--- ASIGNAMOS LAS URLS DE AZURE
                     ManufactureYear = machine.ManufactureYear,
                     SerialNumber = machine.SerialNumber,
                     UserHours = machine.UserHours,
@@ -167,7 +183,6 @@ namespace Control_Machine_Sistem.Controllers
                 };
                 _context.Add(newMachine);
                 await _context.SaveChangesAsync();
-
 
                 return isStock ? RedirectToAction("Index", "Stock") : RedirectToAction("Vendidos", "Stock");
             }
@@ -179,7 +194,6 @@ namespace Control_Machine_Sistem.Controllers
             ViewBag.UbicationId = new SelectList(_context.Ubications, "Id", "Name", machine.UbicationId);
             return View(machine);
         }
-
 
         // GET: Machines/Edit/5
         [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
@@ -214,11 +228,14 @@ namespace Control_Machine_Sistem.Controllers
         [ValidateAntiForgeryToken]
         [RequestSizeLimit(104857600)]
         public async Task<IActionResult> Edit(
-            int id, 
-            [Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,WarrantyExpirationDate,ManufactureYear,SerialNumber,UserHours,UbicationId")] Machine machine, 
-            List<string> ExistingDocs, 
-            List<IFormFile> Documentations, 
+            int id,
+          [Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,WarrantyExpirationDate,ManufactureYear,SerialNumber,UserHours,UbicationId")] Machine machine,
+            List<string> ExistingDocs,
+            List<IFormFile> Documentations,
             List<string> DeletedDocs,
+            List<string> ExistingImageUrls, // <--- Fotos que se quedaron
+            List<string> DeletedImageUrls,  // <--- Fotos marcadas para borrar
+            List<IFormFile> ImageFiles,      // <--- Fotos nuevas
             bool isStock = false
             )
         {
@@ -258,7 +275,6 @@ namespace Control_Machine_Sistem.Controllers
                             ChangeDate = DateTime.Now
                         });
                     }
-
 
                     existingMachine.CustomerId = machine.CustomerId;
                     existingMachine.ModelId = machine.ModelId;
@@ -305,6 +321,32 @@ namespace Control_Machine_Sistem.Controllers
 
                     existingMachine.DocUrls = docUrls;
 
+                    // --- GESTIÓN DE IMÁGENES (Azure Storage) ---
+                    List<string> imageUrls = ExistingImageUrls ?? new List<string>();
+
+                    // 1. Borrar de Azure las fotos eliminadas
+                    if (DeletedImageUrls != null && DeletedImageUrls.Any())
+                    {
+                        foreach (var url in DeletedImageUrls)
+                        {
+                            await _imageStorageService.DeleteImageAsync(url, "machine-photos");
+                        }
+                        imageUrls = imageUrls.Except(DeletedImageUrls).ToList();
+                    }
+
+                    // 2. Subir fotos nuevas a Azure
+                    if (ImageFiles != null && ImageFiles.Any())
+                    {
+                        foreach (var photo in ImageFiles)
+                        {
+                            string newUrl = await _imageStorageService.UploadImageAsync(photo, "machine-photos");
+                            if (!string.IsNullOrEmpty(newUrl)) imageUrls.Add(newUrl);
+                        }
+                    }
+
+                    // Limitamos a 4 por si acaso
+                    existingMachine.ImageUrls = imageUrls.Take(4).ToList();
+
                     _context.Update(existingMachine);
                     await _context.SaveChangesAsync();
                 }
@@ -318,7 +360,6 @@ namespace Control_Machine_Sistem.Controllers
                     {
                         throw;
                     }
-
                 }
                 return isStock ? RedirectToAction("Index", "Stock") : RedirectToAction("Vendidos", "Stock");
             }
@@ -328,7 +369,6 @@ namespace Control_Machine_Sistem.Controllers
             ViewBag.IsStock = isStock;
             return View(machine);
         }
-
 
         // GET: Machines/Delete/5
         [Authorize(Roles = "Admin, SuperAdmin")]
@@ -360,7 +400,7 @@ namespace Control_Machine_Sistem.Controllers
         {
             var machine = await _context.Machines.FindAsync(id);
             if (machine != null)
-            {                
+            {
                 if (machine.DocUrls != null && machine.DocUrls.Any())
                 {
                     foreach (var fileUrl in machine.DocUrls)
@@ -368,7 +408,14 @@ namespace Control_Machine_Sistem.Controllers
                         await FileService.DeleteDocumentationFileAsync(fileUrl);
                     }
                 }
-                
+
+                // --- AGREGAR ESTO: Borrar Fotos de Azure ---
+                if (machine.ImageUrls != null)
+                {
+                    foreach (var url in machine.ImageUrls)
+                        await _imageStorageService.DeleteImageAsync(url, "machine-photos");
+                }
+
                 _context.Machines.Remove(machine);
                 await _context.SaveChangesAsync();
 
@@ -408,6 +455,5 @@ namespace Control_Machine_Sistem.Controllers
             Console.WriteLine($"Clientes encontrados: {customers.Count}");
             return Json(customers);
         }
-
     }
 }

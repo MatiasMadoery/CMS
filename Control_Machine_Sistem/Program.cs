@@ -1,11 +1,15 @@
 using Control_Machine_Sistem.Models;
+using Control_Machine_Sistem.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Azure;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<IImageStorageService, AzureImageStorageService>();
 
 // Dependency injection
 builder.Services.AddDbContext<AppDbContext>(
@@ -17,6 +21,7 @@ builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 })
+
 .AddCookie(options =>
 {
     options.Cookie.HttpOnly = true;
@@ -47,6 +52,12 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDataProtection()
     .PersistKeysToFileSystem(new DirectoryInfo(@"C:\DataProtectionKeys\Terraplane"))
     .SetApplicationName("Terraplane");
+builder.Services.AddAzureClients(clientBuilder =>
+{
+    clientBuilder.AddBlobServiceClient(builder.Configuration["StorageConnection:blobServiceUri"]!).WithName("StorageConnection");
+    clientBuilder.AddQueueServiceClient(builder.Configuration["StorageConnection:queueServiceUri"]!).WithName("StorageConnection");
+    clientBuilder.AddTableServiceClient(builder.Configuration["StorageConnection:tableServiceUri"]!).WithName("StorageConnection");
+});
 
 var app = builder.Build();
 
@@ -75,11 +86,9 @@ app.UseStaticFiles(new StaticFileOptions
     }
 });
 
-
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-
 
 // Redirección si está logueado y accede al login
 app.Use(async (context, next) =>

@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>cd03eedb-a7de-4f58-becc-32cd762f05ba</UserSecretsId>
   </PropertyGroup>
 
   <!--<ItemGroup>
@@ -18,6 +19,11 @@
   </ItemGroup>-->
 
   <ItemGroup>
+    <PackageReference Include="Azure.Data.Tables" Version="12.10.0" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.27.0" />
+    <PackageReference Include="Azure.Storage.Files.Shares" Version="12.22.0" />
+    <PackageReference Include="Azure.Storage.Queues" Version="12.22.0" />
+    <PackageReference Include="Azurite" Version="2.6.5" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.13" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.1" />
@@ -26,13 +32,13 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Azure" Version="1.11.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.23" />
     <PackageReference Include="NPOI" Version="2.7.3" />
     <PackageReference Include="QRCoder" Version="1.6.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
     <Folder Include="wwwroot\img\images\" />
   </ItemGroup>
 

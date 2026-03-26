@@ -90,10 +90,9 @@ h1.page-title {
     }
 
 .btn-custom-small {
-    font-size: 0.72rem; 
-    padding: 0.25rem 0.5rem; 
+    font-size: 0.72rem;
+    padding: 0.25rem 0.5rem;
 }
-
 
 /*
 * Estilo específico para el botón de eliminar archivos en formularios
@@ -315,7 +314,7 @@ h1.page-title {
     .form-control:focus {
         outline: none;
         border-color: #3498db;
-        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);        
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
     }
 
 .text-danger {
@@ -491,7 +490,6 @@ h1.page-title {
         border-color: #3498db;
     }
 
-
 /* * Ajustes para la navegación de Stock (Pestañas + Sucursales)
 * ============================
 */
@@ -530,6 +528,32 @@ h1.page-title {
     box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) !important;
 }
 
+/*FOTOS*/
+/* Estilo para la grilla de fotos */
+.machine-photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.photo-item img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover; /* Esto hace que todas las fotos midan lo mismo sin deformarse */
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+    .photo-item img:hover {
+        transform: scale(1.05); /* Efecto de zoom al pasar el mouse */
+    }
+
+/* Para que la sección de fotos ocupe todo el ancho si usás flexbox */
+.full-width {
+    grid-column: 1 / -1;
+    width: 100%;
+}
 
 /* Estilos responsivos */
 @media (max-width: 768px) {

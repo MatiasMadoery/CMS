@@ -1,8 +1,9 @@
 ﻿using Control_Machine_Sistem.Models;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace Control_Machine_Sistem.Controllers
@@ -90,72 +91,69 @@ namespace Control_Machine_Sistem.Controllers
     }
 }
 
+//Post para ingresar con usuario y contraseña
+//[HttpPost]
+//public async Task<IActionResult> Login(LoginDto loginDto)
+//{
+//    if (!ModelState.IsValid)
+//    {
+//        return View(loginDto);
+//    }
 
-        //Post para ingresar con usuario y contraseña
-        //[HttpPost]
-        //public async Task<IActionResult> Login(LoginDto loginDto)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(loginDto);
-        //    }
+//    // Buscar usuario por nombre (o por email, según convenga)
+//    var user = _context.Users.FirstOrDefault(u => u.Name == loginDto.Name);
+//    if (user != null)
+//    {
+//        bool isPasswordValid = false;
+//        // Verificar si la contraseña está en formato hash (asumiendo que un hash BCrypt comienza con "$2")
+//        if (user.Password!.StartsWith("$2"))
+//        {
+//            // Validación usando BCrypt
+//            try
+//            {
+//                isPasswordValid = BCrypt.Net.BCrypt.Verify(loginDto.Password, user.Password);
+//            }
+//            catch (Exception ex)
+//            {
+//                // En caso de error (por ejemplo, salt mal formado) puedes registrar o manejar el error
+//                ModelState.AddModelError("", "Error en la validación de la contraseña.");
+//                return View(loginDto);
+//            }
+//        }
+//        else
+//        {
+//            // La contraseña en la base de datos está en texto plano.
+//            // Comparamos directamente:
+//            if (user.Password == loginDto.Password)
+//            {
+//                isPasswordValid = true;
+//                // Opcional: actualiza el usuario, hasheando la contraseña ingresada,
+//                // para migrar el valor a un formato seguro.
+//                user.Password = BCrypt.Net.BCrypt.HashPassword(loginDto.Password);
+//                _context.Users.Update(user);
+//                await _context.SaveChangesAsync();
+//            }
+//        }
 
-        //    // Buscar usuario por nombre (o por email, según convenga)
-        //    var user = _context.Users.FirstOrDefault(u => u.Name == loginDto.Name);
-        //    if (user != null)
-        //    {
-        //        bool isPasswordValid = false;
-        //        // Verificar si la contraseña está en formato hash (asumiendo que un hash BCrypt comienza con "$2")
-        //        if (user.Password!.StartsWith("$2"))
-        //        {
-        //            // Validación usando BCrypt
-        //            try
-        //            {
-        //                isPasswordValid = BCrypt.Net.BCrypt.Verify(loginDto.Password, user.Password);
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                // En caso de error (por ejemplo, salt mal formado) puedes registrar o manejar el error
-        //                ModelState.AddModelError("", "Error en la validación de la contraseña.");
-        //                return View(loginDto);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            // La contraseña en la base de datos está en texto plano.
-        //            // Comparamos directamente:
-        //            if (user.Password == loginDto.Password)
-        //            {
-        //                isPasswordValid = true;
-        //                // Opcional: actualiza el usuario, hasheando la contraseña ingresada,
-        //                // para migrar el valor a un formato seguro.
-        //                user.Password = BCrypt.Net.BCrypt.HashPassword(loginDto.Password);
-        //                _context.Users.Update(user);
-        //                await _context.SaveChangesAsync();
-        //            }
-        //        }
+//        if (isPasswordValid)
+//        {
+//            // Crear claims y firmar la cookie
+//            var claims = new List<Claim>
+//            {
+//                new Claim(ClaimTypes.Name, user.Name!),
+//                new Claim(ClaimTypes.Role, user.Rol!)
+//            };
 
-        //        if (isPasswordValid)
-        //        {
-        //            // Crear claims y firmar la cookie
-        //            var claims = new List<Claim>
-        //    {
-        //        new Claim(ClaimTypes.Name, user.Name!),
-        //        new Claim(ClaimTypes.Role, user.Rol!)
-        //    };
+//            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+//            await HttpContext.SignInAsync(
+//                CookieAuthenticationDefaults.AuthenticationScheme,
+//                new ClaimsPrincipal(claimsIdentity));
 
-        //            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-        //            await HttpContext.SignInAsync(
-        //                CookieAuthenticationDefaults.AuthenticationScheme,
-        //                new ClaimsPrincipal(claimsIdentity));
+//            return RedirectToAction("Index", "Home");
+//        }
+//    }
 
-        //            return RedirectToAction("Index", "Home");
-        //        }
-        //    }
-
-        //    ModelState.AddModelError("", "Usuario o contraseña incorrectos");
-        //    ViewData["Error"] = "Usuario o Contraseña incorrectos!";
-        //    return View(loginDto);
-        //}
-
-
+//    ModelState.AddModelError("", "Usuario o contraseña incorrectos");
+//    ViewData["Error"] = "Usuario o Contraseña incorrectos!";
+//    return View(loginDto);
+//}
