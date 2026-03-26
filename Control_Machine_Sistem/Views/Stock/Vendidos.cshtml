@@ -12,10 +12,10 @@
     <div class="action-bar">
         @* Selector de pestañas con tu estilo de botones *@
         <div class="button-group">
-            <button type="button" id="btn-machines" class="btn btn-primary" onclick="switchTab('machines')">
+            <button type="button" id="btn-machines" class="btn btn-primary @(ViewBag.ActiveTab == "accessories" ? "active" : "")" onclick="switchTab('machines')">
                 <i class="fas fa-tractor icon"></i> Máquinas
             </button>
-            <button type="button" id="btn-accessories" class="btn btn-secondary" onclick="switchTab('accessories')">
+            <button type="button" id="btn-accessories" class="btn btn-secondary @(ViewBag.ActiveTab == "accessories" ? "active" : "")" onclick="switchTab('accessories')">
                 <i class="fas fa-tools icon"></i> Accesorios
             </button>
         </div>
@@ -40,7 +40,7 @@
         }
         else
         {
-            <div class="data-table-container">
+            <div class="data-table-container" style="@(ViewBag.ActiveTab == "machines" ? "" : "display:none")">
                 <table class="data-table">
                     <thead>
                         <tr>
@@ -105,7 +105,7 @@
     </div>
 
     @* --- SECCIÓN ACCESORIOS VENDIDOS --- *@
-    <div id="section-accessories" style="display:none">
+    <div id="section-accessories" style="display:none" style="@(ViewBag.ActiveTab == "machines" ? "" : "display:none")">
         @if (!Model.SoldAccessories.Any())
         {
             <div class="alert alert-warning" role="alert">
@@ -134,13 +134,13 @@
                                 <td>@item.LoadCapacity</td>
                                 <td>@item.SaleDate?.ToString("dd/MM/yyyy")</td>
                                 <td class="table-actions">
-                                    <a asp-action="Details" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action details" title="Detalles">
+                                    <a asp-action="Details" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action details" title="Detalles" asp-route-activeTab="accessories">
                                         <i class="fas fa-info-circle"></i>
                                     </a>
-                                    <a asp-action="Edit" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action edit" title="Editar">
+                                    <a asp-action="Edit" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action edit" title="Editar" asp-route-activeTab="accessories">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a asp-action="Delete" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action delete" title="Eliminar">
+                                    <a asp-action="Delete" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action delete" title="Eliminar" asp-route-activeTab="accessories">
                                         <i class="fas fa-trash-alt"></i>
                                     </a>
                                 </td>
@@ -165,5 +165,10 @@
             document.getElementById('btn-machines').className = isMachines ? 'btn btn-primary' : 'btn btn-secondary';
             document.getElementById('btn-accessories').className = isMachines ? 'btn btn-secondary' : 'btn btn-primary';
         }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const currentTab = "@ViewBag.ActiveTab";
+            switchTab(currentTab);
+        });
     </script>
 }

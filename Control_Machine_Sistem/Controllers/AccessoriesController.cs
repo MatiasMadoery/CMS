@@ -67,7 +67,9 @@ namespace Control_Machine_Sistem.Controllers
                 _context.Add(accessory);
                 await _context.SaveChangesAsync();
 
-                return isStock ? RedirectToAction("Index", "Stock") : RedirectToAction("Vendidos", "Stock");
+                return isStock 
+                    ? RedirectToAction("Index", "Stock", new { activeTab = activeTab })
+                    : RedirectToAction("Vendidos", "Stock", new { activeTab = activeTab });
             }
 
             ViewBag.IsStock = isStock;
@@ -156,7 +158,9 @@ namespace Control_Machine_Sistem.Controllers
                 await _context.SaveChangesAsync();
             }
             ViewBag.ActiveTab = activeTab;
-            return isStock ? RedirectToAction("Index", "Stock") : RedirectToAction("Vendidos", "Stock");
+            return isStock 
+                    ? RedirectToAction("Index", "Stock", new { activeTab = activeTab })
+                    : RedirectToAction("Vendidos", "Stock", new { activeTab = activeTab });
         }
 
         private bool AccessoryExists(int id)

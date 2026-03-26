@@ -34,6 +34,8 @@
     @* El asp-route-isStock aquí asegura que el POST reciba el parámetro *@
     <form asp-action="Delete" asp-route-isStock="@isStock" class="button-group" style="margin-top: 30px;">
         <input type="hidden" asp-for="Id" />
+        <input type="hidden" name="isStock" value="@(ViewBag.IsStock ? "true" : "false")" />
+        <input type="hidden" name="activeTab" value="@ViewBag.ActiveTab" />
 
         <button type="submit" class="btn btn-danger" asp-route-activeTab="accessories">
             <i class="fas fa-trash-alt icon"></i> Confirmar Eliminación

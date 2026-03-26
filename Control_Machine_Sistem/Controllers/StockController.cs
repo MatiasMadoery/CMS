@@ -147,7 +147,7 @@ namespace Control_Machine_Sistem.Controllers
             return RedirectToAction("Index", "Stock");
         }
 
-        public async Task<IActionResult> Vendidos()
+        public async Task<IActionResult> Vendidos(string activeTab = "machines")
         {
             var model = new SoldItemViewModel
             {
@@ -163,6 +163,8 @@ namespace Control_Machine_Sistem.Controllers
                     .Where(a => a.CustomerId != null)
                     .ToListAsync()
             };
+
+            ViewBag.ActiveTab = activeTab;
 
             return View(model);
         }

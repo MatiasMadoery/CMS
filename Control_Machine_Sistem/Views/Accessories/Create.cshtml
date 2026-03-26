@@ -14,6 +14,8 @@
 
     @* Es vital pasar asp-route-isStock aquí para que el POST sepa el origen *@
     <form asp-action="Create" asp-route-isStock="@isStock" method="post">
+        <input type="hidden" name="isStock" value="@(ViewBag.IsStock ? "true" : "false")" />
+        <input type="hidden" name="activeTab" value="@ViewBag.ActiveTab" />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
         <div class="form-row">
