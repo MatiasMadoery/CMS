@@ -48,9 +48,18 @@ namespace Control_Machine_Sistem.Controllers
             var mPager = new Pager<Machine>(mElements, mCount, machinePage, pageSize);
 
             // Query Accesorios en Stock
-            var aQuery = _context.Accessories.Where(a => a.CustomerId == null);
+            var aQuery = _context.Accessories
+                .Include(m => m.Ubication)
+                .Where(a => a.CustomerId == null);
+
+            if (ubicationId.HasValue)
+            {
+                aQuery = aQuery.Where(a => a.UbicationId == ubicationId);
+            }
+
+            var aCount = await aQuery.CountAsync();
             var aElements = await aQuery.Skip((accessoryPage - 1) * pageSize).Take(pageSize).ToListAsync();
-            var aPager = new Pager<Accessory>(aElements, await aQuery.CountAsync(), accessoryPage, pageSize);
+            var aPager = new Pager<Accessory>(aElements, aCount, accessoryPage, pageSize);
 
             var viewModel = new StockViewModel
             {

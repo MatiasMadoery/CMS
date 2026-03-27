@@ -33,6 +33,15 @@
                     <span asp-validation-for="LoadCapacity" class="text-danger"></span>
                 </div>
             </div>
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="UbicationId" class="form-label">Ubicación / Sucursal *</label>
+                    <select asp-for="UbicationId" class="form-select" asp-items="ViewBag.Ubications">
+                        <option value="">-- Seleccionar Sucursal --</option>
+                    </select>
+                    <span asp-validation-for="UbicationId" class="text-danger"></span>
+                </div>
+            </div>
         </div>
 
         @if (!isStock)

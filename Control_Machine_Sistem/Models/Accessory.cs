@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Control_Machine_Sistem.Models
 {
@@ -7,10 +8,12 @@ namespace Control_Machine_Sistem.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "El modelo es obligatorio.")]
+        [StringLength(100)]
         [Display(Name = "Modelo/Descripción")]
         public string? Model { get; set; }
 
         [Required(ErrorMessage = "Debe ingresar la capacidad de carga.")]
+        [Range(0, 50000, ErrorMessage = "Ingrese un valor válido")]
         [Display(Name = "Capacidad de Carga (kg)")]
         public double LoadCapacity { get; set; }
 
@@ -19,5 +22,15 @@ namespace Control_Machine_Sistem.Models
 
         public int? CustomerId { get; set; }
         public Customer? Customer { get; set; }
+
+        // --- RELACIÓN CON UBICACIÓN ---
+
+        [Required(ErrorMessage = "Debe asignar una ubicación al accesorio")]
+        [Display(Name = "Sucursal")]
+        public int? UbicationId { get; set; }
+
+        [ForeignKey("UbicationId")]
+        public virtual Ubication? Ubication { get; set; }
     }
 }
+ 

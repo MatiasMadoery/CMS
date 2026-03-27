@@ -89,7 +89,7 @@
                         <tr>
                             <th>Modelo</th>
                             <th>Nº Chasis</th>
-                            <th>Sucursal</th> @* Agregado para ver el filtro *@
+                            <th>Sucursal</th>
                             <th class="table-actions">Acciones</th>
                         </tr>
                     </thead>
@@ -167,6 +167,8 @@
 
                             <th>Capacidad de Carga</th>
 
+                            <th>Sucursal</th>
+
                             <th class="table-actions">Acciones</th>
 
                         </tr>
@@ -184,6 +186,8 @@
                                 <td>@item.Model</td>
 
                                 <td>@item.LoadCapacity kg</td>
+
+                                <td><span class="badge bg-light text-dark">@item.Ubication?.Name</span></td>
 
                                 <td class="table-actions">
 

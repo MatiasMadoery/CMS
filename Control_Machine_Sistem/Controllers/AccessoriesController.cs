@@ -21,7 +21,7 @@ namespace Control_Machine_Sistem.Controllers
         // GET: Accessories (Historial general)
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Accessories.Include(a => a.Customer);
+            var appDbContext = _context.Accessories.Include(a => a.Customer).Include(a => a.Ubication);
             return View(await appDbContext.ToListAsync());
         }
 
@@ -32,6 +32,7 @@ namespace Control_Machine_Sistem.Controllers
 
             var accessory = await _context.Accessories
                 .Include(a => a.Customer)
+                .Include(a => a.Ubication)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (accessory == null) return NotFound();
@@ -47,12 +48,13 @@ namespace Control_Machine_Sistem.Controllers
             ViewBag.IsStock = isStock;
             ViewBag.ActiveTab = activeTab;
             ViewBag.Customers = new SelectList(_context.Customers, "Id", "Name");
+            ViewBag.Ubications = new SelectList(_context.Ubications, "Id", "Name");
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Model,LoadCapacity,SaleDate,CustomerId")] Accessory accessory, bool isStock = false, string activeTab = "machines")
+        public async Task<IActionResult> Create([Bind("Id,Model,LoadCapacity,SaleDate,CustomerId,UbicationId")] Accessory accessory, bool isStock = false, string activeTab = "machines")
         {
             if (isStock)
             {
@@ -75,6 +77,7 @@ namespace Control_Machine_Sistem.Controllers
             ViewBag.IsStock = isStock;
             ViewBag.ActiveTab = activeTab;
             ViewBag.Customers = new SelectList(_context.Customers, "Id", "Name", accessory.CustomerId);
+            ViewBag.Ubications = new SelectList(_context.Ubications, "Id", "Name", accessory.UbicationId);
             return View(accessory);
         }
 
@@ -89,12 +92,13 @@ namespace Control_Machine_Sistem.Controllers
             ViewBag.IsStock = isStock;
             ViewBag.ActiveTab = activeTab;
             ViewBag.Customers = new SelectList(_context.Customers, "Id", "Name", accessory.CustomerId);
+            ViewBag.Ubications = new SelectList(_context.Ubications, "Id", "Name", accessory.UbicationId);
             return View(accessory);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Model,LoadCapacity,SaleDate,CustomerId")] Accessory accessory, bool isStock = false, string activeTab = "machines")
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Model,LoadCapacity,SaleDate,CustomerId,UbicationId")] Accessory accessory, bool isStock = false, string activeTab = "machines")
         {
             if (id != accessory.Id) return NotFound();
 
@@ -127,6 +131,7 @@ namespace Control_Machine_Sistem.Controllers
             ViewBag.IsStock = isStock;
             ViewBag.ActiveTab = activeTab;
             ViewBag.Customers = new SelectList(_context.Customers, "Id", "Name", accessory.CustomerId);
+            ViewBag.Ubications = new SelectList(_context.Ubications, "Id", "Name", accessory.UbicationId);
             return View(accessory);
         }
 
@@ -137,6 +142,7 @@ namespace Control_Machine_Sistem.Controllers
 
             var accessory = await _context.Accessories
                 .Include(a => a.Customer)
+                .Include(a => a.Ubication)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (accessory == null) return NotFound();

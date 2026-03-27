@@ -20,6 +20,18 @@
             <dt class="col-sm-3">@Html.DisplayNameFor(model => model.LoadCapacity)</dt>
             <dd class="col-sm-9">@Html.DisplayFor(model => model.LoadCapacity)</dd>
 
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.UbicationId)</dt>
+            <dd class="col-sm-9">
+                @if (Model.Ubication != null)
+                {
+                    <span class="badge bg-info text-dark">@Model.Ubication.Name</span>
+                }
+                else
+                {
+                    <span class="text-muted small">Sin sucursal asignada</span>
+                }
+            </dd>
+
             @if (!isStock)
             {
                 <dt class="col-sm-3">@Html.DisplayNameFor(model => model.SaleDate)</dt>
@@ -33,7 +45,7 @@
 
     <div class="button-group" style="margin-top: 30px;">
         @* Pasamos isStock al Edit para que el Edit sepa a dónde volver también *@
-        <a asp-action="Edit" asp-route-id="@Model?.Id" asp-route-isStock="@isStock" class="btn btn-primary">
+        <a asp-action="Edit" asp-route-id="@Model?.Id" asp-route-isStock="@isStock" class="btn btn-primary" asp-route-activeTab="@ViewBag.ActiveTab">
             <i class="fas fa-edit icon"></i> Editar
         </a>
 
