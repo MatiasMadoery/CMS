@@ -21,13 +21,13 @@
                         <option value="">-- Todas --</option>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 " id="col-filter-category">
                     <label class="form-label small fw-bold">Categoría</label>
                     <select id="filterCategory" name="categoryId" class="form-select" asp-items="ViewBag.Categories">
                         <option value="">-- Todas --</option>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3" id="col-filter-model">
                     <label class="form-label small fw-bold">Modelo</label>
                     <select id="filterModel" name="modelId" class="form-select" asp-items="ViewBag.Models">
                         <option value="">-- Todos --</option>
@@ -242,6 +242,17 @@
             // Actualizar botones
             document.getElementById('btn-machines').classList.toggle('active', tabName === 'machines');
             document.getElementById('btn-accessories').classList.toggle('active', tabName === 'accessories');
+
+            const colCategory = document.getElementById('col-filter-category');
+            const colModel = document.getElementById('col-filter-model');
+
+            if (tabName === 'accessories') {
+                colCategory.style.display = 'none';
+                colModel.style.display = 'none';
+            } else {
+                colCategory.style.display = 'block';
+                colModel.style.display = 'block';
+            }
 
             // Guardar en el input hidden para que al filtrar se mantenga en esta pestaña
             document.getElementById('inputActiveTab').value = tabName;

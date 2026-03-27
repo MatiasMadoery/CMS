@@ -9,19 +9,53 @@
 <div class="content-wrapper">
     <h1 class="page-title">@ViewData["Title"]</h1>
 
+    @* --- PANEL DE FILTROS --- *@
+    <div class="filter-card shadow-sm mb-4" style="background: #fdfdfd; border: 1px solid #eee; padding: 20px; border-radius: 12px;">
+        <form asp-action="Vendidos" method="get" id="filterForm">
+            <input type="hidden" name="activeTab" id="inputActiveTab" value="@Model.ActiveTab" />
+
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label small fw-bold">Sucursal</label>
+                    <select name="ubicationId" class="form-select" asp-items="ViewBag.Ubications">
+                        <option value="">-- Todas --</option>
+                    </select>
+                </div>
+                <div class="col-md-3" id="col-filter-category">
+                    <label class="form-label small fw-bold">Categoría</label>
+                    <select id="filterCategory" name="categoryId" class="form-select" asp-items="ViewBag.Categories">
+                        <option value="">-- Todas --</option>
+                    </select>
+                </div>
+                <div class="col-md-3" id="col-filter-model">
+                    <label class="form-label small fw-bold">Modelo</label>
+                    <select id="filterModel" name="modelId" class="form-select" asp-items="ViewBag.Models">
+                        <option value="">-- Todos --</option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-filter icon"></i> Filtrar
+                    </button>
+                    <a asp-action="Vendidos" class="btn btn-outline-secondary w-100">
+                        <i class="fas fa-sync-alt icon"></i> Limpiar
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+
     <div class="action-bar">
-        @* Selector de pestañas con tu estilo de botones *@
         <div class="button-group">
-            <button type="button" id="btn-machines" class="btn btn-primary @(ViewBag.ActiveTab == "accessories" ? "active" : "")" onclick="switchTab('machines')">
+            <button type="button" id="btn-machines" class="btn btn-tab @(Model.ActiveTab == "machines" ? "active" : "")" onclick="switchTab('machines')">
                 <i class="fas fa-tractor icon"></i> Máquinas
             </button>
-            <button type="button" id="btn-accessories" class="btn btn-secondary @(ViewBag.ActiveTab == "accessories" ? "active" : "")" onclick="switchTab('accessories')">
+            <button type="button" id="btn-accessories" class="btn btn-tab @(Model.ActiveTab == "accessories" ? "active" : "")" onclick="switchTab('accessories')">
                 <i class="fas fa-tools icon"></i> Accesorios
             </button>
         </div>
 
         <div class="button-group">
-            @* Botón para volver al stock rápidamente *@
             <a asp-action="Index" asp-controller="Stock" class="btn btn-success">
                 <i class="fas fa-boxes icon"></i> Ver Stock Actual
             </a>
@@ -31,59 +65,39 @@
     <hr />
 
     @* --- SECCIÓN MÁQUINAS VENDIDAS --- *@
-    <div id="section-machines">
-        @if (!Model.SoldMachines.Any())
+    <div id="section-machines" style="@(Model.ActiveTab == "machines" ? "" : "display:none")">
+        @if (!Model.SoldMachines.Elements.Any())
         {
-            <div class="alert alert-warning" role="alert">
-                <i class="fas fa-info-circle icon"></i> No hay máquinas vendidas registradas.
+            <div class="alert alert-warning">
+                <i class="fas fa-info-circle icon"></i> No hay máquinas vendidas que coincidan con los filtros.
             </div>
         }
         else
         {
-            <div class="data-table-container" style="@(ViewBag.ActiveTab == "machines" ? "" : "display:none")">
+            <div class="data-table-container">
                 <table class="data-table">
                     <thead>
                         <tr>
                             <th>Razón Social</th>
-                            <th>Categoría</th>
                             <th>Modelo</th>
+                            <th>Sucursal</th>
                             <th>Entrega Técnica</th>
                             <th>Garantía</th>
-                            <th>Documentación</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.SoldMachines)
+                        @foreach (var item in Model.SoldMachines.Elements)
                         {
                             <tr>
                                 <td><strong>@item.Customer?.Name</strong></td>
-                                <td>@item.Model?.Category?.Name</td>
                                 <td>@item.Model?.Name</td>
+                                <td><span class="badge bg-light text-dark">@item.Ubication?.Name</span></td>
                                 <td>@item.DeliveryDate?.ToString("dd/MM/yyyy")</td>
                                 <td>
-                                    <span class="badge @(item.WarrantyExpirationDate > DateTime.Now ? "text-success" : "text-danger")">
+                                    <span class="badge @(item.WarrantyExpirationDate > DateTime.Now ? "bg-success" : "bg-danger")">
                                         @item.WarrantyExpirationDate?.ToString("dd/MM/yyyy")
                                     </span>
-                                </td>
-                                <td>
-                                    @if (item.DocUrls != null && item.DocUrls.Any())
-                                    {
-                                        <ul class="file-list">
-                                            @foreach (var doc in item.DocUrls)
-                                            {
-                                                <li>
-                                                    <a class="document-name" href="@doc" download>
-                                                        <i class="fas fa-file-pdf"></i> @System.IO.Path.GetFileName(doc)
-                                                    </a>
-                                                </li>
-                                            }
-                                        </ul>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">Sin documentos</span>
-                                    }
                                 </td>
                                 <td class="table-actions">
                                     <a asp-action="Details" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action details" title="Detalles">
@@ -92,24 +106,29 @@
                                     <a asp-action="Edit" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action edit" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a asp-action="Delete" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action delete" title="Eliminar">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </a>
                                 </td>
                             </tr>
                         }
                     </tbody>
                 </table>
             </div>
+            @* Paginación Máquinas *@
+            <div class="pagination-container mt-3">
+                @for (int i = 1; i <= Model.SoldMachines.TotalPages; i++)
+                {
+                    <a href="@Url.Action("Vendidos", new { machinePage = i, activeTab = "machines", ubicationId = ViewBag.SelectedUbication, categoryId = ViewBag.SelectedCategory, modelId = ViewBag.SelectedModel })"
+                       class="btn btn-sm @(i == Model.SoldMachines.CurrentPage ? "btn-primary" : "btn-outline-primary")">@i</a>
+                }
+            </div>
         }
     </div>
 
     @* --- SECCIÓN ACCESORIOS VENDIDOS --- *@
-    <div id="section-accessories" style="display:none" style="@(ViewBag.ActiveTab == "machines" ? "" : "display:none")">
-        @if (!Model.SoldAccessories.Any())
+    <div id="section-accessories" style="@(Model.ActiveTab == "accessories" ? "" : "display:none")">
+        @if (!Model.SoldAccessories.Elements.Any())
         {
-            <div class="alert alert-warning" role="alert">
-                <i class="fas fa-info-circle icon"></i> No hay accesorios vendidos registrados.
+            <div class="alert alert-warning">
+                <i class="fas fa-info-circle icon"></i> No hay accesorios vendidos que coincidan con los filtros.
             </div>
         }
         else
@@ -120,28 +139,25 @@
                         <tr>
                             <th>Razón Social</th>
                             <th>Accesorio / Modelo</th>
-                            <th>Capacidad</th>
+                            <th>Sucursal</th>
                             <th>Fecha de Venta</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.SoldAccessories)
+                        @foreach (var item in Model.SoldAccessories.Elements)
                         {
                             <tr>
                                 <td><strong>@item.Customer?.Name</strong></td>
                                 <td>@item.Model</td>
-                                <td>@item.LoadCapacity</td>
+                                <td><span class="badge bg-light text-dark">@item.Ubication?.Name</span></td>
                                 <td>@item.SaleDate?.ToString("dd/MM/yyyy")</td>
                                 <td class="table-actions">
-                                    <a asp-action="Details" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action details" title="Detalles" asp-route-activeTab="accessories">
+                                    <a asp-action="Details" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action details" title="Detalles">
                                         <i class="fas fa-info-circle"></i>
                                     </a>
-                                    <a asp-action="Edit" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action edit" title="Editar" asp-route-activeTab="accessories">
+                                    <a asp-action="Edit" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action edit" title="Editar">
                                         <i class="fas fa-edit"></i>
-                                    </a>
-                                    <a asp-action="Delete" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action delete" title="Eliminar" asp-route-activeTab="accessories">
-                                        <i class="fas fa-trash-alt"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -149,26 +165,59 @@
                     </tbody>
                 </table>
             </div>
+            @* Paginación Accesorios *@
+            <div class="pagination-container mt-3">
+                @for (int i = 1; i <= Model.SoldAccessories.TotalPages; i++)
+                {
+                    <a href="@Url.Action("Vendidos", new { accessoryPage = i, activeTab = "accessories", ubicationId = ViewBag.SelectedUbication })"
+                       class="btn btn-sm @(i == Model.SoldAccessories.CurrentPage ? "btn-primary" : "btn-outline-primary")">@i</a>
+                }
+            </div>
         }
     </div>
 </div>
 
 @section Scripts {
-    <script src="~/js/views.js"></script>
     <script>
         function switchTab(tabName) {
             const isMachines = tabName === 'machines';
             document.getElementById('section-machines').style.display = isMachines ? 'block' : 'none';
             document.getElementById('section-accessories').style.display = isMachines ? 'none' : 'block';
 
-            // Cambio de clases de botones para resaltar el activo
-            document.getElementById('btn-machines').className = isMachines ? 'btn btn-primary' : 'btn btn-secondary';
-            document.getElementById('btn-accessories').className = isMachines ? 'btn btn-secondary' : 'btn btn-primary';
+            // Actualizar botones (usando la clase btn-tab active que ya tienes en tu CSS)
+            document.getElementById('btn-machines').classList.toggle('active', isMachines);
+            document.getElementById('btn-accessories').classList.toggle('active', !isMachines);
+
+            // Ocultar filtros irrelevantes
+            document.getElementById('col-filter-category').style.display = isMachines ? 'block' : 'none';
+            document.getElementById('col-filter-model').style.display = isMachines ? 'block' : 'none';
+
+            document.getElementById('inputActiveTab').value = tabName;
         }
 
+        // Cascada Categoría -> Modelo (Fetch)
+        const categorySelect = document.getElementById('filterCategory');
+        const modelSelect = document.getElementById('filterModel');
+
+        categorySelect.addEventListener('change', function() {
+            const categoryId = this.value;
+            modelSelect.innerHTML = '<option value="">-- Todos --</option>';
+            if (categoryId) {
+                fetch('@Url.Action("GetModelsByCategory", "Stock")?categoryId=' + categoryId)
+                    .then(r => r.json())
+                    .then(data => {
+                        data.forEach(m => {
+                            const opt = document.createElement('option');
+                            opt.value = m.id;
+                            opt.text = m.name;
+                            modelSelect.appendChild(opt);
+                        });
+                    });
+            }
+        });
+
         document.addEventListener("DOMContentLoaded", function() {
-            const currentTab = "@ViewBag.ActiveTab";
-            switchTab(currentTab);
+            switchTab("@Model.ActiveTab");
         });
     </script>
 }

@@ -4,8 +4,8 @@ namespace Control_Machine_Sistem.ViewModels
 {
     public class SoldItemViewModel
     {
-        public List<Machine> SoldMachines { get; set; } = new List<Machine>();
-        public List<Accessory> SoldAccessories { get; set; } = new List<Accessory>();
+        public Pager<Machine> SoldMachines { get; set; }
+        public Pager<Accessory> SoldAccessories { get; set; }
         public string ActiveTab { get; set; } = "machines";
     }
 }

@@ -156,26 +156,67 @@ namespace Control_Machine_Sistem.Controllers
             return RedirectToAction("Index", "Stock");
         }
 
-        public async Task<IActionResult> Vendidos(string activeTab = "machines")
+        public async Task<IActionResult> Vendidos(int? ubicationId, int? categoryId, int? modelId, int machinePage = 1, int accessoryPage = 1, string activeTab = "machines")
         {
-            var model = new SoldItemViewModel
-            {
-                SoldMachines = await _context.Machines
-                    .Include(m => m.Model)
-                    .Include(m => m.Customer)
-                    .Include (m => m.Model.Category)
-                    .Where(m => m.CustomerId != null)
-                    .ToListAsync(),
+            // Persistencia para los filtros en la vista
+            ViewBag.ActiveTab = activeTab;
+            ViewBag.SelectedUbication = ubicationId;
+            ViewBag.SelectedCategory = categoryId;
+            ViewBag.SelectedModel = modelId;
 
-                SoldAccessories = await _context.Accessories
-                    .Include(a => a.Customer)
-                    .Where(a => a.CustomerId != null)
-                    .ToListAsync()
+            // Carga de Selects para los filtros
+            ViewBag.Ubications = new SelectList(await _context.Ubications.ToListAsync(), "Id", "Name", ubicationId);
+            ViewBag.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Name", categoryId);
+
+            if (categoryId.HasValue)
+            {
+                ViewBag.Models = new SelectList(await _context.Models.Where(m => m.CategoryId == categoryId).ToListAsync(), "Id", "Name", modelId);
+            }
+
+            int pageSize = 10;
+
+            // --- QUERY MÁQUINAS VENDIDAS ---
+            var mQuery = _context.Machines
+                .Include(m => m.Model)
+                    .ThenInclude(mod => mod.Category)
+                .Include(m => m.Ubication)
+                .Include(m => m.Customer)
+                .Where(m => m.CustomerId != null); // Solo vendidas
+
+            if (ubicationId.HasValue) mQuery = mQuery.Where(m => m.UbicationId == ubicationId);
+            if (categoryId.HasValue) mQuery = mQuery.Where(m => m.Model.CategoryId == categoryId);
+            if (modelId.HasValue) mQuery = mQuery.Where(m => m.ModelId == modelId);
+
+            var mCount = await mQuery.CountAsync();
+            var mElements = await mQuery
+                .OrderByDescending(m => m.DeliveryDate) // Ordenar por fecha de entrega
+                .Skip((machinePage - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            // --- QUERY ACCESORIOS VENDIDOS ---
+            var aQuery = _context.Accessories
+                .Include(a => a.Ubication)
+                .Include(a => a.Customer)
+                .Where(a => a.CustomerId != null); // Solo vendidos
+
+            if (ubicationId.HasValue) aQuery = aQuery.Where(a => a.UbicationId == ubicationId);
+
+            var aCount = await aQuery.CountAsync();
+            var aElements = await aQuery
+                .OrderByDescending(a => a.SaleDate) // Ordenar por fecha de venta
+                .Skip((accessoryPage - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var viewModel = new SoldItemViewModel
+            {
+                SoldMachines = new Pager<Machine>(mElements, mCount, machinePage, pageSize),
+                SoldAccessories = new Pager<Accessory>(aElements, aCount, accessoryPage, pageSize),
+                ActiveTab = activeTab
             };
 
-            ViewBag.ActiveTab = activeTab;
-
-            return View(model);
+            return View(viewModel);
         }
 
         [HttpGet]
