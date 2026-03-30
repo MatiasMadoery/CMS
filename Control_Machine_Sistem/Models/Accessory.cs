@@ -31,6 +31,14 @@ namespace Control_Machine_Sistem.Models
 
         [ForeignKey("UbicationId")]
         public virtual Ubication? Ubication { get; set; }
+
+        // --- PROPIEDADES PARA FOTOS Y DOCUMENTACIÓN (Igual que en Machine) ---
+
+        [NotMapped]
+        [Display(Name = "Fotos del Accesorio")]
+        public IEnumerable<IFormFile>? ImageFiles { get; set; }
+
+        [Display(Name = "URLs de Fotos")]
+        public List<string> ImageUrls { get; set; } = new List<string>();
     }
 }
- 

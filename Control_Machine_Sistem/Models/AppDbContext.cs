@@ -66,7 +66,14 @@ namespace Control_Machine_Sistem.Models
 
             // --- Configuración exclusiva para ImageUrls ---
 
-            // 1. Definimos el Conversor: Transforma la lista en un JSON string para la DB y viceversa
+            // 1. Definimos el Comparador: Necesario para que EF detecte cambios dentro de la lista
+            var imageComparer = new ValueComparer<List<string>>(
+                (c1, c2) => c1!.SequenceEqual(c2!),
+                c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                c => c.ToList()
+            );
+
+            // 2. Definimos el Conversor: Transforma la lista en un JSON string para la DB y viceversa
             modelBuilder.Entity<Machine>()
                 .Property(m => m.ImageUrls)
                 .HasConversion(
@@ -74,16 +81,21 @@ namespace Control_Machine_Sistem.Models
                     v => JsonConvert.DeserializeObject<List<string>>(v) ?? new List<string>() // De la DB a C#
                 );
 
-            // 2. Definimos el Comparador: Necesario para que EF detecte cambios dentro de la lista
-            var imageComparer = new ValueComparer<List<string>>(
-                (c1, c2) => c1!.SequenceEqual(c2!),
-                c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
-                c => c.ToList()
-            );
-
             modelBuilder.Entity<Machine>()
                 .Property(m => m.ImageUrls)
                 .Metadata.SetValueComparer(imageComparer);
+
+            // 3. Configuración para Accessory (Solo Imágenes) ---
+            modelBuilder.Entity<Accessory>()
+                .Property(a => a.ImageUrls)
+                .HasConversion(
+                    v => JsonConvert.SerializeObject(v), // Lo guarda como un string JSON en la DB
+                    v => JsonConvert.DeserializeObject<List<string>>(v) ?? new List<string>() // Lo trae como Lista a C#
+                );
+
+            modelBuilder.Entity<Accessory>()
+                .Property(a => a.ImageUrls)
+                .Metadata.SetValueComparer(imageComparer); // Reutilizamos el comparador
         }
 
         public DbSet<Customer> Customers { get; set; } = default!;

@@ -2,55 +2,169 @@
 
 @{
     bool isStock = ViewBag.IsStock ?? false;
-    ViewData["Title"] = "Detalles del Accesorio";
+    ViewData["Title"] = isStock ? "Detalle de Accesorio en Stock" : "Detalle de Venta de Accesorio";
 }
 
 <link href="~/css/views.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-<div class="form-container">
-    <h1 class="form-title">@ViewData["Title"]</h1>
-    <h4 class="form-sub-title">Información registrada del accesorio</h4>
+<div class="content-wrapper">
+    <h1 class="page-title">@ViewData["Title"]</h1>
     <hr />
 
-    <div class="details-section">
-        <dl class="row">
-            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Model)</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(model => model.Model)</dd>
-
-            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.LoadCapacity)</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(model => model.LoadCapacity)</dd>
-
-            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.UbicationId)</dt>
-            <dd class="col-sm-9">
-                @if (Model.Ubication != null)
-                {
-                    <span class="badge bg-info text-dark">@Model.Ubication.Name</span>
-                }
-                else
-                {
-                    <span class="text-muted small">Sin sucursal asignada</span>
-                }
-            </dd>
-
+    <div class="details-container">
+        <dl class="details-list">
             @if (!isStock)
             {
-                <dt class="col-sm-3">@Html.DisplayNameFor(model => model.SaleDate)</dt>
-                <dd class="col-sm-9">@Model.SaleDate?.ToString("dd/MM/yyyy")</dd>
-
-                <dt class="col-sm-3">Cliente / Comprador</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(model => model.Customer.Name)</dd>
+                <div class="details-item">
+                    <dt>Cliente / Comprador</dt>
+                    <dd>@(Model.Customer?.Name ?? "Sin asignar")</dd>
+                </div>
+                <div class="details-item">
+                    <dt>@Html.DisplayNameFor(model => model.SaleDate)</dt>
+                    <dd>@Model.SaleDate?.ToString("dd/MM/yyyy")</dd>
+                </div>
             }
+
+            <div class="details-item">
+                <dt>@Html.DisplayNameFor(model => model.Ubication)</dt>
+                <dd>@(Model.Ubication?.Name ?? "Sin sucursal asignada")</dd>
+            </div>
+
+            <div class="details-item">
+                <dt>@Html.DisplayNameFor(model => model.Model)</dt>
+                <dd>@Html.DisplayFor(model => model.Model)</dd>
+            </div>
+
+            <div class="details-item">
+                <dt>@Html.DisplayNameFor(model => model.LoadCapacity)</dt>
+                <dd>@(Model.LoadCapacity > 0 ? Model.LoadCapacity.ToString() + " kg" : "N/A")</dd>
+            </div>
+
+            @* --- SECCIÓN DE FOTOS (Igual a Máquinas) --- *@
+            <div class="details-item full-width">
+                <dt class="mb-2"><i class="fas fa-images icon"></i> Fotos del Accesorio</dt>
+                <dd>
+                    @if (Model.ImageUrls != null && Model.ImageUrls.Any())
+                    {
+                        <div class="machine-photo-grid">
+                            @foreach (var url in Model.ImageUrls)
+                            {
+                                <div class="photo-item-edit">
+                                    <img src="@url" alt="Foto accesorio" class="img-thumbnail img-zoomable" onclick="openZoom(this.src)" />
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <span class="text-muted"><i class="fas fa-camera-retro"></i> No hay fotos cargadas para este accesorio.</span>
+                    }
+                </dd>
+            </div>
         </dl>
     </div>
 
-    <div class="button-group" style="margin-top: 30px;">
-        @* Pasamos isStock al Edit para que el Edit sepa a dónde volver también *@
-        <a asp-action="Edit" asp-route-id="@Model?.Id" asp-route-isStock="@isStock" class="btn btn-primary" asp-route-activeTab="@ViewBag.ActiveTab">
+    <hr />
+
+    <div class="button-group">
+        <a asp-action="Edit" asp-route-id="@Model?.Id" asp-route-isStock="@isStock" class="btn btn-primary" asp-route-activeTab="accessories">
             <i class="fas fa-edit icon"></i> Editar
         </a>
-
-        <a asp-controller="Stock" asp-action="@(isStock ? "Index" : "Vendidos")" class="btn btn-secondary" asp-route-activeTab="@ViewBag.ActiveTab">
-            <i class="fas fa-arrow-left icon"></i> Volver a la lista
+        <a asp-action="Delete" asp-route-id="@Model?.Id" asp-route-isStock="@isStock" class="btn btn-danger" asp-route-activeTab="accessories">
+            <i class="fas fa-trash-alt icon"></i> Eliminar
+        </a>
+        <a asp-controller="Stock" asp-action="@(isStock ? "Index" : "Vendidos")" class="btn btn-secondary" asp-route-activeTab="accessories">
+            <i class="fas fa-arrow-left icon"></i> Volver
         </a>
     </div>
 </div>
+
+@* Modal para el Zoom de imágenes *@
+<div id="zoomModal" class="zoom-modal" onclick="closeZoom()">
+    <span class="zoom-close">&times;</span>
+    <img class="zoom-content" id="imgZoom">
+</div>
+
+<style>
+    /* Estilos de grilla y zoom para mantener consistencia visual */
+    .machine-photo-grid {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
+
+    .photo-item-edit {
+        position: relative;
+        width: 120px;
+        height: 120px;
+    }
+
+        .photo-item-edit img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+            .photo-item-edit img:hover {
+                transform: scale(1.05);
+            }
+
+    .zoom-modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.9);
+        align-items: center;
+        justify-content: center;
+    }
+
+    .zoom-content {
+        max-width: 90%;
+        max-height: 90%;
+        border-radius: 5px;
+        animation: zoomIn 0.3s;
+    }
+
+    .zoom-close {
+        position: absolute;
+        top: 20px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
+        cursor: pointer;
+    }
+
+    @@keyframes zoomIn {
+        from {
+            transform: scale(0)
+        }
+
+        to {
+            transform: scale(1)
+        }
+    }
+</style>
+
+@section Scripts {
+    <script>
+        function openZoom(src) {
+            const modal = document.getElementById("zoomModal");
+            const img = document.getElementById("imgZoom");
+            modal.style.display = "flex";
+            img.src = src;
+        }
+
+        function closeZoom() {
+            document.getElementById("zoomModal").style.display = "none";
+        }
+    </script>
+}
