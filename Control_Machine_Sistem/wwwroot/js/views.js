@@ -80,7 +80,76 @@ function printDocument(url) {
         .catch(error => console.error("No se pudo obtener el PDF para imprimir:", error));
 }
 
+// ---(Pestañas y Filtros de Stock) ---
+
+const StockManager = {
+    // Maneja el cambio de pestañas y visibilidad de filtros
+    switchTab: function (tabName) {
+        const isMachines = tabName === 'machines';
+
+        // Secciones de tablas
+        const secMachines = document.getElementById('section-machines');
+        const secAccessories = document.getElementById('section-accessories');
+        if (secMachines) secMachines.style.display = isMachines ? 'block' : 'none';
+        if (secAccessories) secAccessories.style.display = isMachines ? 'none' : 'block';
+
+        // Botones de pestañas
+        const btnMachines = document.getElementById('btn-machines');
+        const btnAccessories = document.getElementById('btn-accessories');
+        if (btnMachines) btnMachines.classList.toggle('active', isMachines);
+        if (btnAccessories) btnAccessories.classList.toggle('active', !isMachines);
+
+        // Filtros específicos de máquinas
+        const colCat = document.getElementById('col-filter-category');
+        const colMod = document.getElementById('col-filter-model');
+        if (colCat) colCat.style.display = isMachines ? 'block' : 'none';
+        if (colMod) colMod.style.display = isMachines ? 'block' : 'none';
+
+        // Input oculto para persistencia
+        const inputTab = document.getElementById('inputActiveTab');
+        if (inputTab) inputTab.value = tabName;
+    },
+
+    // Lógica de cascada para Categoría -> Modelo
+    initCategoryCascade: function (urlAction) {
+        const categorySelect = document.getElementById('filterCategory');
+        const modelSelect = document.getElementById('filterModel');
+
+        if (categorySelect && modelSelect) {
+            categorySelect.addEventListener('change', function () {
+                const categoryId = this.value;
+                modelSelect.innerHTML = '<option value="">-- Todos --</option>';
+
+                if (categoryId) {
+                    fetch(`${urlAction}?categoryId=${categoryId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            data.forEach(m => {
+                                const opt = document.createElement('option');
+                                opt.value = m.id;
+                                opt.text = m.name;
+                                modelSelect.appendChild(opt);
+                            });
+                        });
+                }
+            });
+        }
+    }
+};
+
+// Exponer funciones globalmente
 window.printDocument = printDocument;
-document.addEventListener("DOMContentLoaded", applyCleanFileNames);
+window.switchTab = (name) => StockManager.switchTab(name);
+
+// Inicialización
+document.addEventListener("DOMContentLoaded", () => {
+    applyCleanFileNames();
+
+    // Si estamos en una vista con pestañas, inicializamos
+    const inputTab = document.getElementById('inputActiveTab');
+    if (inputTab) {
+        StockManager.switchTab(inputTab.value);
+    }
+});
 
 

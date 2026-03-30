@@ -233,69 +233,10 @@
 
 
 @section Scripts {
-    <script>
-        // Cambiar entre pestañas
-        function switchTab(tabName) {
-            document.getElementById('section-machines').style.display = tabName === 'machines' ? 'block' : 'none';
-            document.getElementById('section-accessories').style.display = tabName === 'accessories' ? 'block' : 'none';
-
-            // Actualizar botones
-            document.getElementById('btn-machines').classList.toggle('active', tabName === 'machines');
-            document.getElementById('btn-accessories').classList.toggle('active', tabName === 'accessories');
-
-            const colCategory = document.getElementById('col-filter-category');
-            const colModel = document.getElementById('col-filter-model');
-
-            if (tabName === 'accessories') {
-                colCategory.style.display = 'none';
-                colModel.style.display = 'none';
-            } else {
-                colCategory.style.display = 'block';
-                colModel.style.display = 'block';
-            }
-
-            // Guardar en el input hidden para que al filtrar se mantenga en esta pestaña
-            document.getElementById('inputActiveTab').value = tabName;
-        }
-
-        // Cascada de Categoría -> Modelo
-                // Localiza el select de categoría
-        const categorySelect = document.getElementById('filterCategory');
-        const modelSelect = document.getElementById('filterModel');
-
-        categorySelect.addEventListener('change', function() {
-            const categoryId = this.value;
-
-            // Limpiamos y dejamos la opción por defecto
-            modelSelect.innerHTML = '<option value="">-- Todos --</option>';
-
-            if (categoryId) {
-                // Usamos la URL absoluta generada por Razor para evitar errores de ruta
-                const url = '@Url.Action("GetModelsByCategory", "Stock")' + '?categoryId=' + categoryId;
-
-                fetch(url)
-                    .then(response => {
-                        if (!response.ok) throw new Error("Error en la red");
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log("Modelos recibidos:", data); // Mira esto en la consola (F12)
-
-                        data.forEach(m => {
-                            const opt = document.createElement('option');
-                            // Probamos ambos casos por si el serializador JSON cambia las mayúsculas
-                            opt.value = m.id || m.Id;
-                            opt.text = m.name || m.Name;
-                            modelSelect.appendChild(opt);
-                        });
-                    })
-                    .catch(error => console.error('Error al cargar modelos:', error));
-            }
-        });
-
-        document.addEventListener("DOMContentLoaded", function() {
-             const currentTab = "@Model.ActiveTab";
-             switchTab(currentTab);
-        });
-    </script>
+        <script src="~/js/views.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                StockManager.initCategoryCascade('@Url.Action("GetModelsByCategory", "Stock")');
+            });
+        </script>
 }

@@ -148,6 +148,10 @@ namespace Control_Machine_Sistem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImageUrls")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ManufactureYear")
                         .HasColumnType("int");
 
@@ -356,7 +360,7 @@ namespace Control_Machine_Sistem.Migrations
                         .HasForeignKey("CustomerId");
 
                     b.HasOne("Control_Machine_Sistem.Models.Ubication", "Ubication")
-                        .WithMany()
+                        .WithMany("Accessories")
                         .HasForeignKey("UbicationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -460,6 +464,8 @@ namespace Control_Machine_Sistem.Migrations
 
             modelBuilder.Entity("Control_Machine_Sistem.Models.Ubication", b =>
                 {
+                    b.Navigation("Accessories");
+
                     b.Navigation("Machines");
                 });
 #pragma warning restore 612, 618

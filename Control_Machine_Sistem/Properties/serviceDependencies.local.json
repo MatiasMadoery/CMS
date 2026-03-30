@@ -6,8 +6,12 @@
     "storage1": {
       "secretStore": "LocalSecretsFile",
       "type": "storage.emulator",
+<<<<<<< HEAD
       "connectionId": "StorageConnection",
       "dynamicId": null
+=======
+      "connectionId": "StorageConnection"
+>>>>>>> origin/Matias
     }
   }
 }

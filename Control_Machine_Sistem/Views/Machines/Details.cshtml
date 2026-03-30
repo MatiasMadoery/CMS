@@ -49,6 +49,27 @@
                 <dt>Horas de Uso</dt>
                 <dd>@Html.DisplayFor(model => model.UserHours) hs</dd>
             </div>
+            @* --- SECCIÓN DE FOTOS --- *@
+            <div class="details-item full-width">
+                <dt>Fotos de la Unidad</dt>
+                <dd>
+                    @if (Model.ImageUrls != null && Model.ImageUrls.Any())
+                    {
+                        <div class="machine-photo-grid">
+                            @foreach (var url in Model.ImageUrls)
+                            {
+                                <div class="photo-item">
+                                    <img src="@url" alt="Foto de la máquina" class="img-fluid rounded shadow-sm" onclick="openModal('@url')" />
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <span class="text-muted"><i class="fas fa-camera-retro"></i> No hay fotos cargadas para esta unidad.</span>
+                    }
+                </dd>
+            </div>
             @if (!isStock)
             {
                 <div class="details-item">

@@ -178,46 +178,10 @@
 </div>
 
 @section Scripts {
+    <script src="~/js/views.js"></script>
     <script>
-        function switchTab(tabName) {
-            const isMachines = tabName === 'machines';
-            document.getElementById('section-machines').style.display = isMachines ? 'block' : 'none';
-            document.getElementById('section-accessories').style.display = isMachines ? 'none' : 'block';
-
-            // Actualizar botones (usando la clase btn-tab active que ya tienes en tu CSS)
-            document.getElementById('btn-machines').classList.toggle('active', isMachines);
-            document.getElementById('btn-accessories').classList.toggle('active', !isMachines);
-
-            // Ocultar filtros irrelevantes
-            document.getElementById('col-filter-category').style.display = isMachines ? 'block' : 'none';
-            document.getElementById('col-filter-model').style.display = isMachines ? 'block' : 'none';
-
-            document.getElementById('inputActiveTab').value = tabName;
-        }
-
-        // Cascada Categoría -> Modelo (Fetch)
-        const categorySelect = document.getElementById('filterCategory');
-        const modelSelect = document.getElementById('filterModel');
-
-        categorySelect.addEventListener('change', function() {
-            const categoryId = this.value;
-            modelSelect.innerHTML = '<option value="">-- Todos --</option>';
-            if (categoryId) {
-                fetch('@Url.Action("GetModelsByCategory", "Stock")?categoryId=' + categoryId)
-                    .then(r => r.json())
-                    .then(data => {
-                        data.forEach(m => {
-                            const opt = document.createElement('option');
-                            opt.value = m.id;
-                            opt.text = m.name;
-                            modelSelect.appendChild(opt);
-                        });
-                    });
-            }
-        });
-
         document.addEventListener("DOMContentLoaded", function() {
-            switchTab("@Model.ActiveTab");
+            StockManager.initCategoryCascade('@Url.Action("GetModelsByCategory", "Stock")');
         });
     </script>
 }
