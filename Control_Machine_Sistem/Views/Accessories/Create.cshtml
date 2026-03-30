@@ -14,6 +14,9 @@
 
     @* Es vital pasar asp-route-isStock aquí para que el POST sepa el origen *@
     <form asp-action="Create" asp-route-isStock="@isStock" method="post">
+        <input type="hidden" name="isStock" value="@(ViewBag.IsStock ? "true" : "false")" />
+        <input type="hidden" name="activeTab" value="@ViewBag.ActiveTab" />
+
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
         <div class="form-row">
@@ -46,6 +49,16 @@
                     <span asp-validation-for="LoadCapacity" class="text-danger"></span>
                 </div>
             </div>
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="UbicationId" class="form-label">Ubicación / Sucursal *</label>
+                    <select asp-for="UbicationId" class="form-select" asp-items="ViewBag.Ubications">
+                        <option value="">-- Seleccionar Sucursal --</option>
+                    </select>
+                    <span asp-validation-for="UbicationId" class="text-danger"></span>
+                </div>
+            </div>
+
             @if (!isStock)
             {
                 <div class="form-col">
@@ -59,10 +72,10 @@
         </div>
 
         <div class="button-group" style="margin-top: 20px;">
-            <button type="submit" class="btn btn-success">
+            <button type="submit" class="btn btn-success" asp-route-activeTab="accessories">
                 <i class="fas fa-plus-circle icon"></i> Crear Registro
             </button>
-            <a asp-controller="Stock" asp-action="@(isStock ? "Index" : "Vendidos")" class="btn btn-secondary">
+            <a asp-controller="Stock" asp-action="@(isStock ? "Index" : "Vendidos")" class="btn btn-secondary" asp-route-activeTab="accessories">
                 <i class="fas fa-arrow-left icon"></i> Volver
             </a>
         </div>
@@ -73,5 +86,4 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    @* Si usas Select2 para el buscador de clientes, asegúrate de inicializarlo aquí *@
 }

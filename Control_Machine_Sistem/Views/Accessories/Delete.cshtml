@@ -20,6 +20,18 @@
             <dt class="col-sm-3">@Html.DisplayNameFor(model => model.LoadCapacity)</dt>
             <dd class="col-sm-9">@Html.DisplayFor(model => model.LoadCapacity)</dd>
 
+            <dt class="col-sm-3">Sucursal</dt>
+            <dd class="col-sm-9">
+                @if (Model.Ubication != null)
+                {
+                    <span class="badge bg-info text-dark">@Model.Ubication.Name</span>
+                }
+                else
+                {
+                    <span class="text-muted">Sin asignar</span>
+                }
+            </dd>
+
             @if (!isStock)
             {
                 <dt class="col-sm-3">@Html.DisplayNameFor(model => model.SaleDate)</dt>
@@ -34,12 +46,14 @@
     @* El asp-route-isStock aquí asegura que el POST reciba el parámetro *@
     <form asp-action="Delete" asp-route-isStock="@isStock" class="button-group" style="margin-top: 30px;">
         <input type="hidden" asp-for="Id" />
+        <input type="hidden" name="isStock" value="@(ViewBag.IsStock ? "true" : "false")" />
+        <input type="hidden" name="activeTab" value="@ViewBag.ActiveTab" />
 
-        <button type="submit" class="btn btn-danger">
+        <button type="submit" class="btn btn-danger" asp-route-activeTab="accessories">
             <i class="fas fa-trash-alt icon"></i> Confirmar Eliminación
         </button>
 
-        <a asp-controller="Stock" asp-action="@(isStock ? "Index" : "Vendidos")" class="btn btn-secondary">
+        <a asp-controller="Stock" asp-action="@(isStock ? "Index" : "Vendidos")" class="btn btn-secondary" asp-route-activeTab="accessories" >
             <i class="fas fa-times icon"></i> Cancelar
         </a>
     </form>

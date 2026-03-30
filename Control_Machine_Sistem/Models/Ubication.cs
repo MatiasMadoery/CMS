@@ -6,13 +6,16 @@ namespace Control_Machine_Sistem.Models
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "El nombre de la sucursal es obligatorio.")]
+        [Required(ErrorMessage = "El nombre/ubicación de la sucursal es obligatorio.")]
         [Display(Name = "Sucursal")]
         public string Name { get; set; } = string.Empty;
 
-        public string? Address { get; set; }
 
         // Relación con Máquinas
         public ICollection<Machine>? Machines { get; set; }
+
+        //Relación con Accesorios
+        public ICollection<Accessory>? Accessories { get; set; }
+
     }
 }

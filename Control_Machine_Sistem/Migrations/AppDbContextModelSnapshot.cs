@@ -38,14 +38,20 @@ namespace Control_Machine_Sistem.Migrations
 
                     b.Property<string>("Model")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime?>("SaleDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("UbicationId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("UbicationId");
 
                     b.ToTable("Accessories");
                 });
@@ -307,9 +313,6 @@ namespace Control_Machine_Sistem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -356,7 +359,15 @@ namespace Control_Machine_Sistem.Migrations
                         .WithMany()
                         .HasForeignKey("CustomerId");
 
+                    b.HasOne("Control_Machine_Sistem.Models.Ubication", "Ubication")
+                        .WithMany()
+                        .HasForeignKey("UbicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Customer");
+
+                    b.Navigation("Ubication");
                 });
 
             modelBuilder.Entity("Control_Machine_Sistem.Models.Machine", b =>
