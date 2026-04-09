@@ -24,27 +24,34 @@ namespace Control_Machine_Sistem.Services
 
             try
             {
-                // 2. Obtener referencia al contenedor y CREARLO si no existe
-                // Usamos PublicAccessType.Blob para que las fotos se puedan ver en el navegador
+                // 2. Contenedor
                 var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
                 await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
 
-                // 3. Generar un nombre único para el archivo (evita que se pisen)
+                // 3. Nombre y Cliente del Blob
                 var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
                 var blobClient = containerClient.GetBlobClient(fileName);
 
-                // 4. Subir el flujo de datos (Stream)
+                // 4. Subir el flujo de datos UNA SOLA VEZ con sus Headers
                 using (var stream = file.OpenReadStream())
                 {
-                    await blobClient.UploadAsync(stream, true);
+                    var blobHttpHeader = new BlobHttpHeaders
+                    {
+                        ContentType = file.ContentType // Para que se abra en el navegador y no se descargue
+                    };
+
+                    await blobClient.UploadAsync(stream, new BlobUploadOptions
+                    {
+                        HttpHeaders = blobHttpHeader
+                    });
                 }
 
-                // 5. Devolver la URL real (la de Azurite ahora, la de Azure después)
+                // 5. Devolver la URL
                 return blobClient.Uri.ToString();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error al subir imagen: {ex.Message}");
+                Console.WriteLine($"Error al subir archivo: {ex.Message}");
                 return null;
             }
         }

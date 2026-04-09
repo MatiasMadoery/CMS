@@ -138,6 +138,9 @@ namespace Control_Machine_Sistem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CheckListUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("CustomerId")
                         .HasColumnType("int");
 

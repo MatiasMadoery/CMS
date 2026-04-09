@@ -70,6 +70,22 @@
                     }
                 </dd>
             </div>
+            @* --- GESTIÓN DE CHECKLIST EN ELIMINACIÓN --- *@
+            <div class="details-item">
+                <dt>Checklist de Entrega</dt>
+                <dd>
+                    @if (!string.IsNullOrEmpty(Model.CheckListUrl))
+                    {
+                        <a href="@Model.CheckListUrl" target="_blank" class="btn btn-sm btn-outline-info">
+                            <i class="fas fa-file-pdf"></i> Ver Checklist adjunto
+                        </a>
+                    }
+                    else
+                    {
+                        <span class="text-muted">No se cargó checklist</span>
+                    }
+                </dd>
+            </div>         
         </dl>
     </div>
 

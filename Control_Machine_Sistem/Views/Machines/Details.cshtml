@@ -104,6 +104,27 @@
                     }
                 </dd>
             </div>
+            <div class="details-item">
+                <dt><i class="fas fa-clipboard-check icon"></i> Checklist de Entrega</dt>
+                <dd>
+                    @if (!string.IsNullOrEmpty(Model.CheckListUrl))
+                    {
+                        <div class="d-flex align-items-center gap-2">
+                            <a href="@Model.CheckListUrl" target="_blank" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-external-link-alt"></i> Abrir PDF
+                            </a>
+                            @* Opcional: Un enlace de descarga directa *@
+                            <a href="@Model.CheckListUrl" download="Checklist_@Model.ChasisNumber" class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-download"></i> Descargar
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <span class="text-muted italic">No se ha cargado un checklist para esta unidad.</span>
+                    }
+                </dd>
+            </div>
         </dl>
     </div>
 

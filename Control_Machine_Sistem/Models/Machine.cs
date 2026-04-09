@@ -33,7 +33,6 @@ namespace Control_Machine_Sistem.Models
         [Display(Name = "Fecha vencimiento garantía")]
         public DateTime? WarrantyExpirationDate { get; set; }
 
-        //Nuevas Propiedades Para Stock
         [Required]
         [Display(Name = "Año de fabricación")]
         public int? ManufactureYear { get; set; }
@@ -51,16 +50,15 @@ namespace Control_Machine_Sistem.Models
 
         public Ubication? Ubication { get; set; }
 
-        // --- Agregar esto en Machine.cs ---
-
+        // --- FOTOS ---
         [NotMapped]
         [Display(Name = "Fotos de la Máquina (Máx 4)")]
-        public IEnumerable<IFormFile>? ImageFiles { get; set; } // Para recibir los archivos del formulario
+        public IEnumerable<IFormFile>? ImageFiles { get; set; }
 
         [Display(Name = "URLs de Fotos")]
-        public List<string> ImageUrls { get; set; } = new List<string>(); // Para guardar las URLs de Azure
+        public List<string> ImageUrls { get; set; } = new List<string>();
 
-        //
+        // --- DOCUMENTACIÓN GENERAL ---
         [NotMapped]
         [Display(Name = "Documentación")]
         public IEnumerable<IFormFile>? Documentations { get; set; }
@@ -68,10 +66,18 @@ namespace Control_Machine_Sistem.Models
         [Display(Name = "Documentación")]
         public List<string> DocUrls { get; set; } = new List<string>();
 
+        // --- NUEVA PROPIEDAD: CHECKLIST PDF ---
+        [NotMapped]
+        [Display(Name = "Archivo de Check List (PDF)")]
+        public IFormFile? CheckListFile { get; set; } // Un solo archivo PDF
+
+        [Display(Name = "URL Check List")]
+        public string? CheckListUrl { get; set; } // Guardamos la URL de Azurite
+
+        // --- COLECCIONES ---
         public ICollection<OwnerHistory>? OwnerHistories { get; set; }
 
         public ICollection<Service>? Services { get; set; }
-
         public ICollection<OtherMaintenance>? OtherMaintenances { get; set; }
     }
 }

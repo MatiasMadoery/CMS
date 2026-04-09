@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Control_Machine_Sistem.Models;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -96,6 +94,11 @@ namespace Control_Machine_Sistem.Models
             modelBuilder.Entity<Accessory>()
                 .Property(a => a.ImageUrls)
                 .Metadata.SetValueComparer(imageComparer); // Reutilizamos el comparador
+
+            // --- Configuración para CheckListUrl ---
+            modelBuilder.Entity<Machine>()
+                .Property(m => m.CheckListUrl)
+                .IsRequired(false); // Por si la máquina no tiene checklist cargado aún
         }
 
         public DbSet<Customer> Customers { get; set; } = default!;

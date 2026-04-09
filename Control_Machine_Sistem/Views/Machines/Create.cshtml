@@ -136,6 +136,18 @@
             </button>
         </div>
 
+        <h4 class="form-section-title">Checklist de Entrega</h4>
+        <div class="form-row">
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="CheckListFile" class="form-label">Archivo de Checklist (PDF)</label>
+                    <input asp-for="CheckListFile" type="file" class="form-control" accept="application/pdf" id="checkListInput" />
+                    <span asp-validation-for="CheckListFile" class="text-danger"></span>
+                    <small class="text-muted">Suba el informe de inspección o checklist en formato PDF.</small>
+                </div>
+            </div>
+        </div>
+
         @* --- SECCIÓN NUEVA: FOTOS DE LA MÁQUINA (Solo si es Stock) --- *@
         @if (isStock)
         {
@@ -170,10 +182,18 @@
     <script src="~/js/machineCreateForm.js"></script>
     <script>
 
-document.getElementById('imageInput')?.addEventListener('change', function (e) {
-    const previewContainer = document.getElementById('imagePreviewContainer');
-    previewContainer.innerHTML = ''; // Limpiar previsualización
+                // Validación para el Checklist
+        document.getElementById('checkListInput')?.addEventListener('change', function (e) {
+            const file = this.files[0];
+            if (file && file.type !== "application/pdf") {
+                alert("El archivo seleccionado no es un PDF. Por favor, seleccione un documento válido.");
+                this.value = ''; // Limpiar el input
+            }
+        });
 
+    document.getElementById('imageInput')?.addEventListener('change', function (e) {
+        const previewContainer = document.getElementById('imagePreviewContainer');
+     previewContainer.innerHTML = ''; // Limpiar previsualización
     if (this.files.length > 4) {
         alert("Atención: Solo se permite un máximo de 4 fotos. Se descartarán las excedentes.");
         // Opcional: podrías resetear el input si quieres ser estricto

@@ -113,6 +113,31 @@
             </div>
         }
 
+        @* --- SECCIÓN DE CHECKLIST DE ENTREGA --- *@
+        <h4 class="form-section-title"><i class="fas fa-clipboard-check icon"></i> Checklist de Entrega</h4>
+        <div class="document-management mb-4">
+            <div class="form-group">
+                @if (!string.IsNullOrEmpty(Model.CheckListUrl))
+                {
+                    <div id="checklist-container" class="alert alert-info d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="fas fa-file-pdf"></i>
+                            <a href="@Model.CheckListUrl" target="_blank" class="document-name">Ver Checklist Actual</a>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-danger" onclick="markChecklistForDeletion('@Model.CheckListUrl')">
+                            <i class="fas fa-times"></i> Reemplazar/Eliminar
+                        </button>
+                        @* Campo oculto para indicar si se debe borrar el actual *@
+                        <input type="hidden" id="DeleteChecklistInput" name="DeleteChecklist" value="false" />
+                    </div>
+                }
+
+                <label class="form-label">@(string.IsNullOrEmpty(Model.CheckListUrl) ? "Subir Checklist (PDF)" : "Subir nuevo Checklist para reemplazar")</label>
+                <input asp-for="CheckListFile" type="file" class="form-control" accept="application/pdf" />
+                <span asp-validation-for="CheckListFile" class="text-danger"></span>
+            </div>
+        </div>
+
         @* --- SECCIÓN DE FOTOS EXISTENTES --- *@
         <h4 class="form-section-title"><i class="fas fa-images icon"></i> Fotos de la Unidad</h4>
         <div class="document-management mb-4">
@@ -240,6 +265,16 @@
     <script src="~/js/machineCreateForm.js"></script>
     <script>
         setupWarrantyDateAutoCalc("DeliveryDate", "WarrantyExpirationDate");
+
+                function markChecklistForDeletion(url) {
+            if (confirm("¿Deseas quitar el checklist actual? Se borrará permanentemente al guardar.")) {
+                // Ocultamos el contenedor visual
+                document.getElementById("checklist-container").classList.add("d-none");
+                // Cambiamos el valor del input oculto para que el controlador sepa que debe borrarlo de Azure
+                document.getElementById("DeleteChecklistInput").value = "true";
+            }
+        }
+
         // Función para el Zoom
         function openZoom(src) {
             const modal = document.getElementById("zoomModal");

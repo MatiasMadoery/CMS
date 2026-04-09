@@ -114,7 +114,7 @@ namespace Control_Machine_Sistem.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [RequestSizeLimit(104857600)]
-        public async Task<IActionResult> Create([Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,Documentations,ImageFiles,ManufactureYear,SerialNumber,UserHours,UbicationId")] Machine machine, bool isStock = false)
+        public async Task<IActionResult> Create([Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,Documentations,ImageFiles,CheckListFile,ManufactureYear,SerialNumber,UserHours,UbicationId")] Machine machine, bool isStock = false)
         {
             if (isStock)
             {
@@ -166,6 +166,24 @@ namespace Control_Machine_Sistem.Controllers
                     }
                 }
 
+                // --- NUEVA LÓGICA: PROCESAR CHECKLIST PDF ---
+                string checkListUrl = null;
+                if (machine.CheckListFile != null)
+                {
+                    var extension = Path.GetExtension(machine.CheckListFile.FileName).ToLower();
+                    if (extension == ".pdf")
+                    {
+                        // Reutilizamos el servicio de Azure subiendo al contenedor "checklists"
+                        checkListUrl = await _imageStorageService.UploadImageAsync(machine.CheckListFile, "checklists");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("CheckListFile", "El Check List debe ser un archivo PDF.");
+                        // Recargar ViewBags si hay error...
+                        return View(machine);
+                    }
+                }
+
                 var newMachine = new Machine
                 {
                     CustomerId = machine.CustomerId,
@@ -176,6 +194,7 @@ namespace Control_Machine_Sistem.Controllers
                     WarrantyExpirationDate = machine.DeliveryDate?.AddDays(365),
                     DocUrls = docUrls,
                     ImageUrls = imageUrls, // <--- ASIGNAMOS LAS URLS DE AZURE
+                    CheckListUrl = checkListUrl, // <--- ASIGNAMOS LA URL DE AZURITE
                     ManufactureYear = machine.ManufactureYear,
                     SerialNumber = machine.SerialNumber,
                     UserHours = machine.UserHours,
@@ -183,7 +202,6 @@ namespace Control_Machine_Sistem.Controllers
                 };
                 _context.Add(newMachine);
                 await _context.SaveChangesAsync();
-
                 return isStock ? RedirectToAction("Index", "Stock") : RedirectToAction("Vendidos", "Stock");
             }
 
@@ -236,6 +254,8 @@ namespace Control_Machine_Sistem.Controllers
             List<string> ExistingImageUrls, // <--- Fotos que se quedaron
             List<string> DeletedImageUrls,  // <--- Fotos marcadas para borrar
             List<IFormFile> ImageFiles,      // <--- Fotos nuevas
+            IFormFile? CheckListFile, // <--- Nuevo  CheckList
+            bool DeleteChecklist = false, // <--- Marcar para eliminar CheckList sin reemplazo
             bool isStock = false
             )
         {
@@ -347,6 +367,38 @@ namespace Control_Machine_Sistem.Controllers
                     // Limitamos a 4 por si acaso
                     existingMachine.ImageUrls = imageUrls.Take(4).ToList();
 
+                    // --- GESTIÓN DE CHECKLIST (Azure Storage) ---
+
+                    if (CheckListFile != null) // Caso 1: El usuario subió un archivo nuevo (reemplaza o crea)
+                    {
+                        var extension = Path.GetExtension(CheckListFile.FileName).ToLower();
+                        if (extension != ".pdf")
+                        {
+                            ModelState.AddModelError("CheckListFile", "El Check List debe ser un archivo PDF.");
+                            // Recargar datos necesarios para la vista
+                            ViewData["UbicationId"] = new SelectList(_context.Ubications, "Id", "Name", machine.UbicationId);
+                            ViewData["ModelId"] = new SelectList(_context.Models, "Id", "Name", machine.ModelId);
+                            return View(machine);
+                        }
+
+                        // 1. Borrar el anterior si existe
+                        if (!string.IsNullOrEmpty(existingMachine.CheckListUrl))
+                        {
+                            await _imageStorageService.DeleteImageAsync(existingMachine.CheckListUrl, "checklists");
+                        }
+
+                        // 2. Subir el nuevo
+                        existingMachine.CheckListUrl = await _imageStorageService.UploadImageAsync(CheckListFile, "checklists");
+                    }
+                    else if (DeleteChecklist) // Caso 2: El usuario marcó "Eliminar" y no subió nada nuevo
+                    {
+                        if (!string.IsNullOrEmpty(existingMachine.CheckListUrl))
+                        {
+                            await _imageStorageService.DeleteImageAsync(existingMachine.CheckListUrl, "checklists");
+                            existingMachine.CheckListUrl = null; // Limpiamos la referencia en la DB
+                        }
+                    }
+
                     _context.Update(existingMachine);
                     await _context.SaveChangesAsync();
                 }
@@ -409,11 +461,17 @@ namespace Control_Machine_Sistem.Controllers
                     }
                 }
 
-                // --- AGREGAR ESTO: Borrar Fotos de Azure ---
+                // --- Borrar Fotos de Azure ---
                 if (machine.ImageUrls != null)
                 {
                     foreach (var url in machine.ImageUrls)
                         await _imageStorageService.DeleteImageAsync(url, "machine-photos");
+                }
+
+                // --- BORRAR CHECKLIST DE AZURE ---
+                if (!string.IsNullOrEmpty(machine.CheckListUrl))
+                {
+                    await _imageStorageService.DeleteImageAsync(machine.CheckListUrl, "checklists");
                 }
 
                 _context.Machines.Remove(machine);
