@@ -100,11 +100,17 @@
                                     </span>
                                 </td>
                                 <td class="table-actions">
+                                    <a asp-action="GenerateQr" asp-controller="QrCodes" asp-route-machineId="@item.Id" class="btn-action btn-info">
+                                        <i class="fas fa-qrcode"></i>
+                                    </a>
                                     <a asp-action="Details" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action details" title="Detalles">
                                         <i class="fas fa-info-circle"></i>
                                     </a>
                                     <a asp-action="Edit" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action edit" title="Editar">
                                         <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action delete" title="Eliminar">
+                                        <i class="fas fa-delete"></i>
                                     </a>
                                 </td>
                             </tr>

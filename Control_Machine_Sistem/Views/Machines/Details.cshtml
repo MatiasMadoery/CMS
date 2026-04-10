@@ -49,17 +49,18 @@
                 <dt>Horas de Uso</dt>
                 <dd>@Html.DisplayFor(model => model.UserHours) hs</dd>
             </div>
-            @* --- SECCIÓN DE FOTOS --- *@
+
+            @* --- SECCIÓN DE FOTOS IGUAL A EDIT --- *@
             <div class="details-item full-width">
-                <dt>Fotos de la Unidad</dt>
+                <dt class="mb-2"><i class="fas fa-images icon"></i> Fotos de la Unidad</dt>
                 <dd>
                     @if (Model.ImageUrls != null && Model.ImageUrls.Any())
                     {
                         <div class="machine-photo-grid">
                             @foreach (var url in Model.ImageUrls)
                             {
-                                <div class="photo-item">
-                                    <img src="@url" alt="Foto de la máquina" class="img-fluid rounded shadow-sm" onclick="openModal('@url')" />
+                                <div class="photo-item-edit">
+                                    <img src="@url" alt="Foto máquina" class="img-thumbnail img-zoomable" onclick="openZoom(this.src)" />
                                 </div>
                             }
                         </div>
@@ -70,6 +71,7 @@
                     }
                 </dd>
             </div>
+
             @if (!isStock)
             {
                 <div class="details-item">
@@ -81,6 +83,7 @@
                     <dd>@Model.WarrantyExpirationDate?.ToString("dd/MM/yyyy")</dd>
                 </div>
             }
+
             <div class="details-item">
                 <dt>@Html.DisplayNameFor(model => model.DocUrls)</dt>
                 <dd>
@@ -103,8 +106,6 @@
             </div>
         </dl>
     </div>
-
-    <hr />
 
     @if (!isStock)
     {
@@ -157,4 +158,92 @@
     </div>
 </div>
 
-<script src="~/js/views.js"></script>
+@* Modal para el Zoom de imágenes *@
+<div id="zoomModal" class="zoom-modal" onclick="closeZoom()">
+    <span class="zoom-close">&times;</span>
+    <img class="zoom-content" id="imgZoom">
+</div>
+
+<style>
+    /* Mantenemos los estilos de la grilla y el zoom */
+    .machine-photo-grid {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
+
+    .photo-item-edit {
+        position: relative;
+        width: 120px;
+        height: 120px;
+    }
+
+        .photo-item-edit img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+            .photo-item-edit img:hover {
+                transform: scale(1.05);
+            }
+
+    /* Estilos del Modal de Zoom */
+    .zoom-modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.9);
+        align-items: center;
+        justify-content: center;
+    }
+
+    .zoom-content {
+        max-width: 90%;
+        max-height: 90%;
+        border-radius: 5px;
+        animation: zoomIn 0.3s;
+    }
+
+    .zoom-close {
+        position: absolute;
+        top: 20px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
+        cursor: pointer;
+    }
+
+    @@keyframes zoomIn {
+        from {
+            transform: scale(0)
+        }
+
+        to {
+            transform: scale(1)
+        }
+    }
+</style>
+
+@section Scripts {
+    <script>
+        function openZoom(src) {
+            const modal = document.getElementById("zoomModal");
+            const img = document.getElementById("imgZoom");
+            modal.style.display = "flex";
+            img.src = src;
+        }
+
+        function closeZoom() {
+            document.getElementById("zoomModal").style.display = "none";
+        }
+    </script>
+}

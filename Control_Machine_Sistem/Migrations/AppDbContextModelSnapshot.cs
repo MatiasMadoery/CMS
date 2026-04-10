@@ -33,6 +33,10 @@ namespace Control_Machine_Sistem.Migrations
                     b.Property<int?>("CustomerId")
                         .HasColumnType("int");
 
+                    b.Property<string>("ImageUrls")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<double>("LoadCapacity")
                         .HasColumnType("float");
 
