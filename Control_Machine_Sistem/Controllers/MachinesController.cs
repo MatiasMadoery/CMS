@@ -1,4 +1,5 @@
-﻿using Control_Machine_Sistem.Models;
+﻿using ClosedXML.Excel;
+using Control_Machine_Sistem.Models;
 using Control_Machine_Sistem.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -458,6 +459,65 @@ namespace Control_Machine_Sistem.Controllers
 
             Console.WriteLine($"Clientes encontrados: {customers.Count}");
             return Json(customers);
+        }
+
+        public async Task<IActionResult> ExportarExcel()
+        {
+            var machines = await _context.Machines!
+                .Include(m => m.Model)
+                    .ThenInclude(mod => mod.Category)
+                .Include(m => m.Ubication)
+                .OrderBy(m => m.Id)
+                .ToListAsync();
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("Stock de Maquinaria");
+
+                string[] headers = {
+            "Categoría", "Modelo", "N° Importación", "Fecha Oficialización",
+            "N° Chasis", "N° Motor", "N° Serie", "Año Fabricación",
+            "Horas de Uso", "Ubicación"
+        };
+
+                for (int i = 0; i < headers.Length; i++)
+                {
+                    var cell = worksheet.Cell(1, i + 1);
+                    cell.Value = headers[i];
+                    cell.Style.Font.Bold = true;
+                    cell.Style.Fill.BackgroundColor = XLColor.LightGray;
+                }
+
+                int row = 2;
+                foreach (var item in machines)
+                {
+                    worksheet.Cell(row, 1).Value = item.Model?.Category?.Name ?? "N/A";
+                    worksheet.Cell(row, 2).Value = item.Model?.Name ?? "N/A";
+                    worksheet.Cell(row, 3).Value = item.ImportNumber;
+                    worksheet.Cell(row, 4).Value = item.OfficializationDate.ToShortDateString();
+                    worksheet.Cell(row, 5).Value = item.ChasisNumber;
+                    worksheet.Cell(row, 6).Value = item.EngineNumber;
+                    worksheet.Cell(row, 7).Value = item.SerialNumber;
+                    worksheet.Cell(row, 8).Value = item.ManufactureYear;
+                    worksheet.Cell(row, 9).Value = item.UserHours;
+                    worksheet.Cell(row, 10).Value = item.Ubication?.Name ?? "N/A";
+                    row++;
+                }
+
+                worksheet.Columns().AdjustToContents();
+
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var content = stream.ToArray();
+
+                    return File(
+                        content,
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        $"Reporte_Stock_{DateTime.Now:yyyyMMdd}.xlsx"
+                    );
+                }
+            }
         }
     }
 }

@@ -37,13 +37,19 @@
                     <button type="submit" class="btn btn-primary w-100">
                         <i class="fas fa-filter icon"></i> Filtrar
                     </button>
-                    <a asp-action="Index" class="btn btn-outline-secondary w-100">
+                    <a asp-action="Index" class="btn btn-secondary w-100">
                         <i class="fas fa-sync-alt icon"></i> Limpiar
                     </a>
                 </div>
             </div>
         </form>
+
+        
     </div>
+
+    <a asp-controller="Machines" asp-action="ExportarExcel" class="btn btn-success mb-3">
+        <i class="fas fa-file-excel"></i> Descargar Stock Maquinas
+    </a>
 
     <div class="stock-header-nav">
         <div class="stock-selector">
