@@ -9,6 +9,7 @@ namespace Control_Machine_Sistem.Controllers
     public class StockController : Controller
     {
         private readonly AppDbContext _context;
+
         public StockController(AppDbContext context)
         {
             _context = context;
@@ -22,39 +23,52 @@ namespace Control_Machine_Sistem.Controllers
             ViewBag.SelectedCategory = categoryId;
             ViewBag.SelectedModel = modelId;
 
-            // Carga de Selects para filtros
+            // 1. Carga de Ubicaciones
             ViewBag.Ubications = new SelectList(await _context.Ubications.ToListAsync(), "Id", "Name", ubicationId);
-            ViewBag.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Name", categoryId);
 
-            if (categoryId.HasValue)
+            // 2. CARGA DE CATEGORÍAS POR SEPARADO (Para que JS pueda usarlas)
+            var allCategories = await _context.Categories.ToListAsync();
+            ViewBag.CategoriesMachine = allCategories.Where(c => c.Type == CategoryType.Machine).ToList();
+            ViewBag.CategoriesAccessory = allCategories.Where(c => c.Type == CategoryType.Accessory).ToList();
+
+            // Mantener ViewBag.Categories para la carga inicial (dependiendo de la pestaña activa)
+            ViewBag.Categories = new SelectList(
+                activeTab == "machines" ? ViewBag.CategoriesMachine : ViewBag.CategoriesAccessory,
+                "Id", "Name", categoryId
+            );
+
+            if (categoryId.HasValue && activeTab == "machines")
             {
                 ViewBag.Models = new SelectList(await _context.Models.Where(m => m.CategoryId == categoryId).ToListAsync(), "Id", "Name", modelId);
             }
 
             int pageSize = 10;
 
-            // Query Máquinas en Stock
+            // --- Query Máquinas en Stock ---
             var mQuery = _context.Machines
                 .Include(m => m.Model)
                 .Include(m => m.Ubication)
                 .Where(m => m.CustomerId == null);
 
             if (ubicationId.HasValue) mQuery = mQuery.Where(m => m.UbicationId == ubicationId);
-            if (categoryId.HasValue) mQuery = mQuery.Where(m => m.Model.CategoryId == categoryId);
+            if (categoryId.HasValue && activeTab == "machines") mQuery = mQuery.Where(m => m.Model.CategoryId == categoryId);
             if (modelId.HasValue) mQuery = mQuery.Where(m => m.ModelId == modelId);
 
             var mCount = await mQuery.CountAsync();
             var mElements = await mQuery.Skip((machinePage - 1) * pageSize).Take(pageSize).ToListAsync();
             var mPager = new Pager<Machine>(mElements, mCount, machinePage, pageSize);
 
-            // Query Accesorios en Stock
+            // --- Query Accesorios en Stock ---
             var aQuery = _context.Accessories
                 .Include(m => m.Ubication)
                 .Where(a => a.CustomerId == null);
 
-            if (ubicationId.HasValue)
+            if (ubicationId.HasValue) aQuery = aQuery.Where(a => a.UbicationId == ubicationId);
+
+            // 3. NUEVO: Filtrar accesorios por categoría si estamos en la pestaña correspondiente
+            if (categoryId.HasValue && activeTab == "accessories")
             {
-                aQuery = aQuery.Where(a => a.UbicationId == ubicationId);
+                aQuery = aQuery.Where(a => a.CategoryId == categoryId);
             }
 
             var aCount = await aQuery.CountAsync();
@@ -97,7 +111,6 @@ namespace Control_Machine_Sistem.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Index", "ProductosVendidos");
         }
-
 
         // GET: Stock/Vender?id=5&type=Machine
         public async Task<IActionResult> Vender(int id, string type)

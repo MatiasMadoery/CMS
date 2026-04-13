@@ -40,5 +40,8 @@ namespace Control_Machine_Sistem.Models
 
         [Display(Name = "URLs de Fotos")]
         public List<string> ImageUrls { get; set; } = new List<string>();
+
+        public int CategoryId { get; set; }
+        public Category? Category { get; set; }
     }
 }

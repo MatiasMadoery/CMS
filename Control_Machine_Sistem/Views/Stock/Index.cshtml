@@ -22,7 +22,7 @@
                     </select>
                 </div>
                 <div class="col-md-3 " id="col-filter-category">
-                    <label class="form-label small fw-bold">Categoría</label>
+                    <label class="form-label small fw-bold">Producto</label>
                     <select id="filterCategory" name="categoryId" class="form-select" asp-items="ViewBag.Categories">
                         <option value="">-- Todas --</option>
                     </select>
@@ -127,7 +127,7 @@
                                     </a>
                                     <a asp-action="Delete" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action delete" title="Eliminar" asp-route-isStock="true" asp-route-activeTab="machines">
                                         <i class="fas fa-trash-alt"></i>
-                                    </a>                               
+                                    </a>
                                 </td>
                             </tr>
                         }
@@ -250,63 +250,89 @@
 @section Scripts {
     <script>
         // Cambiar entre pestañas
-        function switchTab(tabName) {
-            document.getElementById('section-machines').style.display = tabName === 'machines' ? 'block' : 'none';
-            document.getElementById('section-accessories').style.display = tabName === 'accessories' ? 'block' : 'none';
+                  function switchTab(tabName) {
+                // Mostrar/Ocultar secciones
+                document.getElementById('section-machines').style.display = tabName === 'machines' ? 'block' : 'none';
+                document.getElementById('section-accessories').style.display = tabName === 'accessories' ? 'block' : 'none';
 
-            // Actualizar botones
-            document.getElementById('btn-machines').classList.toggle('active', tabName === 'machines');
-            document.getElementById('btn-accessories').classList.toggle('active', tabName === 'accessories');
+                // Actualizar estado de botones
+                document.getElementById('btn-machines').classList.toggle('active', tabName === 'machines');
+                document.getElementById('btn-accessories').classList.toggle('active', tabName === 'accessories');
 
-            const colCategory = document.getElementById('col-filter-category');
-            const colModel = document.getElementById('col-filter-model');
+                const colCategory = document.getElementById('col-filter-category');
+                const colModel = document.getElementById('col-filter-model');
+                const categorySelect = document.getElementById('filterCategory');
 
-            if (tabName === 'accessories') {
-                colCategory.style.display = 'none';
-                colModel.style.display = 'none';
-            } else {
+                // Siempre mostramos el filtro de categoría, pero el de modelo solo en máquinas
                 colCategory.style.display = 'block';
-                colModel.style.display = 'block';
-            }
+                colModel.style.display = tabName === 'machines' ? 'block' : 'none';
 
-            // Guardar en el input hidden para que al filtrar se mantenga en esta pestaña
-            document.getElementById('inputActiveTab').value = tabName;
-        }
+                // Guardar el valor seleccionado actualmente para intentar mantenerlo si es posible
+                const currentSelected = categorySelect.value;
+
+                // Limpiar y recargar el select de categorías dinámicamente
+                categorySelect.innerHTML = '<option value="">-- Todas --</option>';
+
+                if (tabName === 'machines') {
+                    @foreach (var cat in (IEnumerable<Control_Machine_Sistem.Models.Category>)ViewBag.CategoriesMachine)
+                    {
+                            <text>
+                            var opt = document.createElement('option');
+                            opt.value = '@cat.Id';
+                            opt.text = '@cat.Name';
+                            if(opt.value == currentSelected) opt.selected = true;
+                            categorySelect.appendChild(opt);
+                            </text>
+                    }
+                } else {
+                    @foreach (var cat in (IEnumerable<Control_Machine_Sistem.Models.Category>)ViewBag.CategoriesAccessory)
+                    {
+                            <text>
+                            var opt = document.createElement('option');
+                            opt.value = '@cat.Id';
+                            opt.text = '@cat.Name';
+                            if(opt.value == currentSelected) opt.selected = true;
+                            categorySelect.appendChild(opt);
+                            </text>
+                    }
+                }
+
+                // Guardar en el input hidden
+                document.getElementById('inputActiveTab').value = tabName;
+            }
 
         // Cascada de Categoría -> Modelo
                 // Localiza el select de categoría
         const categorySelect = document.getElementById('filterCategory');
         const modelSelect = document.getElementById('filterModel');
 
-        categorySelect.addEventListener('change', function() {
-            const categoryId = this.value;
+                  categorySelect.addEventListener('change', function() {
+                const tabName = document.getElementById('inputActiveTab').value;
 
-            // Limpiamos y dejamos la opción por defecto
-            modelSelect.innerHTML = '<option value="">-- Todos --</option>';
+                // Si no estamos en máquinas, no buscamos modelos
+                if (tabName !== 'machines') {
+                    modelSelect.innerHTML = '<option value="">-- Todos --</option>';
+                    return;
+                }
 
-            if (categoryId) {
-                // Usamos la URL absoluta generada por Razor para evitar errores de ruta
-                const url = '@Url.Action("GetModelsByCategory", "Stock")' + '?categoryId=' + categoryId;
+                const categoryId = this.value;
+                modelSelect.innerHTML = '<option value="">-- Todos --</option>';
 
-                fetch(url)
-                    .then(response => {
-                        if (!response.ok) throw new Error("Error en la red");
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log("Modelos recibidos:", data); // Mira esto en la consola (F12)
-
-                        data.forEach(m => {
-                            const opt = document.createElement('option');
-                            // Probamos ambos casos por si el serializador JSON cambia las mayúsculas
-                            opt.value = m.id || m.Id;
-                            opt.text = m.name || m.Name;
-                            modelSelect.appendChild(opt);
-                        });
-                    })
-                    .catch(error => console.error('Error al cargar modelos:', error));
-            }
-        });
+                if (categoryId) {
+                    const url = '@Url.Action("GetModelsByCategory", "Stock")' + '?categoryId=' + categoryId;
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(data => {
+                            data.forEach(m => {
+                                const opt = document.createElement('option');
+                                opt.value = m.id || m.Id;
+                                opt.text = m.name || m.Name;
+                                modelSelect.appendChild(opt);
+                            });
+                        })
+                        .catch(error => console.error('Error al cargar modelos:', error));
+                }
+            });
 
         document.addEventListener("DOMContentLoaded", function() {
              const currentTab = "@Model.ActiveTab";

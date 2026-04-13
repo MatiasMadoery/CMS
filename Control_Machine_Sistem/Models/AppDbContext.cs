@@ -91,6 +91,13 @@ namespace Control_Machine_Sistem.Models
                     v => JsonConvert.DeserializeObject<List<string>>(v) ?? new List<string>() // Lo trae como Lista a C#
                 );
 
+            // 4. Relación Accessory -> Category (NUEVA)
+            modelBuilder.Entity<Accessory>()
+                .HasOne(a => a.Category)
+                .WithMany()
+                .HasForeignKey(a => a.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<Accessory>()
                 .Property(a => a.ImageUrls)
                 .Metadata.SetValueComparer(imageComparer); // Reutilizamos el comparador

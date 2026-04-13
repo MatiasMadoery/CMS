@@ -30,6 +30,9 @@ namespace Control_Machine_Sistem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("CustomerId")
                         .HasColumnType("int");
 
@@ -53,6 +56,8 @@ namespace Control_Machine_Sistem.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.HasIndex("CustomerId");
 
                     b.HasIndex("UbicationId");
@@ -71,6 +76,9 @@ namespace Control_Machine_Sistem.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -362,6 +370,12 @@ namespace Control_Machine_Sistem.Migrations
 
             modelBuilder.Entity("Control_Machine_Sistem.Models.Accessory", b =>
                 {
+                    b.HasOne("Control_Machine_Sistem.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Control_Machine_Sistem.Models.Customer", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId");
@@ -371,6 +385,8 @@ namespace Control_Machine_Sistem.Migrations
                         .HasForeignKey("UbicationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Category");
 
                     b.Navigation("Customer");
 

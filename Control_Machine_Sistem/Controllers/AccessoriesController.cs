@@ -48,12 +48,13 @@ namespace Control_Machine_Sistem.Controllers
             ViewBag.ActiveTab = activeTab;
             ViewBag.Customers = new SelectList(_context.Customers, "Id", "Name");
             ViewBag.Ubications = new SelectList(_context.Ubications, "Id", "Name");
+            CargarCategoriasAccesorios();
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Model,LoadCapacity,SaleDate,CustomerId,UbicationId,ImageFiles")] Accessory accessory, bool isStock = false, string activeTab = "machines")
+        public async Task<IActionResult> Create([Bind("Id,Model,LoadCapacity,SaleDate,CustomerId,UbicationId,ImageFiles,CategoryId")] Accessory accessory, bool isStock = false, string activeTab = "machines")
         {
             if (isStock)
             {
@@ -90,6 +91,7 @@ namespace Control_Machine_Sistem.Controllers
             ViewBag.ActiveTab = activeTab;
             ViewBag.Customers = new SelectList(_context.Customers, "Id", "Name", accessory.CustomerId);
             ViewBag.Ubications = new SelectList(_context.Ubications, "Id", "Name", accessory.UbicationId);
+            CargarCategoriasAccesorios(accessory.CategoryId);
             return View(accessory);
         }
 
@@ -105,6 +107,7 @@ namespace Control_Machine_Sistem.Controllers
             ViewBag.ActiveTab = activeTab;
             ViewBag.Customers = new SelectList(_context.Customers, "Id", "Name", accessory.CustomerId);
             ViewBag.Ubications = new SelectList(_context.Ubications, "Id", "Name", accessory.UbicationId);
+            CargarCategoriasAccesorios(accessory.CategoryId);
             return View(accessory);
         }
 
@@ -112,7 +115,7 @@ namespace Control_Machine_Sistem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
             int id,
-            [Bind("Id,Model,LoadCapacity,SaleDate,CustomerId,UbicationId")] Accessory accessory,
+            [Bind("Id,Model,LoadCapacity,SaleDate,CustomerId,UbicationId,CategoryId")] Accessory accessory,
             List<string> ExistingImageUrls,
             List<string> DeletedImageUrls,
             List<IFormFile> ImageFiles,
@@ -140,6 +143,7 @@ namespace Control_Machine_Sistem.Controllers
                     existingAccessory.Model = accessory.Model;
                     existingAccessory.LoadCapacity = accessory.LoadCapacity;
                     existingAccessory.UbicationId = accessory.UbicationId;
+                    existingAccessory.CategoryId = accessory.CategoryId;
                     existingAccessory.CustomerId = isStock ? null : accessory.CustomerId;
                     existingAccessory.SaleDate = isStock ? null : accessory.SaleDate;
 
@@ -184,6 +188,7 @@ namespace Control_Machine_Sistem.Controllers
             ViewBag.ActiveTab = activeTab;
             ViewBag.Customers = new SelectList(_context.Customers, "Id", "Name", accessory.CustomerId);
             ViewBag.Ubications = new SelectList(_context.Ubications, "Id", "Name", accessory.UbicationId);
+            CargarCategoriasAccesorios(accessory.CategoryId);
             return View(accessory);
         }
 
@@ -245,6 +250,16 @@ namespace Control_Machine_Sistem.Controllers
                 .ToListAsync();
 
             return Json(customers);
+        }
+
+        private void CargarCategoriasAccesorios(int? selectedId = null)
+        {
+            var categorias = _context.Categories
+                .Where(c => c.Type == CategoryType.Accessory)
+                .OrderBy(c => c.Name)
+                .ToList();
+
+            ViewBag.CategoryId = new SelectList(categorias, "Id", "Name", selectedId);
         }
     }
 }

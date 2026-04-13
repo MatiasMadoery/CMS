@@ -5,7 +5,6 @@ using Control_Machine_Sistem.Services;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
 
-
 namespace Control_Machine_Sistem.Controllers
 {
     [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer")]
@@ -30,7 +29,7 @@ namespace Control_Machine_Sistem.Controllers
                 models = models.Where(m => m.CategoryId == categoryId);
             }
 
-            // Get total models 
+            // Get total models
             var totalModels = await models.CountAsync();
 
             // Apply pagination
@@ -39,10 +38,9 @@ namespace Control_Machine_Sistem.Controllers
                                          .Take(pageSize)
                                          .ToListAsync();
 
-
             var pager = new Pager<Model>(modelsPager, totalModels, page, pageSize);
 
-            ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
+            ViewBag.Categories = new SelectList(_context.Categories.Where(c => c.Type == CategoryType.Machine), "Id", "Name");
             ViewBag.SelectedCategory = categoryId;
 
             return View(pager);
@@ -72,11 +70,17 @@ namespace Control_Machine_Sistem.Controllers
         [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         public IActionResult Create()
         {
-            ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
+            // Solo mostramos categorías que correspondan a Máquinas
+            var categoriasMaquinas = _context.Categories
+                                             .Where(c => c.Type == CategoryType.Machine)
+                                             .OrderBy(c => c.Name)
+                                             .ToList();
+
+            ViewBag.Categories = new SelectList(categoriasMaquinas, "Id", "Name");
             return View();
         }
 
-        // POST: Models/Create     
+        // POST: Models/Create
         [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -115,7 +119,6 @@ namespace Control_Machine_Sistem.Controllers
                     spareKitsUrls = await FileService.SaveSpareKitsAsync((List<IFormFile>)model.SpareKits);
                 }
 
-
                 var newModel = new Model
                 {
                     Name = model.Name,
@@ -153,8 +156,12 @@ namespace Control_Machine_Sistem.Controllers
                 return NotFound();
             }
 
-            ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name", model.CategoryId);
+            var categoriasMaquinas = _context.Categories
+                                       .Where(c => c.Type == CategoryType.Machine)
+                                       .OrderBy(c => c.Name)
+                                       .ToList();
 
+            ViewBag.Categories = new SelectList(categoriasMaquinas, "Id", "Name", model.CategoryId);
             return View(model);
         }
 
@@ -201,7 +208,6 @@ namespace Control_Machine_Sistem.Controllers
                             }
                         }
 
-
                         manualUrls = manualUrls.Except(DeletedManuals).ToList();
                     }
 
@@ -218,7 +224,6 @@ namespace Control_Machine_Sistem.Controllers
                             }
                         }
 
-
                         spareKitsUrls = spareKitsUrls.Except(DeletedSpareKits).ToList();
                     }
 
@@ -234,7 +239,6 @@ namespace Control_Machine_Sistem.Controllers
                             }
                         }
                         manualUrls.AddRange(await FileService.SaveManualsAsync(Manuals));
-
                     }
 
                     if (SpareKits != null && SpareKits.Any())
@@ -249,7 +253,6 @@ namespace Control_Machine_Sistem.Controllers
                             }
                         }
                         spareKitsUrls.AddRange(await FileService.SaveSpareKitsAsync(SpareKits));
-
                     }
 
                     existingModel.ManualUrls = manualUrls;
@@ -277,7 +280,6 @@ namespace Control_Machine_Sistem.Controllers
             return View(model);
         }
 
-
         // GET: Models/Delete/5
         [Authorize(Roles = "Admin, SuperAdmin")]
         public async Task<IActionResult> Delete(int? id)
@@ -303,7 +305,7 @@ namespace Control_Machine_Sistem.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
-        {            
+        {
             var model = await _context.Models
                                       .Include(m => m.Machines)
                                       .FirstOrDefaultAsync(m => m.Id == id);
@@ -312,13 +314,13 @@ namespace Control_Machine_Sistem.Controllers
             {
                 return NotFound();
             }
-            
+
             if (model.Machines != null && model.Machines.Any())
             {
                 TempData["ErrorMessage"] = "No se puede eliminar el modelo porque tiene máquinas asociadas.";
                 return RedirectToAction(nameof(Index));
             }
-          
+
             if (model.ManualUrls != null && model.ManualUrls.Any())
             {
                 foreach (var fileUrl in model.ManualUrls)
@@ -326,7 +328,7 @@ namespace Control_Machine_Sistem.Controllers
                     await FileService.DeleteManualFileAsync(fileUrl);
                 }
             }
-          
+
             if (model.SpareKitsUrls != null && model.SpareKitsUrls.Any())
             {
                 foreach (var fileUrl in model.SpareKitsUrls)
@@ -334,7 +336,7 @@ namespace Control_Machine_Sistem.Controllers
                     await FileService.DeleteSpareKitFileAsync(fileUrl);
                 }
             }
-            
+
             _context.Models.Remove(model);
             await _context.SaveChangesAsync();
 

@@ -1,7 +1,7 @@
 ﻿@model Control_Machine_Sistem.Models.Category
 
 @{
-    ViewData["Title"] = "Crear Producto";
+    ViewData["Title"] = "Crear Producto"; // Cambié Producto por Categoría para que sea más preciso
 }
 
 <link href="~/css/views.css" rel="stylesheet" />
@@ -13,14 +13,27 @@
 
     <form asp-action="Create">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-            <label asp-for="Name" class="form-label"></label>
-            <input asp-for="Name" class="form-control" />
+
+        <div class="form-group mb-3">
+            <label asp-for="Name" class="form-label">Nombre del Producto</label>
+            <input asp-for="Name" class="form-control" placeholder="Ej: Excavadoras, Baldes, etc." />
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
 
+        @* --- NUEVO CAMPO: Selector de Tipo --- *@
+        <div class="form-group mb-4">
+            <label asp-for="Type" class="form-label">Destinado a:</label>
+            <select asp-for="Type" class="form-select"
+                    asp-items="Html.GetEnumSelectList<Control_Machine_Sistem.Models.CategoryType>()">
+            </select>
+            <span asp-validation-for="Type" class="text-danger"></span>
+            <small class="text-muted">Define si este producto aparecerá en Modelos o en Accesorios.</small>
+        </div>
+
         <div class="button-group">
-            <input type="submit" value="Crear" class="btn btn-success" />
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-save icon"></i> Crear
+            </button>
             <a class="btn btn-secondary" asp-action="Index">
                 <i class="fas fa-arrow-left icon"></i> Volver a la lista
             </a>

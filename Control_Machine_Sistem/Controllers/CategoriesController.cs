@@ -19,7 +19,11 @@ namespace Control_Machine_Sistem.Controllers
         [Authorize(Roles = "Viewer, Admin, Técnico, SuperAdmin")]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Categories.ToListAsync());
+            // Ordenamos por tipo y luego por nombre
+            return View(await _context.Categories
+                .OrderBy(c => c.Type)
+                .ThenBy(c => c.Name)
+                .ToListAsync());
         }
 
         // GET: Categories/Details/5
@@ -52,7 +56,7 @@ namespace Control_Machine_Sistem.Controllers
         [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Category category)
+        public async Task<IActionResult> Create([Bind("Id,Name,Type")] Category category)
         {
             if (ModelState.IsValid)
             {
@@ -84,7 +88,7 @@ namespace Control_Machine_Sistem.Controllers
         [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Type")] Category category)
         {
             if (id != category.Id)
             {
