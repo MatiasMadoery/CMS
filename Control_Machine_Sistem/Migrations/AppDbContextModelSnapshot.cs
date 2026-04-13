@@ -156,11 +156,17 @@ namespace Control_Machine_Sistem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ImportNumber")
+                        .HasColumnType("int");
+
                     b.Property<int>("ManufactureYear")
                         .HasColumnType("int");
 
                     b.Property<int>("ModelId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("OfficializationDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("SerialNumber")
                         .IsRequired()

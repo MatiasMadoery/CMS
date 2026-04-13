@@ -31,6 +31,17 @@
                 <dt>@Html.DisplayNameFor(model => model.Model!.Name)</dt>
                 <dd>@Html.DisplayFor(model => model.Model!.Name)</dd>
             </div>
+
+            @*Nuevas prop*@
+            <div class="details-item">
+                <dt>@Html.DisplayNameFor(model => model.ImportNumber)</dt>
+                <dd>@Html.DisplayFor(model => model.ImportNumber)</dd>
+            </div>
+            <div class="details-item">
+                <dt>@Html.DisplayNameFor(model => model.OfficializationDate)</dt>
+                <dd>@Model.OfficializationDate.ToString("dd/MM/yyyy")</dd>
+            </div>
+
             <div class="details-item">
                 <dt>@Html.DisplayNameFor(model => model.ChasisNumber)</dt>
                 <dd>@Html.DisplayFor(model => model.ChasisNumber)</dd>

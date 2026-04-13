@@ -54,6 +54,24 @@
             </div>
         </div>
 
+        @*Nuevas prop*@
+        <div class="form-row">
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="ImportNumber" class="form-label">Número de Importación *</label>
+                    <input asp-for="ImportNumber" class="form-control" type="number"/>
+                    <span asp-validation-for="ImportNumber" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="OfficializationDate" class="form-label">Fecha de Oficialización *</label>
+                    <input asp-for="OfficializationDate" class="form-control" type="date"/>
+                    <span asp-validation-for="OfficializationDate" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
         <div class="form-row">
             <div class="form-col">
                 <div class="form-group">

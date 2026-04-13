@@ -114,7 +114,7 @@ namespace Control_Machine_Sistem.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [RequestSizeLimit(104857600)]
-        public async Task<IActionResult> Create([Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,Documentations,ImageFiles,ManufactureYear,SerialNumber,UserHours,UbicationId")] Machine machine, bool isStock = false)
+        public async Task<IActionResult> Create([Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,Documentations,ImageFiles,ManufactureYear,SerialNumber,UserHours,UbicationId,ImportNumber,OfficializationDate")] Machine machine, bool isStock = false)
         {
             if (isStock)
             {
@@ -179,7 +179,9 @@ namespace Control_Machine_Sistem.Controllers
                     ManufactureYear = machine.ManufactureYear,
                     SerialNumber = machine.SerialNumber,
                     UserHours = machine.UserHours,
-                    UbicationId = machine.UbicationId
+                    UbicationId = machine.UbicationId,
+                    ImportNumber = machine.ImportNumber,
+                    OfficializationDate = machine.OfficializationDate
                 };
                 _context.Add(newMachine);
                 await _context.SaveChangesAsync();
@@ -229,7 +231,7 @@ namespace Control_Machine_Sistem.Controllers
         [RequestSizeLimit(104857600)]
         public async Task<IActionResult> Edit(
             int id,
-          [Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,WarrantyExpirationDate,ManufactureYear,SerialNumber,UserHours,UbicationId")] Machine machine,
+          [Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,WarrantyExpirationDate,ManufactureYear,SerialNumber,UserHours,UbicationId,ImportNumber,OfficializationDate")] Machine machine,
             List<string> ExistingDocs,
             List<IFormFile> Documentations,
             List<string> DeletedDocs,
@@ -286,6 +288,8 @@ namespace Control_Machine_Sistem.Controllers
                     existingMachine.SerialNumber = machine.SerialNumber;
                     existingMachine.UserHours = machine.UserHours;
                     existingMachine.UbicationId = machine.UbicationId;
+                    existingMachine.ImportNumber = machine.ImportNumber;
+                    existingMachine.OfficializationDate = machine.OfficializationDate;
 
                     List<string> docUrls = ExistingDocs ?? new List<string>();
 
