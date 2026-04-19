@@ -50,6 +50,17 @@ namespace Control_Machine_Sistem.Models
 
         public Ubication? Ubication { get; set; }
 
+        //Nuevas propiedades ult reunion
+        [Required(ErrorMessage = "Debe ingresar el N° de importación.")]
+        [Display(Name = "N° de importación")]
+        public int ImportNumber { get; set; }
+
+        [Required(ErrorMessage = "Debe ingresar la Fecha de Oficialización.")]
+        [Display(Name = "Fecha de Oficialización")]
+        public DateTime OfficializationDate { get; set; }
+
+        // --- Agregar esto en Machine.cs ---
+
         // --- FOTOS ---
         [NotMapped]
         [Display(Name = "Fotos de la Máquina (Máx 4)")]
