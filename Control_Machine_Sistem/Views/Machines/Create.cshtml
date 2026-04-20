@@ -34,12 +34,8 @@
             <div class="form-col">
                 <div class="form-group">
                     <label for="CategoryId" class="form-label">Producto *</label>
-                    <select id="CategoryId" class="form-select">
+                    <select id="CategoryId" class="form-select" asp-items="ViewBag.Categories">
                         <option value="">Seleccione un producto...</option>
-                        @foreach (var category in ViewBag.Categories)
-                        {
-                            <option value="@category.Value">@category.Text</option>
-                        }
                     </select>
                 </div>
             </div>
@@ -59,7 +55,7 @@
             <div class="form-col">
                 <div class="form-group">
                     <label asp-for="ImportNumber" class="form-label">Número de Importación *</label>
-                    <input asp-for="ImportNumber" class="form-control" type="number"/>
+                    <input asp-for="ImportNumber" class="form-control"/>
                     <span asp-validation-for="ImportNumber" class="text-danger"></span>
                 </div>
             </div>

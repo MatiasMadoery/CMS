@@ -90,8 +90,14 @@ namespace Control_Machine_Sistem.Controllers
         [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         public IActionResult Create(bool isStock = false)
         {
+
             ViewBag.IsStock = isStock;
-            ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
+
+            var machineCategories = _context.Categories
+                .Where(c => c.Type == CategoryType.Machine)
+                .ToList();
+
+            ViewBag.Categories = new SelectList(machineCategories, "Id", "Name");
             ViewBag.ModelId = new SelectList(new List<Model>(), "Id", "Name");
             ViewBag.Customers = new SelectList(_context.Customers.Select(c => new { c.Id, c.Name }), "Id", "Name");
             ViewBag.UbicationId = new SelectList(_context.Ubications.OrderBy(u => u.Name), "Id", "Name");
@@ -209,7 +215,12 @@ namespace Control_Machine_Sistem.Controllers
             }
 
             ViewBag.IsStock = isStock;
-            ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
+
+            var machineCategories = _context.Categories
+                .Where(c => c.Type == CategoryType.Machine)
+                .ToList();
+
+            ViewBag.Categories = new SelectList(machineCategories, "Id", "Name");
             ViewBag.ModelId = new SelectList(new List<Model>(), "Id", "Name");
             ViewBag.Customers = new SelectList(_context.Customers.Select(c => new { c.Id, c.Name }), "Id", "Name");
             ViewBag.UbicationId = new SelectList(_context.Ubications, "Id", "Name", machine.UbicationId);
