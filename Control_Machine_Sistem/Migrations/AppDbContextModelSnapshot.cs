@@ -31,6 +31,7 @@ namespace Control_Machine_Sistem.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CategoryId")
+                        .HasMaxLength(100)
                         .HasColumnType("int");
 
                     b.Property<int?>("CustomerId")
@@ -42,11 +43,6 @@ namespace Control_Machine_Sistem.Migrations
 
                     b.Property<double>("LoadCapacity")
                         .HasColumnType("float");
-
-                    b.Property<string>("Model")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime?>("SaleDate")
                         .HasColumnType("datetime2");

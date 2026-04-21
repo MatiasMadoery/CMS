@@ -36,9 +36,9 @@
             }
             <div class="form-col">
                 <div class="form-group">
-                    <label asp-for="Model" class="form-label">Modelo / Nombre *</label>
-                    <input asp-for="Model" class="form-control" placeholder="Ej: Balde 600mm" />
-                    <span asp-validation-for="Model" class="text-danger"></span>
+                    <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.CategoryId">
+                        <option value="">-- Seleccione un Accesorio --</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -46,7 +46,7 @@
         <div class="form-row">
             <div class="form-col">
                 <div class="form-group">
-                    <label asp-for="LoadCapacity" class="form-label">Capacidad de Carga</label>
+                    <label asp-for="LoadCapacity" class="form-label">Capacidad de Carga (kg)</label>
                     <input asp-for="LoadCapacity" class="form-control" placeholder="Ej: 0.5 m3" />
                     <span asp-validation-for="LoadCapacity" class="text-danger"></span>
                 </div>

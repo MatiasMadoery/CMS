@@ -109,8 +109,8 @@
                                     <a asp-action="Edit" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action edit" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a asp-action="Delete" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action delete" title="Eliminar">
-                                        <i class="fas fa-delete"></i>
+                                    <a asp-action="Delete" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action delete" title="Eliminar" asp-route-activeTab="machines">
+                                        <i class="fas fa-trash-alt"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -155,7 +155,7 @@
                         {
                             <tr>
                                 <td><strong>@item.Customer?.Name</strong></td>
-                                <td>@item.Model</td>
+                                <td>@item.Category.Name</td>
                                 <td><span class="badge bg-light text-dark">@item.Ubication?.Name</span></td>
                                 <td>@item.SaleDate?.ToString("dd/MM/yyyy")</td>
                                 <td class="table-actions">
@@ -166,7 +166,7 @@
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <a asp-action="Delete" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action delete" title="Eliminar">
-                                        <i class="fas fa-delete"></i>
+                                        <i class="fas fa-trash-alt"></i>
                                     </a>
                                 </td>
                             </tr>

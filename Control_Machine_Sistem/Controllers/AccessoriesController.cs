@@ -32,12 +32,14 @@ namespace Control_Machine_Sistem.Controllers
             var accessory = await _context.Accessories
                 .Include(a => a.Customer)
                 .Include(a => a.Ubication)
+                .Include(a => a.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (accessory == null) return NotFound();
 
             ViewBag.IsStock = isStock;
             ViewBag.ActiveTab = activeTab;
+            CargarCategoriasAccesorios();
             return View(accessory);
         }
 
@@ -62,6 +64,11 @@ namespace Control_Machine_Sistem.Controllers
                 accessory.SaleDate = null;
                 ModelState.Remove("CustomerId");
                 ModelState.Remove("SaleDate");
+            }
+
+            if (accessory.CategoryId <= 0)
+            {
+                ModelState.AddModelError("CategoryId", "Debe seleccionar una categoría válida.");
             }
 
             if (ModelState.IsValid)
@@ -140,7 +147,7 @@ namespace Control_Machine_Sistem.Controllers
                     if (existingAccessory == null) return NotFound();
 
                     // Mapeo manual (Igual que en Machines)
-                    existingAccessory.Model = accessory.Model;
+                    //existingAccessory.Model = accessory.Model;
                     existingAccessory.LoadCapacity = accessory.LoadCapacity;
                     existingAccessory.UbicationId = accessory.UbicationId;
                     existingAccessory.CategoryId = accessory.CategoryId;
@@ -200,12 +207,14 @@ namespace Control_Machine_Sistem.Controllers
             var accessory = await _context.Accessories
                 .Include(a => a.Customer)
                 .Include(a => a.Ubication)
+                .Include(a => a.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (accessory == null) return NotFound();
 
             ViewBag.IsStock = isStock;
             ViewBag.ActiveTab = activeTab;
+            CargarCategoriasAccesorios();
             return View(accessory);
         }
 

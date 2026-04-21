@@ -23,9 +23,10 @@
         <div class="form-row">
             <div class="form-col">
                 <div class="form-group">
-                    <label asp-for="Model" class="form-label">Modelo/Nombre *</label>
-                    <input asp-for="Model" class="form-control" />
-                    <span asp-validation-for="Model" class="text-danger"></span>
+                    <label asp-for="CategoryId" class="form-label">Accesorio</label>
+                    <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.CategoryId">
+                        <option value="">-- Seleccione un Accesorio --</option>
+                    </select>
                 </div>
             </div>
             <div class="form-col">

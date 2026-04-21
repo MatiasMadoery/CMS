@@ -8,9 +8,9 @@ namespace Control_Machine_Sistem.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "El modelo es obligatorio.")]
-        [StringLength(100)]
         [Display(Name = "Modelo/Descripción")]
-        public string? Model { get; set; }
+        public int CategoryId { get; set; }
+        public Category? Category { get; set; }
 
         [Required(ErrorMessage = "Debe ingresar la capacidad de carga.")]
         [Range(0, 50000, ErrorMessage = "Ingrese un valor válido")]
@@ -41,7 +41,8 @@ namespace Control_Machine_Sistem.Models
         [Display(Name = "URLs de Fotos")]
         public List<string> ImageUrls { get; set; } = new List<string>();
 
-        public int CategoryId { get; set; }
-        public Category? Category { get; set; }
+        
+
+        //public string? Model { get; set; }
     }
 }

@@ -125,9 +125,11 @@ namespace Control_Machine_Sistem.Controllers
             }
             else
             {
-                var accessory = await _context.Accessories.FindAsync(id);
+                var accessory = await _context.Accessories
+                    .Include(a => a.Category)
+                    .FirstOrDefaultAsync(a => a.Id == id);
                 if (accessory == null) return NotFound();
-                productName = accessory.Model;
+                productName = accessory.Category.Name;
             }
 
             ViewBag.Id = id;
@@ -156,7 +158,9 @@ namespace Control_Machine_Sistem.Controllers
             }
             else
             {
-                var accessory = await _context.Accessories.FindAsync(id);
+                var accessory = await _context.Accessories
+                    .Include(a => a.Category)
+                    .FirstOrDefaultAsync(a => a.Id == id);
                 if (accessory != null)
                 {
                     accessory.CustomerId = customerId;
