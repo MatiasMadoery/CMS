@@ -13,7 +13,7 @@ builder.Services.AddScoped<IImageStorageService, AzureImageStorageService>();
 
 // Dependency injection
 builder.Services.AddDbContext<AppDbContext>(
-    options => options.UseSqlServer(builder.Configuration.GetConnectionString("conexionDb"))
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString("conexionDB"))
 );
 
 // Agregar servicios de autenticación y autorización

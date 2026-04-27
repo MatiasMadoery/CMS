@@ -19,26 +19,33 @@ namespace Control_Machine_Sistem.Services
 
         public async Task<string> UploadImageAsync(IFormFile file, string containerName)
         {
-            // 1. Validaciones básicas
-            if (file == null || file.Length == 0 || _blobServiceClient == null) return null;
+            if (file == null || file.Length == 0) return null;
+
+            if (_blobServiceClient == null)
+                throw new Exception("El cliente de Azure Blob no está inicializado.");
 
             try
             {
-                // 2. Contenedor
                 var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
-                await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
 
-                // 3. Nombre y Cliente del Blob
+                // MODIFICACIÓN CRÍTICA:
+                // Primero intentamos crear, pero si falla con 409, lo atrapamos y seguimos.
+                try
+                {
+                    await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
+                }
+                catch (Azure.RequestFailedException ex) when (ex.Status == 409)
+                {
+                    // Si el error es 409, significa que ya existe. No hacemos nada, está bien.
+                    Console.WriteLine($"El contenedor {containerName} ya existía.");
+                }
+
                 var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
                 var blobClient = containerClient.GetBlobClient(fileName);
 
-                // 4. Subir el flujo de datos UNA SOLA VEZ con sus Headers
                 using (var stream = file.OpenReadStream())
                 {
-                    var blobHttpHeader = new BlobHttpHeaders
-                    {
-                        ContentType = file.ContentType // Para que se abra en el navegador y no se descargue
-                    };
+                    var blobHttpHeader = new BlobHttpHeaders { ContentType = file.ContentType };
 
                     await blobClient.UploadAsync(stream, new BlobUploadOptions
                     {
@@ -46,12 +53,12 @@ namespace Control_Machine_Sistem.Services
                     });
                 }
 
-                // 5. Devolver la URL
                 return blobClient.Uri.ToString();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error al subir archivo: {ex.Message}");
+                // Solo logueamos, no lanzamos (throw) para que no se caiga la página
+                Console.WriteLine($"Error real en la subida: {ex.Message}");
                 return null;
             }
         }

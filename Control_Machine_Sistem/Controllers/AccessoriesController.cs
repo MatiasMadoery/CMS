@@ -14,7 +14,7 @@ namespace Control_Machine_Sistem.Controllers
         public AccessoriesController(AppDbContext context, IImageStorageService imageStorageService)
         {
             _context = context;
-            _imageStorageService = new AzureImageStorageService(new ConfigurationBuilder().AddJsonFile("appsettings.json").Build());
+            _imageStorageService = imageStorageService;
         }
 
         // GET: Accessories (Historial general)
@@ -214,7 +214,7 @@ namespace Control_Machine_Sistem.Controllers
 
             ViewBag.IsStock = isStock;
             ViewBag.ActiveTab = activeTab;
-            CargarCategoriasAccesorios();
+            CargarCategoriasAccesorios(accessory.CategoryId);
             return View(accessory);
         }
 
