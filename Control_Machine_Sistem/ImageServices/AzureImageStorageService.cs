@@ -7,14 +7,17 @@ namespace Control_Machine_Sistem.Services
     public class AzureImageStorageService : IImageStorageService
     {
         private readonly BlobServiceClient _blobServiceClient;
+        private readonly ILogger<AzureImageStorageService> _logger;
 
-        public AzureImageStorageService(IConfiguration configuration)
+        public AzureImageStorageService(IConfiguration configuration, ILogger<AzureImageStorageService> logger)
         {
             var connectionString = configuration.GetConnectionString("AzureStorage");
             if (!string.IsNullOrEmpty(connectionString))
             {
                 _blobServiceClient = new BlobServiceClient(connectionString);
             }
+
+            _logger = logger;
         }
 
         public async Task<string> UploadImageAsync(IFormFile file, string containerName)
@@ -28,25 +31,14 @@ namespace Control_Machine_Sistem.Services
             {
                 var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
 
-                // MODIFICACIÓN CRÍTICA:
-                // Primero intentamos crear, pero si falla con 409, lo atrapamos y seguimos.
-                try
-                {
-                    await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
-                }
-                catch (Azure.RequestFailedException ex) when (ex.Status == 409)
-                {
-                    // Si el error es 409, significa que ya existe. No hacemos nada, está bien.
-                    Console.WriteLine($"El contenedor {containerName} ya existía.");
-                }
-
+                // Generar nombre único
                 var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
                 var blobClient = containerClient.GetBlobClient(fileName);
 
+                var blobHttpHeader = new BlobHttpHeaders { ContentType = file.ContentType };
+
                 using (var stream = file.OpenReadStream())
                 {
-                    var blobHttpHeader = new BlobHttpHeaders { ContentType = file.ContentType };
-
                     await blobClient.UploadAsync(stream, new BlobUploadOptions
                     {
                         HttpHeaders = blobHttpHeader
@@ -57,29 +49,27 @@ namespace Control_Machine_Sistem.Services
             }
             catch (Exception ex)
             {
-                // Solo logueamos, no lanzamos (throw) para que no se caiga la página
-                Console.WriteLine($"Error real en la subida: {ex.Message}");
-                return null;
+                _logger.LogError(ex, "Error al subir imagen al contenedor {ContainerName}", containerName);
+                throw;
             }
         }
 
         public async Task DeleteImageAsync(string imageUrl, string containerName)
         {
-            if (string.IsNullOrEmpty(imageUrl) || _blobServiceClient == null) return;
+            if (string.IsNullOrEmpty(imageUrl)) return;
 
             try
             {
                 var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
-
                 var uri = new Uri(imageUrl);
                 string blobName = Path.GetFileName(uri.LocalPath);
 
                 var blobClient = containerClient.GetBlobClient(blobName);
-                await blobClient.DeleteIfExistsAsync();
+                await blobClient.DeleteIfExistsAsync(DeleteSnapshotsOption.IncludeSnapshots);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error al borrar imagen: {ex.Message}");
+                _logger.LogError(ex, "Error al eliminar la imagen {ImageUrl}", imageUrl);
             }
         }
     }
