@@ -21,24 +21,21 @@
         <input type="hidden" name="activeTab" value="@ViewBag.ActiveTab" />
 
         <div class="form-row">
-            <div class="form-col">
+            @* --- CORRECCIÓN CLAVE: SELECCIÓN DEL MODELO DESDE EL CATÁLOGO (Reemplaza a Model y LoadCapacity sueltos) --- *@
+            <div class="form-col" style="flex: 2;">
                 <div class="form-group">
-                    <label asp-for="Model" class="form-label">Modelo/Nombre *</label>
-                    <input asp-for="Model" class="form-control" />
-                    <span asp-validation-for="Model" class="text-danger"></span>
+                    <label asp-for="AccessoryModelId" class="form-label">Modelo de Accesorio (Catálogo) *</label>
+                    <select asp-for="AccessoryModelId" class="form-select" asp-items="ViewBag.AccessoryModelId">
+                        <option value="">-- Seleccionar del Catálogo --</option>
+                    </select>
+                    <span asp-validation-for="AccessoryModelId" class="text-danger"></span>
                 </div>
             </div>
-            <div class="form-col">
-                <div class="form-group">
-                    <label asp-for="LoadCapacity" class="form-label">Capacidad de Carga</label>
-                    <input asp-for="LoadCapacity" class="form-control" />
-                    <span asp-validation-for="LoadCapacity" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-col">
+
+            <div class="form-col" style="flex: 1;">
                 <div class="form-group">
                     <label asp-for="UbicationId" class="form-label">Ubicación / Sucursal *</label>
-                    <select asp-for="UbicationId" class="form-select" asp-items="ViewBag.Ubications">
+                    <select asp-for="UbicationId" class="form-select" asp-items="ViewBag.UbicationId">
                         <option value="">-- Seleccionar Sucursal --</option>
                     </select>
                     <span asp-validation-for="UbicationId" class="text-danger"></span>
@@ -189,13 +186,16 @@
     }
 
     @@keyframes zoomIn {
-        from {
-            transform: scale(0)
-        }
+        from
 
-        to {
-            transform: scale(1)
-        }
+    {
+        transform: scale(0)
+    }
+
+    to {
+        transform: scale(1)
+    }
+
     }
 </style>
 

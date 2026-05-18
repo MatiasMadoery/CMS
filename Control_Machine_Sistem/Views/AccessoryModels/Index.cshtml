@@ -1,7 +1,7 @@
-﻿@model Pager<Control_Machine_Sistem.Models.Model>
+﻿@model Control_Machine_Sistem.Models.Pager<Control_Machine_Sistem.Models.Control_Machine_Sistem.Models.AccessoryModel>
 
 @{
-    ViewData["Title"] = "Modelos";
+    ViewData["Title"] = "Accesorios";
 }
 
 <link href="~/css/views.css" rel="stylesheet" />
@@ -10,32 +10,34 @@
 <div class="content-wrapper">
     <h1 class="page-title">@ViewData["Title"]</h1>
 
-    @* --- BOTONERA DE PESTAÑAS MELLIZAS (Estilo Stock) --- *@
+    @* --- BOTONERA DE PESTAÑAS MELLIZAS (Estilo Catálogo) --- *@
     <div class="stock-header-nav mb-4">
         <div class="stock-selector">
             <div class="button-group">
-                @* Esta pestaña está activa porque estamos en la vista de Modelos *@
-                <a asp-action="Index" asp-controller="Models" class="btn btn-tab active">
+                <a asp-action="Index" asp-controller="Models" class="btn btn-tab">
                     <i class="fas fa-tractor icon"></i> Máquinas
                 </a>
-                @* Esta pestaña redirige al Index de Accesorios que ya tenés creado *@
-                <a asp-action="Index" asp-controller="AccessoryModels" class="btn btn-tab">
+                <a asp-action="Index" asp-controller="AccessoryModels" class="btn btn-tab active">
                     <i class="fas fa-tools icon"></i> Accesorios
                 </a>
             </div>
         </div>
     </div>
 
+    @* --- BARRA DE ACCIONES (Filtro por Producto/Categoría Desplegable) --- *@
     <div class="action-bar">
         <div class="search-form">
             <form asp-action="Index" method="get" class="d-flex">
                 <select name="categoryId" class="form-select me-2">
                     <option value="">Filtrar por producto</option>
-                    @foreach (var category in ViewBag.Categories)
+                    @if (ViewBag.Categories != null)
                     {
-                        <option value="@category.Value" selected="@(category.Value == ViewBag.SelectedCategory?.ToString())">
-                            @category.Text
-                        </option>
+                        foreach (var category in ViewBag.Categories)
+                        {
+                            <option value="@category.Value" selected="@(category.Value == ViewBag.SelectedCategory?.ToString())">
+                                @category.Text
+                            </option>
+                        }
                     }
                 </select>
                 <button type="submit" class="btn btn-primary">
@@ -48,21 +50,21 @@
                 <i class="fas fa-cogs icon"></i> Productos
             </a>
             <a asp-action="Create" class="btn btn-success">
-                <i class="fas fa-plus-circle icon"></i> Nuevo modelo
+                <i class="fas fa-plus-circle icon"></i> Nuevo Accesorio
             </a>
         </div>
     </div>
 
     <hr />
 
+    @* --- TABLA DE DATOS ESTILIZADA --- *@
     <div class="data-table-container">
         <table class="data-table">
             <thead>
                 <tr>
-                    <th>@Html.DisplayNameFor(model => model.Elements.First().Name)</th>
-                    <th>@Html.DisplayNameFor(model => model.Elements.First().Category)</th>
-                    <th>Manuales</th>
-                    <th>Consumibles / Services</th>
+                    <th>@Html.DisplayNameFor(model => model.Elements.FirstOrDefault().Name)</th>
+                    <th>@Html.DisplayNameFor(model => model.Elements.FirstOrDefault().Category)</th>
+                    <th>@Html.DisplayNameFor(model => model.Elements.FirstOrDefault().LoadCapacity)</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -70,50 +72,17 @@
                 @foreach (var item in Model.Elements)
                 {
                     <tr>
-                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Category!.Name)</td>
-                        <td>
-                            @if (item.ManualUrls != null && item.ManualUrls.Any())
-                            {
-                                <ul class="model-details-list">
-                                    @foreach (var manual in item.ManualUrls)
-                                    {
-                                        <li>
-                                            <a class="manual-name" href="@manual" download>@System.IO.Path.GetFileName(manual)</a>
-                                        </li>
-                                    }
-                                </ul>
-                            }
-                            else
-                            {
-                                <span class="text-danger">Sin manuales</span>
-                            }
-                        </td>
-                        <td>
-                            @if (item.SpareKitsUrls != null && item.SpareKitsUrls.Any())
-                            {
-                                <ul class="model-details-list">
-                                    @foreach (var spareKit in item.SpareKitsUrls)
-                                    {
-                                        <li>
-                                            <a class="spareKit-name" href="@spareKit" download>@System.IO.Path.GetFileName(spareKit)</a>
-                                        </li>
-                                    }
-                                </ul>
-                            }
-                            else
-                            {
-                                <span class="text-danger">Sin consumibles</span>
-                            }
-                        </td>
+                        <td><strong>@Html.DisplayFor(modelItem => item.Name)</strong></td>
+                        <td><span class="badge bg-light text-dark">@Html.DisplayFor(modelItem => item.Category.Name)</span></td>
+                        <td>@Html.DisplayFor(modelItem => item.LoadCapacity) kg</td>
                         <td class="table-actions">
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn-action details">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn-action details" title="Detalles">
                                 <i class="fas fa-info-circle"></i>
                             </a>
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn-action edit">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn-action edit" title="Editar">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn-action delete">
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn-action delete" title="Borrar">
                                 <i class="fas fa-trash-alt"></i>
                             </a>
                         </td>
@@ -123,14 +92,15 @@
         </table>
     </div>
 
+    @* --- CONTROL DE DATOS VACÍOS --- *@
     @if (!Model.Elements.Any())
     {
         <div class="alert alert-warning" role="alert">
-            No se encontraron resultados.
+            <i class="fas fa-info-circle icon"></i> No se encontraron modelos de accesorios registrados.
         </div>
     }
 
-    @* --- EL RESTO DEL PAGINADOR Y MENSAJES SE MANTIENE EXACTAMENTE IGUAL --- *@
+    @* --- COMPONENTE DE PAGINACIÓN COMPLETO Y REPLICADO --- *@
     <div class="pagination-container">
         <ul class="pagination-list">
             @{
@@ -156,7 +126,7 @@
             @if (Model.PreviousPage)
             {
                 <li class="page-item">
-                    <a class="page-link" asp-action="Index" asp-route-page="@(Model.CurrentPage - 1)" asp-route-searchString="@ViewData["searchString"]" asp-route-categoryId="@ViewBag.SelectedCategory">« Anterior</a>
+                    <a class="page-link" asp-action="Index" asp-route-page="@(Model.CurrentPage - 1)" asp-route-categoryId="@ViewBag.SelectedCategory">« Anterior</a>
                 </li>
             }
             else
@@ -169,7 +139,7 @@
             @if (startPage > 1)
             {
                 <li class="page-item">
-                    <a class="page-link" asp-action="Index" asp-route-page="1" asp-route-searchString="@ViewData["searchString"]" asp-route-categoryId="@ViewBag.SelectedCategory">1</a>
+                    <a class="page-link" asp-action="Index" asp-route-page="1" asp-route-categoryId="@ViewBag.SelectedCategory">1</a>
                 </li>
                 if (startPage > 2)
                 {
@@ -181,8 +151,6 @@
 
             @for (int i = startPage; i <= endPage; i++)
             {
-                string categoryId = ViewBag.SelectedCategory?.ToString();
-
                 if (i == Model.CurrentPage)
                 {
                     <li class="page-item active">
@@ -192,7 +160,7 @@
                 else
                 {
                     <li class="page-item">
-                        <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-searchString="@ViewData["searchString"]" asp-route-categoryId="@categoryId">@i</a>
+                        <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-categoryId="@ViewBag.SelectedCategory">@i</a>
                     </li>
                 }
             }
@@ -206,14 +174,14 @@
                     </li>
                 }
                 <li class="page-item">
-                    <a class="page-link" asp-action="Index" asp-route-page="@Model.TotalPages" asp-route-searchString="@ViewData["searchString"]" asp-route-categoryId="@ViewBag.SelectedCategory">@Model.TotalPages</a>
+                    <a class="page-link" asp-action="Index" asp-route-page="@Model.TotalPages" asp-route-categoryId="@ViewBag.SelectedCategory">@Model.TotalPages</a>
                 </li>
             }
 
             @if (Model.NextPage)
             {
                 <li class="page-item">
-                    <a class="page-link" asp-action="Index" asp-route-page="@(Model.CurrentPage + 1)" asp-route-searchString="@ViewData["searchString"]" asp-route-categoryId="@ViewBag.SelectedCategory">Siguiente »</a>
+                    <a class="page-link" asp-action="Index" asp-route-page="@(Model.CurrentPage + 1)" asp-route-categoryId="@ViewBag.SelectedCategory">Siguiente »</a>
                 </li>
             }
             else
@@ -225,17 +193,18 @@
         </ul>
     </div>
 
+    @* --- MENSAJES DE NOTIFICACIÓN TEMPDATA --- *@
     @if (TempData["ErrorMessage"] != null)
     {
-        <div class="alert alert-danger">
-            @TempData["ErrorMessage"]
+        <div class="alert alert-danger mt-3">
+            <i class="fas fa-exclamation-circle icon"></i> @TempData["ErrorMessage"]
         </div>
     }
 
     @if (TempData["SuccessMessage"] != null)
     {
-        <div class="alert alert-success">
-            @TempData["SuccessMessage"]
+        <div class="alert alert-success mt-3">
+            <i class="fas fa-check-circle icon"></i> @TempData["SuccessMessage"]
         </div>
     }
 </div>

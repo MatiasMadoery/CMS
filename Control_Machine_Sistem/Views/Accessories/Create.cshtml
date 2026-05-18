@@ -1,134 +1,67 @@
 ﻿@model Control_Machine_Sistem.Models.Accessory
 
 @{
-    bool isStock = ViewBag.IsStock ?? false;
-    ViewData["Title"] = isStock ? "Cargar Nuevo Accesorio a Stock" : "Registrar Nueva Venta de Accesorio";
+    ViewData["Title"] = "Nuevo Accesorio en Stock";
 }
 
 <link href="~/css/views.css" rel="stylesheet" />
-@* Agregamos FontAwesome para los iconos *@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
 <div class="form-container">
     <h1 class="form-title">@ViewData["Title"]</h1>
-    <h4 class="form-sub-title">Complete los datos del accesorio</h4>
+    <h4 class="form-sub-title">Registre el ingreso de una unidad física al stock</h4>
     <hr />
 
-    @* CORRECCIÓN 1: Agregar enctype="multipart/form-data" para permitir subir archivos *@
-    <form asp-action="Create" asp-route-isStock="@isStock" method="post" enctype="multipart/form-data" id="uploadForm">
-        <input type="hidden" name="isStock" value="@(isStock ? "true" : "false")" />
-        <input type="hidden" name="activeTab" value="@ViewBag.ActiveTab" />
-
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
         <div class="form-row">
-            @if (!isStock)
-            {
-                <div class="form-col">
-                    <div class="form-group">
-                        <label asp-for="CustomerId" class="form-label">Cliente *</label>
-                        <select asp-for="CustomerId" class="form-control select2" data-url="@Url.Action("GetCustomers", "Accessories")">
-                            <option value="">Seleccione un Cliente...</option>
-                        </select>
-                        <span asp-validation-for="CustomerId" class="text-danger"></span>
-                    </div>
-                </div>
-            }
+            @* --- SELECCIÓN DEL MODELO DESDE EL CATÁLOGO --- *@
             <div class="form-col">
                 <div class="form-group">
-                    <label asp-for="Model" class="form-label">Modelo / Nombre *</label>
-                    <input asp-for="Model" class="form-control" placeholder="Ej: Balde 600mm" />
-                    <span asp-validation-for="Model" class="text-danger"></span>
+                    <label asp-for="AccessoryModelId" class="form-label">Modelo de Accesorio (Catálogo) *</label>
+                    <select asp-for="AccessoryModelId" class="form-select" asp-items="ViewBag.AccessoryModelId">
+                        <option value="">-- Seleccionar del Catálogo --</option>
+                    </select>
+                    <span asp-validation-for="AccessoryModelId" class="text-danger"></span>
                 </div>
             </div>
-        </div>
 
-        <div class="form-row">
+            @* --- ASIGNACIÓN DE SUCURSAL / UBICACIÓN --- *@
             <div class="form-col">
                 <div class="form-group">
-                    <label asp-for="LoadCapacity" class="form-label">Capacidad de Carga</label>
-                    <input asp-for="LoadCapacity" class="form-control" placeholder="Ej: 0.5 m3" />
-                    <span asp-validation-for="LoadCapacity" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-col">
-                <div class="form-group">
-                    <label asp-for="UbicationId" class="form-label">Ubicación / Sucursal *</label>
-                    <select asp-for="UbicationId" class="form-select" asp-items="ViewBag.Ubications">
+                    <label asp-for="UbicationId" class="form-label">Sucursal / Ubicación *</label>
+                    <select asp-for="UbicationId" class="form-select" asp-items="ViewBag.UbicationId">
                         <option value="">-- Seleccionar Sucursal --</option>
                     </select>
                     <span asp-validation-for="UbicationId" class="text-danger"></span>
                 </div>
             </div>
-
-            @if (!isStock)
-            {
-                <div class="form-col">
-                    <div class="form-group">
-                        <label asp-for="SaleDate" class="form-label">Fecha de Venta</label>
-                        <input asp-for="SaleDate" type="date" class="form-control" />
-                        <span asp-validation-for="SaleDate" class="text-danger"></span>
-                    </div>
-                </div>
-            }
         </div>
 
-        @* --- SECCIÓN NUEVA: FOTOS DEL ACCESORIO (Solo si es Stock) --- *@
-        @if (isStock)
-        {
-            <h4 class="form-section-title">Fotos del Accesorio</h4>
-            <div class="form-row">
-                <div class="form-col">
-                    <div class="form-group">
-                        <label asp-for="ImageFiles" class="form-label">Imágenes de Stock (Máximo 4) *</label>
-                        <input asp-for="ImageFiles" type="file" class="form-control" multiple accept="image/*" id="imageInput" />
-                        <span asp-validation-for="ImageFiles" class="text-danger"></span>
-                        <small class="text-muted">Formatos: JPG, PNG. Seleccione las 4 juntas.</small>
-                    </div>
+        @* --- CONTROL ADICIONAL: CARGA DE IMÁGENES (Opcional, según tu entidad) --- *@
+        <div class="form-row">
+            <div class="form-col" style="max-width: 50%;">
+                <div class="form-group">
+                    <label asp-for="ImageFiles" class="form-label">Fotos del Accesorio</label>
+                    <input asp-for="ImageFiles" class="form-control" type="file" multiple />
+                    <span asp-validation-for="ImageFiles" class="text-danger"></span>
                 </div>
             </div>
-            @* Contenedor para miniaturas *@
-            <div id="imagePreviewContainer" class="d-flex flex-wrap gap-2 mb-3"></div>
-        }
+        </div>
 
-        <div class="button-group" style="margin-top: 20px;">
-            <button type="submit" class="btn btn-success" asp-route-activeTab="accessories">
-                <i class="fas fa-plus-circle icon"></i> Crear Registro
+        <div class="button-group" style="margin-top: 30px;">
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-save icon"></i> Registrar Ingreso Stock
             </button>
-            <a asp-controller="Stock" asp-action="@(isStock ? "Index" : "Vendidos")" class="btn btn-secondary" asp-route-activeTab="accessories">
-                <i class="fas fa-arrow-left icon"></i> Volver
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left icon"></i> Volver al Listado
             </a>
         </div>
     </form>
 </div>
 
 @section Scripts {
-    <script>
-        // Lógica de previsualización de imágenes (Igual que en Machines)
-        document.getElementById('imageInput')?.addEventListener('change', function (e) {
-            const previewContainer = document.getElementById('imagePreviewContainer');
-            previewContainer.innerHTML = '';
-
-            if (this.files.length > 4) {
-                alert("Solo se permite un máximo de 4 fotos.");
-            }
-
-            Array.from(this.files).slice(0, 4).forEach(file => {
-                const reader = new FileReader();
-                reader.onload = function (event) {
-                    const img = document.createElement('img');
-                    img.src = event.target.result;
-                    img.style.width = '100px';
-                    img.style.height = '100px';
-                    img.style.objectFit = 'cover';
-                    img.style.borderRadius = '8px';
-                    img.className = 'img-thumbnail';
-                    previewContainer.appendChild(img);
-                };
-                reader.readAsDataURL(file);
-            });
-        });
-    </script>
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }

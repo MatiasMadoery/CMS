@@ -1,11 +1,14 @@
 ﻿using Control_Machine_Sistem.Models;
+using Control_Machine_Sistem.Models.Control_Machine_Sistem.Models;
 using Control_Machine_Sistem.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace Control_Machine_Sistem.Controllers
 {
+    [Authorize(Roles = "Admin, Técnico, SuperAdmin, Viewer")]
     public class AccessoriesController : Controller
     {
         private readonly AppDbContext _context;
@@ -14,65 +17,92 @@ namespace Control_Machine_Sistem.Controllers
         public AccessoriesController(AppDbContext context, IImageStorageService imageStorageService)
         {
             _context = context;
-            _imageStorageService = new AzureImageStorageService(new ConfigurationBuilder().AddJsonFile("appsettings.json").Build());
+            _imageStorageService = imageStorageService;
         }
 
-        // GET: Accessories (Historial general)
-        public async Task<IActionResult> Index()
+        // GET: Accessories
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin, Viewer")]
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 5, int? productId = null)
         {
-            var appDbContext = _context.Accessories.Include(a => a.Customer).Include(a => a.Ubication);
-            return View(await appDbContext.ToListAsync());
+            // CORRECCIÓN: Ahora incluimos AccessoryModel para llegar a la Categoría indirectamente
+            var query = _context.Accessories
+                .Include(a => a.AccessoryModel)
+                    .ThenInclude(am => am!.Category)
+                .Include(a => a.Ubication)
+                .AsQueryable();
+
+            // CORRECCIÓN: El filtrado por producto/categoría ahora se hace a través de AccessoryModel
+            if (productId.HasValue && productId > 0)
+            {
+                query = query.Where(a => a.AccessoryModel!.CategoryId == productId);
+            }
+
+            var totalAccessories = await query.CountAsync();
+
+            var accessoriesPage = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var pager = new Pager<Accessory>(accessoriesPage, totalAccessories, page, pageSize);
+
+            var categoriasAccesorios = await _context.Categories
+                .Where(c => c.Type == CategoryType.Accessory)
+                .OrderBy(c => c.Name)
+                .ToListAsync();
+
+            ViewBag.Categories = new SelectList(categoriasAccesorios, "Id", "Name");
+            ViewBag.SelectedCategory = productId;
+
+            return View(pager);
         }
 
         // GET: Accessories/Details/5
-        public async Task<IActionResult> Details(int? id, bool isStock = false, string activeTab = "machines")
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin, Viewer")]
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
 
+            // CORRECCIÓN: Incluimos AccessoryModel y su Categoría
             var accessory = await _context.Accessories
-                .Include(a => a.Customer)
+                .Include(a => a.AccessoryModel)
+                    .ThenInclude(am => am!.Category)
                 .Include(a => a.Ubication)
+                .Include(a => a.Customer)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (accessory == null) return NotFound();
 
-            ViewBag.IsStock = isStock;
-            ViewBag.ActiveTab = activeTab;
             return View(accessory);
         }
 
         // GET: Accessories/Create
-        public IActionResult Create(bool isStock = false, string activeTab = "machines")
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
+        public IActionResult Create()
         {
-            ViewBag.IsStock = isStock;
-            ViewBag.ActiveTab = activeTab;
-            ViewBag.Customers = new SelectList(_context.Customers, "Id", "Name");
-            ViewBag.Ubications = new SelectList(_context.Ubications, "Id", "Name");
-            CargarCategoriasAccesorios();
+            ViewBag.UbicationId = new SelectList(_context.Ubications, "Id", "Name");
+            CargarModelosAccesorios(); // <--- NUEVO: Cargamos los modelos del catálogo
             return View();
         }
 
+        // POST: Accessories/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Model,LoadCapacity,SaleDate,CustomerId,UbicationId,ImageFiles,CategoryId")] Accessory accessory, bool isStock = false, string activeTab = "machines")
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
+        public async Task<IActionResult> Create([Bind("Id,AccessoryModelId,UbicationId,ImageFiles")] Accessory accessory)
         {
-            if (isStock)
-            {
-                accessory.CustomerId = null;
-                accessory.SaleDate = null;
-                ModelState.Remove("CustomerId");
-                ModelState.Remove("SaleDate");
-            }
+            accessory.CustomerId = null;
+            accessory.SaleDate = null;
+            ModelState.Remove("CustomerId");
+            ModelState.Remove("SaleDate");
 
             if (ModelState.IsValid)
             {
-                // --- NUEVA LÓGICA: PROCESAR IMÁGENES PARA AZURE ---
                 List<string> imageUrls = new List<string>();
                 if (accessory.ImageFiles != null && accessory.ImageFiles.Any())
                 {
                     foreach (var photo in accessory.ImageFiles.Take(4))
                     {
-                        // CORRECCIÓN: Nombre de contenedor consistente "accessory-photos"
                         string url = await _imageStorageService.UploadImageAsync(photo, "accessory-photos");
                         if (!string.IsNullOrEmpty(url)) imageUrls.Add(url);
                     }
@@ -82,55 +112,51 @@ namespace Control_Machine_Sistem.Controllers
                 _context.Add(accessory);
                 await _context.SaveChangesAsync();
 
-                return isStock
-                    ? RedirectToAction("Index", "Stock", new { activeTab = activeTab })
-                    : RedirectToAction("Vendidos", "Stock", new { activeTab = activeTab });
+                return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.IsStock = isStock;
-            ViewBag.ActiveTab = activeTab;
-            ViewBag.Customers = new SelectList(_context.Customers, "Id", "Name", accessory.CustomerId);
             ViewBag.Ubications = new SelectList(_context.Ubications, "Id", "Name", accessory.UbicationId);
-            CargarCategoriasAccesorios(accessory.CategoryId);
+            CargarModelosAccesorios(accessory.AccessoryModelId);
             return View(accessory);
         }
 
         // GET: Accessories/Edit/5
-        public async Task<IActionResult> Edit(int? id, bool isStock = false, string activeTab = "machines")
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
+        public async Task<IActionResult> Edit(int? id, bool isStock = true) // <-- Parámetro opcional añadido
         {
             if (id == null) return NotFound();
 
             var accessory = await _context.Accessories.FindAsync(id);
             if (accessory == null) return NotFound();
 
+            // CORRECCIÓN: Cambiamos a UbicationId para que coincida con el asp-items de la vista
+            ViewBag.UbicationId = new SelectList(_context.Ubications, "Id", "Name", accessory.UbicationId);
+
+            // Si la vista no es de stock (es vendido), también necesitas cargar los clientes:
+            if (!isStock)
+            {
+                ViewBag.Customers = new SelectList(_context.Customers, "Id", "Name", accessory.CustomerId);
+            }
+
+            // Pasamos el estado de las pestañas y tipo a la vista
             ViewBag.IsStock = isStock;
-            ViewBag.ActiveTab = activeTab;
-            ViewBag.Customers = new SelectList(_context.Customers, "Id", "Name", accessory.CustomerId);
-            ViewBag.Ubications = new SelectList(_context.Ubications, "Id", "Name", accessory.UbicationId);
-            CargarCategoriasAccesorios(accessory.CategoryId);
+            ViewBag.ActiveTab = "accessories";
+
+            CargarModelosAccesorios(accessory.AccessoryModelId); // Asegúrate que dentro asigne a "ViewBag.AccessoryModelId"
+
             return View(accessory);
         }
 
+        // POST: Accessories/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(
-            int id,
-            [Bind("Id,Model,LoadCapacity,SaleDate,CustomerId,UbicationId,CategoryId")] Accessory accessory,
-            List<string> ExistingImageUrls,
-            List<string> DeletedImageUrls,
-            List<IFormFile> ImageFiles,
-            bool isStock = false,
-            string activeTab = "machines")
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,AccessoryModelId,UbicationId")] Accessory accessory, List<string> ExistingImageUrls, List<string> DeletedImageUrls, List<IFormFile> ImageFiles)
         {
             if (id != accessory.Id) return NotFound();
 
-            if (isStock)
-            {
-                accessory.CustomerId = null;
-                accessory.SaleDate = null;
-                ModelState.Remove("CustomerId");
-                ModelState.Remove("SaleDate");
-            }
+            ModelState.Remove("CustomerId");
+            ModelState.Remove("SaleDate");
 
             if (ModelState.IsValid)
             {
@@ -139,26 +165,21 @@ namespace Control_Machine_Sistem.Controllers
                     var existingAccessory = await _context.Accessories.FirstOrDefaultAsync(a => a.Id == id);
                     if (existingAccessory == null) return NotFound();
 
-                    // Mapeo manual (Igual que en Machines)
-                    existingAccessory.Model = accessory.Model;
-                    existingAccessory.LoadCapacity = accessory.LoadCapacity;
+                    // CORRECCIÓN: Mapeo de propiedades físicas actualizadas
+                    existingAccessory.AccessoryModelId = accessory.AccessoryModelId;
                     existingAccessory.UbicationId = accessory.UbicationId;
-                    existingAccessory.CategoryId = accessory.CategoryId;
-                    existingAccessory.CustomerId = isStock ? null : accessory.CustomerId;
-                    existingAccessory.SaleDate = isStock ? null : accessory.SaleDate;
 
                     List<string> imageUrls = ExistingImageUrls ?? new List<string>();
 
-                    // 1. Borrar de Azure
                     if (DeletedImageUrls != null && DeletedImageUrls.Any())
                     {
                         foreach (var url in DeletedImageUrls)
+                        {
                             await _imageStorageService.DeleteImageAsync(url, "accessory-photos");
-
+                        }
                         imageUrls = imageUrls.Except(DeletedImageUrls).ToList();
                     }
 
-                    // 2. Subir nuevas
                     if (ImageFiles != null && ImageFiles.Any())
                     {
                         foreach (var photo in ImageFiles)
@@ -179,58 +200,57 @@ namespace Control_Machine_Sistem.Controllers
                     else throw;
                 }
 
-                return isStock
-                    ? RedirectToAction("Index", "Stock", new { activeTab = activeTab })
-                    : RedirectToAction("Vendidos", "Stock", new { activeTab = activeTab });
+                return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.IsStock = isStock;
-            ViewBag.ActiveTab = activeTab;
-            ViewBag.Customers = new SelectList(_context.Customers, "Id", "Name", accessory.CustomerId);
             ViewBag.Ubications = new SelectList(_context.Ubications, "Id", "Name", accessory.UbicationId);
-            CargarCategoriasAccesorios(accessory.CategoryId);
+            CargarModelosAccesorios(accessory.AccessoryModelId);
             return View(accessory);
         }
 
         // GET: Accessories/Delete/5
-        public async Task<IActionResult> Delete(int? id, bool isStock = false, string activeTab = "machines")
+        [Authorize(Roles = "Admin, SuperAdmin")]
+        public async Task<IActionResult> Delete(int? id, bool isStock = true)
         {
             if (id == null) return NotFound();
 
             var accessory = await _context.Accessories
-                .Include(a => a.Customer)
+                .Include(a => a.AccessoryModel)
+                    .ThenInclude(am => am!.Category)
                 .Include(a => a.Ubication)
+                .Include(a => a.Customer) // Te agrego este Include por si borras un accesorio ya vendido
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (accessory == null) return NotFound();
 
+            // NUEVO: Guardamos el estado para que la vista sepa a dónde regresar
             ViewBag.IsStock = isStock;
-            ViewBag.ActiveTab = activeTab;
+            ViewBag.ActiveTab = "accessories";
+
             return View(accessory);
         }
 
         // POST: Accessories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id, bool isStock = false, string activeTab = "machines")
+        [Authorize(Roles = "Admin, SuperAdmin")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var accessory = await _context.Accessories.FindAsync(id);
             if (accessory != null)
             {
-                // Borrar fotos de la nube antes de borrar de la DB
-                if (accessory.ImageUrls != null)
+                if (accessory.ImageUrls != null && accessory.ImageUrls.Any())
                 {
                     foreach (var url in accessory.ImageUrls)
+                    {
                         await _imageStorageService.DeleteImageAsync(url, "accessory-photos");
+                    }
                 }
 
                 _context.Accessories.Remove(accessory);
                 await _context.SaveChangesAsync();
             }
-            ViewBag.ActiveTab = activeTab;
-            return isStock
-                    ? RedirectToAction("Index", "Stock", new { activeTab = activeTab })
-                    : RedirectToAction("Vendidos", "Stock", new { activeTab = activeTab });
+            return RedirectToAction(nameof(Index));
         }
 
         private bool AccessoryExists(int id)
@@ -238,28 +258,14 @@ namespace Control_Machine_Sistem.Controllers
             return _context.Accessories.Any(e => e.Id == id);
         }
 
-        [HttpGet]
-        public async Task<JsonResult> GetCustomers(string term)
+        // NUEVOS MÉTODOS AUXILIARES: Reemplaza CargarCategoriasAccesorios por los modelos disponibles
+        private void CargarModelosAccesorios(int? selectedId = null)
         {
-            if (string.IsNullOrEmpty(term)) return Json(new List<object>());
-
-            var customers = await _context.Customers
-                .Where(c => c.Name!.ToLower().Contains(term.ToLower()))
-                .Select(c => new { id = c.Id, text = c.Name })
-                .Take(10)
-                .ToListAsync();
-
-            return Json(customers);
-        }
-
-        private void CargarCategoriasAccesorios(int? selectedId = null)
-        {
-            var categorias = _context.Categories
-                .Where(c => c.Type == CategoryType.Accessory)
-                .OrderBy(c => c.Name)
+            var modelos = _context.AccessoryModels
+                .OrderBy(m => m.Name)
                 .ToList();
 
-            ViewBag.CategoryId = new SelectList(categorias, "Id", "Name", selectedId);
+            ViewBag.AccessoryModelId = new SelectList(modelos, "Id", "Name", selectedId);
         }
     }
 }

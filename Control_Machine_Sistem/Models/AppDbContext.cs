@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
+﻿using Control_Machine_Sistem.Models.Control_Machine_Sistem.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Newtonsoft.Json;
 
 namespace Control_Machine_Sistem.Models
 {
@@ -91,16 +92,32 @@ namespace Control_Machine_Sistem.Models
                     v => JsonConvert.DeserializeObject<List<string>>(v) ?? new List<string>() // Lo trae como Lista a C#
                 );
 
-            // 4. Relación Accessory -> Category (NUEVA)
-            modelBuilder.Entity<Accessory>()
-                .HasOne(a => a.Category)
-                .WithMany()
-                .HasForeignKey(a => a.CategoryId)
-                .OnDelete(DeleteBehavior.Restrict);
-
             modelBuilder.Entity<Accessory>()
                 .Property(a => a.ImageUrls)
                 .Metadata.SetValueComparer(imageComparer); // Reutilizamos el comparador
+
+            // --- NUEVAS CONFIGURACIONES PARA ACCESORIOS (CATÁLOGO Y STOCK) ---
+
+            // 4. Relación: Catálogo de Accesorio -> Categoría
+            modelBuilder.Entity<AccessoryModel>()
+                .HasOne(am => am.Category)
+                .WithMany() // Si Category no tiene una lista de AccessoryModels, lo dejamos vacío
+                .HasForeignKey(am => am.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // 5. Relación: Unidad Física en Stock -> Catálogo de Accesorio
+            modelBuilder.Entity<Accessory>()
+                .HasOne(a => a.AccessoryModel)
+                .WithMany(am => am.Accessories)
+                .HasForeignKey(a => a.AccessoryModelId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // 6. Relación: Unidad Física en Stock -> Ubicación
+            modelBuilder.Entity<Accessory>()
+                .HasOne(a => a.Ubication)
+                .WithMany(u => u.Accessories)
+                .HasForeignKey(a => a.UbicationId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // --- Configuración para CheckListUrl ---
             modelBuilder.Entity<Machine>()
@@ -117,6 +134,7 @@ namespace Control_Machine_Sistem.Models
         public DbSet<Service> Services { get; set; } = default!;
         public DbSet<OtherMaintenance> OtherMaintenances { get; set; } = default!;
         public DbSet<Accessory> Accessories { get; set; } = default!;
+        public DbSet<AccessoryModel> AccessoryModels { get; set; } = default!; // <--- AGREGADO
         public DbSet<Ubication> Ubications { get; set; } = default!;
     }
 }

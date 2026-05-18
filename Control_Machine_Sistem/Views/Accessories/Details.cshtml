@@ -31,14 +31,16 @@
                 <dd>@(Model.Ubication?.Name ?? "Sin sucursal asignada")</dd>
             </div>
 
+            @* --- CORRECCIÓN BLOQUE MODELO (Líneas 35-36) --- *@
             <div class="details-item">
-                <dt>@Html.DisplayNameFor(model => model.Model)</dt>
-                <dd>@Html.DisplayFor(model => model.Model)</dd>
+                <dt>@Html.DisplayNameFor(model => model.AccessoryModel!.Name)</dt>
+                <dd>@Html.DisplayFor(model => model.AccessoryModel!.Name)</dd>
             </div>
 
+            @* --- CORRECCIÓN BLOQUE CAPACIDAD DE CARGA (Líneas 40-41) --- *@
             <div class="details-item">
-                <dt>@Html.DisplayNameFor(model => model.LoadCapacity)</dt>
-                <dd>@(Model.LoadCapacity > 0 ? Model.LoadCapacity.ToString() + " kg" : "N/A")</dd>
+                <dt>@Html.DisplayNameFor(model => model.AccessoryModel!.LoadCapacity)</dt>
+                <dd>@(Model.AccessoryModel != null && Model.AccessoryModel.LoadCapacity > 0 ? Model.AccessoryModel.LoadCapacity.ToString() + " kg" : "N/A")</dd>
             </div>
 
             @* --- SECCIÓN DE FOTOS (Igual a Máquinas) --- *@
@@ -144,13 +146,16 @@
     }
 
     @@keyframes zoomIn {
-        from {
-            transform: scale(0)
-        }
+        from
 
-        to {
-            transform: scale(1)
-        }
+    {
+        transform: scale(0)
+    }
+
+    to {
+        transform: scale(1)
+    }
+
     }
 </style>
 

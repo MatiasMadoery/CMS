@@ -59,16 +59,18 @@ namespace Control_Machine_Sistem.Controllers
             var mPager = new Pager<Machine>(mElements, mCount, machinePage, pageSize);
 
             // --- Query Accesorios en Stock ---
+            // CORRECCIÓN: Se incluye AccessoryModel para poder acceder a sus datos de catálogo
             var aQuery = _context.Accessories
-                .Include(m => m.Ubication)
+                .Include(a => a.AccessoryModel)
+                .Include(a => a.Ubication)
                 .Where(a => a.CustomerId == null);
 
             if (ubicationId.HasValue) aQuery = aQuery.Where(a => a.UbicationId == ubicationId);
 
-            // 3. NUEVO: Filtrar accesorios por categoría si estamos en la pestaña correspondiente
+            // 3. CORRECCIÓN: Filtrar accesorios por categoría haciendo puente a través de AccessoryModel
             if (categoryId.HasValue && activeTab == "accessories")
             {
-                aQuery = aQuery.Where(a => a.CategoryId == categoryId);
+                aQuery = aQuery.Where(a => a.AccessoryModel!.CategoryId == categoryId);
             }
 
             var aCount = await aQuery.CountAsync();
@@ -125,9 +127,10 @@ namespace Control_Machine_Sistem.Controllers
             }
             else
             {
-                var accessory = await _context.Accessories.FindAsync(id);
+                // CORRECCIÓN: Incluimos el AccessoryModel para leer el nombre del catálogo
+                var accessory = await _context.Accessories.Include(a => a.AccessoryModel).FirstOrDefaultAsync(a => a.Id == id);
                 if (accessory == null) return NotFound();
-                productName = accessory.Model;
+                productName = accessory.AccessoryModel?.Name ?? "Accesorio sin nombre";
             }
 
             ViewBag.Id = id;
@@ -208,7 +211,9 @@ namespace Control_Machine_Sistem.Controllers
                 .ToListAsync();
 
             // --- QUERY ACCESORIOS VENDIDOS ---
+            // CORRECCIÓN: Incluimos también AccessoryModel aquí para las vistas de vendidos si hiciera falta
             var aQuery = _context.Accessories
+                .Include(a => a.AccessoryModel)
                 .Include(a => a.Ubication)
                 .Include(a => a.Customer)
                 .Where(a => a.CustomerId != null); // Solo vendidos

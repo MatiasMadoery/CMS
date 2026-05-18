@@ -1,0 +1,46 @@
+﻿@model Control_Machine_Sistem.Models.Control_Machine_Sistem.Models.AccessoryModel
+
+@{
+    ViewData["Title"] = "Detalle del Accesorio";
+}
+
+<link href="~/css/views.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<div class="content-wrapper">
+    <h1 class="page-title">@ViewData["Title"]</h1>
+    <hr />
+
+    <div class="details-container">
+        <dl class="details-list">
+            <div class="details-item">
+                <dt>@Html.DisplayNameFor(model => model.Name)</dt>
+                <dd>@Html.DisplayFor(model => model.Name)</dd>
+            </div>
+
+            <div class="details-item">
+                <dt>@Html.DisplayNameFor(model => model.Category)</dt>
+                <dd>@Html.DisplayFor(model => model.Category!.Name)</dd>
+            </div>
+
+            <div class="details-item">
+                <dt>@Html.DisplayNameFor(model => model.LoadCapacity)</dt>
+                <dd>@Html.DisplayFor(model => model.LoadCapacity) kg</dd>
+            </div>
+        </dl>
+    </div>
+
+    <div class="button-group mt-4">
+        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">
+            <i class="fas fa-edit icon"></i> Editar
+        </a>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left icon"></i> Volver a la lista
+        </a>
+        <a asp-action="Delete" asp-route-id="@Model?.Id" class="btn btn-danger">
+            <i class="fas fa-trash-alt icon"></i> Eliminar
+        </a>
+    </div>
+</div>
+
+<script src="~/js/views.js"></script>

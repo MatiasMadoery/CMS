@@ -123,7 +123,7 @@
         }
     </div>
 
-    @* --- SECCIÓN ACCESORIOS VENDIDOS --- *@
+    @* --- SECCIÓN ACCESORIOS VENDIDAS --- *@
     <div id="section-accessories" style="@(Model.ActiveTab == "accessories" ? "" : "display:none")">
         @if (!Model.SoldAccessories.Elements.Any())
         {
@@ -149,7 +149,8 @@
                         {
                             <tr>
                                 <td><strong>@item.Customer?.Name</strong></td>
-                                <td>@item.Model</td>
+                                @* CORRECCIÓN: Acceso correcto a la propiedad del catálogo *@
+                                <td>@item.AccessoryModel?.Name</td>
                                 <td><span class="badge bg-light text-dark">@item.Ubication?.Name</span></td>
                                 <td>@item.SaleDate?.ToString("dd/MM/yyyy")</td>
                                 <td class="table-actions">
@@ -184,7 +185,7 @@
             document.getElementById('section-machines').style.display = isMachines ? 'block' : 'none';
             document.getElementById('section-accessories').style.display = isMachines ? 'none' : 'block';
 
-            // Actualizar botones (usando la clase btn-tab active que ya tienes en tu CSS)
+            // Actualizar botones
             document.getElementById('btn-machines').classList.toggle('active', isMachines);
             document.getElementById('btn-accessories').classList.toggle('active', !isMachines);
 

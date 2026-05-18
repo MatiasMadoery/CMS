@@ -1,0 +1,72 @@
+﻿@model Control_Machine_Sistem.Models.Control_Machine_Sistem.Models.AccessoryModel
+
+@{
+    ViewData["Title"] = "Crear Accesorio";
+}
+
+<link href="~/css/views.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<div class="form-container">
+    <h1 class="form-title">@ViewData["Title"]</h1>
+
+    <h4 class="form-section-title">Información del Accesorio</h4>
+    <hr />
+
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        @* Primera fila de controles: Producto y Nombre *@
+        <div class="form-row">
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="CategoryId" class="form-label">Producto / Categoría</label>
+                    <div class="input-group-addon">
+                        @* Corregido para usar ViewBag.Categories mapeado en el controlador *@
+                        <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select">
+                            <option value="">Selecciona un producto</option>
+                        </select>
+                        <a asp-action="Create" asp-controller="Categories" class="btn btn-success btn-custom-small" target="_blank">
+                            <i class="fas fa-plus-circle icon"></i> Crear producto
+                        </a>
+                    </div>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="Name" class="form-label">Nombre</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        @* Segunda fila de controles: Atributos específicos del accesorio *@
+        <div class="form-row">
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="LoadCapacity" class="form-label">Capacidad de Carga (kg)</label>
+                    <input asp-for="LoadCapacity" class="form-control" type="number" />
+                    <span asp-validation-for="LoadCapacity" class="text-danger"></span>
+                </div>
+            </div>
+            @* Columna vacía de relleno para mantener simetría y alineación visual en pantallas grandes *@
+            <div class="form-col"></div>
+        </div>
+
+        <div class="button-group mt-4">
+            <input type="submit" value="Crear accesorio" class="btn btn-success" />
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left icon"></i> Volver a la lista
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="~/js/views.js"></script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
