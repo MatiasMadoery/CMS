@@ -1,4 +1,5 @@
-﻿using Control_Machine_Sistem.Models;
+﻿using ClosedXML.Excel;
+using Control_Machine_Sistem.Models;
 using Control_Machine_Sistem.Models.Control_Machine_Sistem.Models;
 using Control_Machine_Sistem.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -80,9 +81,28 @@ namespace Control_Machine_Sistem.Controllers
         [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         public IActionResult Create()
         {
+            var accessoriesCategories = _context.Categories
+                .Where(c => c.Type == CategoryType.Accessory)
+                .OrderBy(c => c.Name)
+                .ToList();
+
+            ViewBag.Categories = new SelectList(accessoriesCategories, "Id", "Name");
             ViewBag.UbicationId = new SelectList(_context.Ubications, "Id", "Name");
             CargarModelosAccesorios(); // <--- NUEVO: Cargamos los modelos del catálogo
+
+            ViewBag.AccessoryModelId = new SelectList(Enumerable.Empty<SelectListItem>());
             return View();
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetAccessoriesModelsByCategory(int categoryId)
+        {
+            var models = await _context.AccessoryModels
+                                       .Where(a => a.CategoryId == categoryId)
+                                       .Select(a => new { id = a.Id, name = a.Name })
+                                       .ToListAsync();
+
+            return Json(models);
         }
 
         // POST: Accessories/Create
@@ -266,6 +286,57 @@ namespace Control_Machine_Sistem.Controllers
                 .ToList();
 
             ViewBag.AccessoryModelId = new SelectList(modelos, "Id", "Name", selectedId);
+        }
+
+        public async Task<IActionResult> ExportarExcelAccessories()
+        {
+            var accessories = await _context.Accessories!
+                .Include(a => a.AccessoryModel)
+                    .ThenInclude(a => a.Category)
+                .Include(m => m.Ubication)
+                .OrderBy(m => m.Id)
+                .ToListAsync();
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("Stock de Accesorios");
+
+                string[] headers = {
+            "Accesorio", "Modelo", "Capacidad de Carga", "Sucursal",
+        };
+
+                for (int i = 0; i < headers.Length; i++)
+                {
+                    var cell = worksheet.Cell(1, i + 1);
+                    cell.Value = headers[i];
+                    cell.Style.Font.Bold = true;
+                    cell.Style.Fill.BackgroundColor = XLColor.LightGray;
+                }
+
+                int row = 2;
+                foreach (var item in accessories)
+                {
+                    worksheet.Cell(row, 1).Value = item.AccessoryModel?.Category?.Name ?? "N/A";
+                    worksheet.Cell(row, 2).Value = item.AccessoryModel?.Name ?? "N/A";
+                    worksheet.Cell(row, 3).Value = item.AccessoryModel?.LoadCapacity;
+                    worksheet.Cell(row, 4).Value = item.Ubication?.Name ?? "N/A";
+                    row++;
+                }
+
+                worksheet.Columns().AdjustToContents();
+
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var content = stream.ToArray();
+
+                    return File(
+                        content,
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        $"Reporte_Stock_{DateTime.Now:yyyyMMdd}.xlsx"
+                    );
+                }
+            }
         }
     }
 }

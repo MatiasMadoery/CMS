@@ -8,9 +8,9 @@ namespace Control_Machine_Sistem.Models
         {
             public int Id { get; set; }
 
-            [Required(ErrorMessage = "El modelo/descripción es obligatorio.")]
+            [Required(ErrorMessage = "El modelo es obligatorio.")]
             [StringLength(100)]
-            [Display(Name = "Modelo/Descripción")]
+            [Display(Name = "Modelo")]
             public string Name { get; set; } = string.Empty;
 
             [Required(ErrorMessage = "Debe ingresar la capacidad de carga.")]

@@ -16,6 +16,14 @@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
         <div class="form-row">
+            <div class="form-col">
+                <div class="form-group">
+                    <label for="CategoryId" class="form-label">Producto *</label>
+                    <select id="CategoryId" class="form-select" asp-items="ViewBag.Categories">
+                        <option value="">Seleccione un producto...</option>
+                    </select>
+                </div>
+            </div>
             @* --- SELECCIÓN DEL MODELO DESDE EL CATÁLOGO --- *@
             <div class="form-col">
                 <div class="form-group">
@@ -62,6 +70,7 @@
     </form>
 </div>
 
+<script src="~/js/accessoryCreateForm.js"></script>
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
