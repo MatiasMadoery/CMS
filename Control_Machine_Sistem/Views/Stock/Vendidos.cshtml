@@ -129,7 +129,7 @@
         }
     </div>
 
-    @* --- SECCIÓN ACCESORIOS VENDIDOS --- *@
+    @* --- SECCIÓN ACCESORIOS VENDIDAS --- *@
     <div id="section-accessories" style="@(Model.ActiveTab == "accessories" ? "" : "display:none")">
         @if (!Model.SoldAccessories.Elements.Any())
         {
@@ -155,7 +155,8 @@
                         {
                             <tr>
                                 <td><strong>@item.Customer?.Name</strong></td>
-                                <td>@item.Category.Name</td>
+                                @* CORRECCIÓN: Acceso correcto a la propiedad del catálogo *@
+                                <td>@item.AccessoryModel?.Name</td>
                                 <td><span class="badge bg-light text-dark">@item.Ubication?.Name</span></td>
                                 <td>@item.SaleDate?.ToString("dd/MM/yyyy")</td>
                                 <td class="table-actions">
@@ -189,6 +190,43 @@
 @section Scripts {
     <script src="~/js/views.js"></script>
     <script>
+        function switchTab(tabName) {
+            const isMachines = tabName === 'machines';
+            document.getElementById('section-machines').style.display = isMachines ? 'block' : 'none';
+            document.getElementById('section-accessories').style.display = isMachines ? 'none' : 'block';
+
+            // Actualizar botones
+            document.getElementById('btn-machines').classList.toggle('active', isMachines);
+            document.getElementById('btn-accessories').classList.toggle('active', !isMachines);
+
+            // Ocultar filtros irrelevantes
+            document.getElementById('col-filter-category').style.display = isMachines ? 'block' : 'none';
+            document.getElementById('col-filter-model').style.display = isMachines ? 'block' : 'none';
+
+            document.getElementById('inputActiveTab').value = tabName;
+        }
+
+        // Cascada Categoría -> Modelo (Fetch)
+        const categorySelect = document.getElementById('filterCategory');
+        const modelSelect = document.getElementById('filterModel');
+
+        categorySelect.addEventListener('change', function() {
+            const categoryId = this.value;
+            modelSelect.innerHTML = '<option value="">-- Todos --</option>';
+            if (categoryId) {
+                fetch('@Url.Action("GetModelsByCategory", "Stock")?categoryId=' + categoryId)
+                    .then(r => r.json())
+                    .then(data => {
+                        data.forEach(m => {
+                            const opt = document.createElement('option');
+                            opt.value = m.id;
+                            opt.text = m.name;
+                            modelSelect.appendChild(opt);
+                        });
+                    });
+            }
+        });
+
         document.addEventListener("DOMContentLoaded", function() {
             StockManager.initCategoryCascade('@Url.Action("GetModelsByCategory", "Stock")');
         });

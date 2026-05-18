@@ -1,0 +1,66 @@
+﻿@model Control_Machine_Sistem.Models.Control_Machine_Sistem.Models.AccessoryModel
+
+@{
+    ViewData["Title"] = "Editar Accesorio";
+}
+
+<link href="~/css/views.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<div class="form-container">
+    <h1 class="form-title">@ViewData["Title"]</h1>
+    <hr />
+
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+
+        @* Primera fila de controles: Producto y Nombre *@
+        <div class="form-row">
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="CategoryId" class="form-label">Producto / Categoría</label>
+                    <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-control">
+                        <option value="">Selecciona un producto</option>
+                    </select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="Name" class="form-label">Nombre</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        @* Segunda fila de controles: Atributo específico *@
+        <div class="form-row">
+            <div class="form-col">
+                <div class="form-group">
+                    <label asp-for="LoadCapacity" class="form-label">Capacidad de Carga (kg)</label>
+                    <input asp-for="LoadCapacity" class="form-control" type="number" />
+                    <span asp-validation-for="LoadCapacity" class="text-danger"></span>
+                </div>
+            </div>
+            @* Columna de relleno simétrico *@
+            <div class="form-col"></div>
+        </div>
+
+        <br />
+        <div class="button-group">
+            <input type="submit" value="Guardar" class="btn btn-success" />
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left icon"></i> Volver a la lista
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="~/js/views.js"></script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

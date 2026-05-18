@@ -30,8 +30,7 @@ namespace Control_Machine_Sistem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CategoryId")
-                        .HasMaxLength(100)
+                    b.Property<int>("AccessoryModelId")
                         .HasColumnType("int");
 
                     b.Property<int?>("CustomerId")
@@ -41,9 +40,6 @@ namespace Control_Machine_Sistem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("LoadCapacity")
-                        .HasColumnType("float");
-
                     b.Property<DateTime?>("SaleDate")
                         .HasColumnType("datetime2");
 
@@ -52,7 +48,7 @@ namespace Control_Machine_Sistem.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("AccessoryModelId");
 
                     b.HasIndex("CustomerId");
 
@@ -79,6 +75,32 @@ namespace Control_Machine_Sistem.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("Control_Machine_Sistem.Models.Control_Machine_Sistem.Models.AccessoryModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("LoadCapacity")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("AccessoryModels");
                 });
 
             modelBuilder.Entity("Control_Machine_Sistem.Models.Customer", b =>
@@ -372,9 +394,9 @@ namespace Control_Machine_Sistem.Migrations
 
             modelBuilder.Entity("Control_Machine_Sistem.Models.Accessory", b =>
                 {
-                    b.HasOne("Control_Machine_Sistem.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
+                    b.HasOne("Control_Machine_Sistem.Models.Control_Machine_Sistem.Models.AccessoryModel", "AccessoryModel")
+                        .WithMany("Accessories")
+                        .HasForeignKey("AccessoryModelId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -385,14 +407,25 @@ namespace Control_Machine_Sistem.Migrations
                     b.HasOne("Control_Machine_Sistem.Models.Ubication", "Ubication")
                         .WithMany("Accessories")
                         .HasForeignKey("UbicationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.Navigation("AccessoryModel");
 
                     b.Navigation("Customer");
 
                     b.Navigation("Ubication");
+                });
+
+            modelBuilder.Entity("Control_Machine_Sistem.Models.Control_Machine_Sistem.Models.AccessoryModel", b =>
+                {
+                    b.HasOne("Control_Machine_Sistem.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Control_Machine_Sistem.Models.Machine", b =>
@@ -466,6 +499,11 @@ namespace Control_Machine_Sistem.Migrations
             modelBuilder.Entity("Control_Machine_Sistem.Models.Category", b =>
                 {
                     b.Navigation("Models");
+                });
+
+            modelBuilder.Entity("Control_Machine_Sistem.Models.Control_Machine_Sistem.Models.AccessoryModel", b =>
+                {
+                    b.Navigation("Accessories");
                 });
 
             modelBuilder.Entity("Control_Machine_Sistem.Models.Customer", b =>

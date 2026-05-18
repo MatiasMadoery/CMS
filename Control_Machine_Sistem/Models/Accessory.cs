@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Control_Machine_Sistem.Models.Control_Machine_Sistem.Models;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Control_Machine_Sistem.Models
@@ -7,33 +8,32 @@ namespace Control_Machine_Sistem.Models
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "El modelo es obligatorio.")]
-        [Display(Name = "Modelo/Descripción")]
-        public int CategoryId { get; set; }
-        public Category? Category { get; set; }
 
-        [Required(ErrorMessage = "Debe ingresar la capacidad de carga.")]
-        [Range(0, 50000, ErrorMessage = "Ingrese un valor válido")]
-        [Display(Name = "Capacidad de Carga (kg)")]
-        public double LoadCapacity { get; set; }
+        // --- NUEVA RELACIÓN CON EL CATÁLOGO (AccessoryModel) ---
+        [Required(ErrorMessage = "Debe seleccionar un modelo de accesorio del catálogo.")]
+        [Display(Name = "Modelo de Accesorio")]
+        public int AccessoryModelId { get; set; }
+
+        [ForeignKey("AccessoryModelId")]
+        public virtual AccessoryModel? AccessoryModel { get; set; }
+
+        // --- PROPIEDADES DE CONTROL DE STOCK (Se quedan aquí) ---
 
         [Display(Name = "Fecha de Venta")]
         public DateTime? SaleDate { get; set; }
 
         public int? CustomerId { get; set; }
-        public Customer? Customer { get; set; }
+        public virtual Customer? Customer { get; set; }
 
         // --- RELACIÓN CON UBICACIÓN ---
-
         [Required(ErrorMessage = "Debe asignar una ubicación al accesorio")]
         [Display(Name = "Sucursal")]
-        public int? UbicationId { get; set; }
+        public int UbicationId { get; set; }
 
         [ForeignKey("UbicationId")]
         public virtual Ubication? Ubication { get; set; }
 
-        // --- PROPIEDADES PARA FOTOS Y DOCUMENTACIÓN (Igual que en Machine) ---
-
+        // --- PROPIEDADES PARA FOTOS ---
         [NotMapped]
         [Display(Name = "Fotos del Accesorio")]
         public IEnumerable<IFormFile>? ImageFiles { get; set; }
@@ -41,8 +41,8 @@ namespace Control_Machine_Sistem.Models
         [Display(Name = "URLs de Fotos")]
         public List<string> ImageUrls { get; set; } = new List<string>();
 
-        
 
-        //public string? Model { get; set; }
+        // Nota: Quitamos "Model", "LoadCapacity" y "CategoryId" de aquí porque
+        // ahora se manejan a través de AccessoryModel.
     }
 }

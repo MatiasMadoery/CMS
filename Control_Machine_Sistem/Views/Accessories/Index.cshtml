@@ -1,53 +1,113 @@
-﻿@model IEnumerable<Control_Machine_Sistem.Models.Accessory>
+﻿@model Pager<Control_Machine_Sistem.Models.Accessory>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Accesorios";
 }
 
-<h1>Index</h1>
+<link href="~/css/views.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LoadCapacity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SaleDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Customer)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LoadCapacity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SaleDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Customer.FullName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="content-wrapper">
+    <h1 class="page-title">@ViewData["Title"]</h1>
+
+    @* --- BOTONERA DE PESTAÑAS MELLIZAS (Estilo Stock) --- *@
+    <div class="stock-header-nav mb-4">
+        <div class="stock-selector">
+            <div class="button-group">
+                <a asp-action="Index" asp-controller="Models" class="btn btn-tab">
+                    <i class="fas fa-tractor icon"></i> Máquinas
+                </a>
+                <a asp-action="Index" asp-controller="Accessories" class="btn btn-tab active">
+                    <i class="fas fa-tools icon"></i> Accesorios
+                </a>
+            </div>
+        </div>
+    </div>
+
+    @* --- BARRA DE ACCIONES (Filtros y Creación) --- *@
+    <div class="action-bar">
+        <div class="search-form">
+            <form asp-action="Index" method="get" class="d-flex">
+                @* Cambiado a select dinámico con el ViewBag que envía el nuevo Controller *@
+                <select name="productId" asp-items="ViewBag.Categories" class="form-select me-2">
+                    <option value="">Filtrar por producto</option>
+                </select>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-filter icon"></i> Filtrar
+                </button>
+            </form>
+        </div>
+        <div class="button-group">
+            <a asp-action="Index" asp-controller="Categories" class="btn btn-secondary">
+                <i class="fas fa-cogs icon"></i> Productos
+            </a>
+            <a asp-action="Create" class="btn btn-success">
+                <i class="fas fa-plus-circle icon"></i> Nuevo accesorio
+            </a>
+        </div>
+    </div>
+
+    <hr />
+
+    @* --- TABLA DE DATOS ESTILIZADA --- *@
+    <div class="data-table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    @* CORRECCIÓN: Apuntamos al puente del catálogo en las cabeceras *@
+                    <th>@Html.DisplayNameFor(model => model.Elements.First().AccessoryModel!.Name)</th>
+                    <th>@Html.DisplayNameFor(model => model.Elements.First().AccessoryModel!.Category)</th>
+                    <th>@Html.DisplayNameFor(model => model.Elements.First().AccessoryModel!.LoadCapacity)</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Elements)
+                {
+                    <tr>
+                        @* CORRECCIÓN: Renderizamos los valores correctos navegando por la entidad del catálogo *@
+                        <td>@Html.DisplayFor(modelItem => item.AccessoryModel!.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.AccessoryModel!.Category!.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.AccessoryModel!.LoadCapacity) kg</td>
+                        <td class="table-actions">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn-action details">
+                                <i class="fas fa-info-circle"></i>
+                            </a>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn-action edit">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn-action delete">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @* Solución al error de .Any() *@
+    @if (!Model.Elements.Any())
+    {
+        <div class="alert alert-warning" role="alert">
+            No se encontraron accesorios registrados.
+        </div>
+    }
+
+    @* --- MENSAJES DE NOTIFICACIÓN --- *@
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+</div>
+
+<script src="~/js/views.js"></script>

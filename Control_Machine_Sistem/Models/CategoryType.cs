@@ -4,7 +4,7 @@ namespace Control_Machine_Sistem.Models
 {
     public enum CategoryType
     {
-        [Display(Name = "MODELOS")]
+        [Display(Name = "MAQUINARIA")]
         Machine = 1,
 
         [Display(Name = "ACCESORIOS")]
