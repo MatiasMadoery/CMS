@@ -48,16 +48,43 @@ builder.Services.AddAuthorization(options =>
 // Agrega MVC
 builder.Services.AddControllersWithViews();
 
+
+//AZURE CONFIGURATION
 // Configurar Data Protection con clave persistente
+// 1. Recuperamos la cadena de conexión unificada
+var storageConnectionString = builder.Configuration.GetConnectionString("AzureStorage");
+
+// 2. Aseguramos que el contenedor para las llaves exista (Evita errores en Azurite y Azure)
+var keysContainerClient = new Azure.Storage.Blobs.BlobContainerClient(storageConnectionString!, "dataprotection-keys");
+keysContainerClient.CreateIfNotExists(); // Crea el contenedor de forma segura si no existe
+
+// 3. Apuntamos al archivo específico xml donde se guardarán las llaves dentro del contenedor
+var keysBlobClient = keysContainerClient.GetBlobClient("keys.xml");
+
+// 4. Configurar Data Protection para usar ese Blob
 builder.Services.AddDataProtection()
-    .PersistKeysToFileSystem(new DirectoryInfo(@"C:\DataProtectionKeys\Terraplane"))
+    .PersistKeysToAzureBlobStorage(keysBlobClient)
     .SetApplicationName("Terraplane");
+
 builder.Services.AddAzureClients(clientBuilder =>
 {
-    clientBuilder.AddBlobServiceClient(builder.Configuration["StorageConnection:blobServiceUri"]!).WithName("StorageConnection");
-    clientBuilder.AddQueueServiceClient(builder.Configuration["StorageConnection:queueServiceUri"]!).WithName("StorageConnection");
-    clientBuilder.AddTableServiceClient(builder.Configuration["StorageConnection:tableServiceUri"]!).WithName("StorageConnection");
+    // Al usar tu extensión AddBlobServiceClient, si le pasas un Connection String, lo resolverá bien automáticamente
+    clientBuilder.AddBlobServiceClient(storageConnectionString!);
+    clientBuilder.AddQueueServiceClient(storageConnectionString!);
+    clientBuilder.AddTableServiceClient(storageConnectionString!);
 });
+
+
+//LOCAL CON AZURITE
+//builder.Services.AddDataProtection()
+//    .PersistKeysToFileSystem(new DirectoryInfo(@"C:\DataProtectionKeys\Terraplane"))
+//    .SetApplicationName("Terraplane");
+//builder.Services.AddAzureClients(clientBuilder =>
+//{
+//    clientBuilder.AddBlobServiceClient(builder.Configuration["StorageConnection:blobServiceUri"]!).WithName("StorageConnection");
+//    clientBuilder.AddQueueServiceClient(builder.Configuration["StorageConnection:queueServiceUri"]!).WithName("StorageConnection");
+//    clientBuilder.AddTableServiceClient(builder.Configuration["StorageConnection:tableServiceUri"]!).WithName("StorageConnection");
+//});
 
 var app = builder.Build();
 

@@ -9,14 +9,9 @@ namespace Control_Machine_Sistem.Services
         private readonly BlobServiceClient _blobServiceClient;
         private readonly ILogger<AzureImageStorageService> _logger;
 
-        public AzureImageStorageService(IConfiguration configuration, ILogger<AzureImageStorageService> logger)
+        public AzureImageStorageService(BlobServiceClient blobServiceClient, ILogger<AzureImageStorageService> logger)
         {
-            var connectionString = configuration.GetConnectionString("AzureStorage");
-            if (!string.IsNullOrEmpty(connectionString))
-            {
-                _blobServiceClient = new BlobServiceClient(connectionString);
-            }
-
+            _blobServiceClient = blobServiceClient ?? throw new ArgumentNullException(nameof(blobServiceClient));
             _logger = logger;
         }
 
@@ -30,6 +25,7 @@ namespace Control_Machine_Sistem.Services
             try
             {
                 var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
+                await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
 
                 // Generar nombre único
                 var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
