@@ -129,7 +129,7 @@
         }
     </div>
 
-    @* --- SECCIÓN ACCESORIOS VENDIDAS --- *@
+    @* --- SECCIÓN ACCESORIOS VENDIDOS --- *@
     <div id="section-accessories" style="@(Model.ActiveTab == "accessories" ? "" : "display:none")">
         @if (!Model.SoldAccessories.Elements.Any())
         {
@@ -160,13 +160,15 @@
                                 <td><span class="badge bg-light text-dark">@item.Ubication?.Name</span></td>
                                 <td>@item.SaleDate?.ToString("dd/MM/yyyy")</td>
                                 <td class="table-actions">
-                                    <a asp-action="Details" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action details" title="Detalles">
+                                    <a asp-action="Details" asp-controller="Accessories" asp-route-id="@item.Id" asp-route-isStock="false" class="btn-action details" title="Detalles">
                                         <i class="fas fa-info-circle"></i>
                                     </a>
-                                    <a asp-action="Edit" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action edit" title="Editar">
+
+                                    <a asp-action="Edit" asp-controller="Accessories" asp-route-id="@item.Id" asp-route-isStock="false" class="btn-action edit" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a asp-action="Delete" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action delete" title="Eliminar">
+
+                                    <a asp-action="Delete" asp-controller="Accessories" asp-route-id="@item.Id" asp-route-isStock="false" class="btn-action delete" title="Eliminar">
                                         <i class="fas fa-trash-alt"></i>
                                     </a>
                                 </td>

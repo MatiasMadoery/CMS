@@ -200,13 +200,23 @@ namespace Control_Machine_Sistem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var accessoryModel = await _context.AccessoryModels.FindAsync(id);
-            if (accessoryModel != null)
+            try
             {
-                _context.AccessoryModels.Remove(accessoryModel);
+                var accessoryModel = await _context.AccessoryModels.FindAsync(id);
+                if (accessoryModel != null)
+                {
+                    _context.AccessoryModels.Remove(accessoryModel);
+                    await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "Modelo de accesorio eliminado correctamente.";
+                }
+            }
+            catch (DbUpdateException)
+            {
+                //Manejo del conflicto relacional: Evita la pantalla de error y avisa prolijamente
+                TempData["ErrorMessage"] = "No se puede eliminar este modelo porque existen accesorios físicos en el inventario vinculados a él. Primero debés remover esos accesorios.";
+                return RedirectToAction(nameof(Index));
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

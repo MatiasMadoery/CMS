@@ -32,3 +32,10 @@ ehthumbs.db
 Control_Machine_Sistem/Migrations/*.Designer.cs
 Control_Machine_Sistem/Migrations/*.cs
 Control_Machine_Sistem/appsettings.json
+
+# Azurite local emulators
+__azurite_db_*
+__blobstorage__/
+__queuestorage__/
+__tablestorage__/
+AzuriteConfig

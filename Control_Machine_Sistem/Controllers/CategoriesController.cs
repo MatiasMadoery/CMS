@@ -17,13 +17,27 @@ namespace Control_Machine_Sistem.Controllers
 
         // GET: Categories
         [Authorize(Roles = "Viewer, Admin, Técnico, SuperAdmin")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(CategoryType? filterType = null)
         {
-            // Ordenamos por tipo y luego por nombre
-            return View(await _context.Categories
+            // 1. Creamos la consulta base como Queryable para poder encadenar filtros
+            var query = _context.Categories.AsQueryable();
+
+            // 2. Si el usuario seleccionó un filtro en el combo de la vista, lo aplicamos
+            if (filterType.HasValue)
+            {
+                query = query.Where(c => c.Type == filterType.Value);
+            }
+
+            // 3. Mantenemos el ordenamiento que ya tenías por Tipo y Nombre
+            var categories = await query
                 .OrderBy(c => c.Type)
                 .ThenBy(c => c.Name)
-                .ToListAsync());
+                .ToListAsync();
+
+            // 4. Guardamos el filtro seleccionado en el ViewBag para que la vista lo recuerde
+            ViewBag.SelectedFilter = filterType;
+
+            return View(categories);
         }
 
         // GET: Categories/Details/5

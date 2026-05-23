@@ -13,15 +13,15 @@
     <h4 class="form-sub-title">Modifique los datos necesarios</h4>
     <hr />
 
-    @* IMPORTANTE: enctype="multipart/form-data" añadido *@
-    <form asp-action="Edit" asp-route-isStock="@isStock" method="post" enctype="multipart/form-data" id="uploadForm">
+    @* 🌟 CORRECCIÓN 1: Apuntamos al parámetro 'origenStock' que configuramos en el POST del controlador *@
+    <form asp-action="Edit" asp-route-origenStock="@(isStock ? "true" : "false")" method="post" enctype="multipart/form-data" id="uploadForm">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
-        <input type="hidden" name="isStock" value="@(isStock ? "true" : "false")" />
+
+        @* 🌟 CORRECCIÓN 2: Eliminamos el input oculto redundante de isStock para evitar ruidos de binding *@
         <input type="hidden" name="activeTab" value="@ViewBag.ActiveTab" />
 
         <div class="form-row">
-            @* --- CORRECCIÓN CLAVE: SELECCIÓN DEL MODELO DESDE EL CATÁLOGO (Reemplaza a Model y LoadCapacity sueltos) --- *@
             <div class="form-col" style="flex: 2;">
                 <div class="form-group">
                     <label asp-for="AccessoryModelId" class="form-label">Modelo de Accesorio (Catálogo) *</label>
@@ -65,7 +65,6 @@
             </div>
         }
 
-        @* --- SECCIÓN DE FOTOS EXISTENTES (Adaptado de Machines) --- *@
         <h4 class="form-section-title"><i class="fas fa-images icon"></i> Fotos del Accesorio</h4>
         <div class="document-management mb-4">
             <div class="machine-photo-grid">
@@ -75,7 +74,6 @@
                     {
                         <div class="photo-item-edit" id="photo-@url.GetHashCode()">
                             <img src="@url" alt="Foto accesorio" class="img-thumbnail img-zoomable" onclick="openZoom(this.src)" />
-                            @* Enviamos las URLs que quedan para que el controlador sepa qué mantener *@
                             <input type="hidden" name="ExistingImageUrls" value="@url" />
                             <button type="button" class="btn-delete-photo" onclick="markImageForDeletion('@url', '@url.GetHashCode()')">
                                 <i class="fas fa-times"></i>
@@ -90,18 +88,17 @@
             </div>
         </div>
 
-        @* Input para agregar fotos nuevas *@
         <div class="form-group mb-4">
             <label class="form-label">Subir fotos nuevas (Máximo 4 totales)</label>
             <input asp-for="ImageFiles" type="file" class="form-control" multiple accept="image/*" />
             <span asp-validation-for="ImageFiles" class="text-danger"></span>
         </div>
 
-        @* Contenedor para IDs de imágenes a borrar *@
         <div id="deletedImagesContainer"></div>
 
         <div class="button-group">
-            <button type="submit" class="btn btn-success" asp-route-activeTab="accessories">
+            @* 🌟 CORRECCIÓN 3: Se quitó el asp-route-activeTab de acá adentro para que no rompa el envío del formulario *@
+            <button type="submit" class="btn btn-success">
                 <i class="fas fa-save icon"></i> Guardar Cambios
             </button>
             <a asp-controller="Stock" asp-action="@(isStock ? "Index" : "Vendidos")" class="btn btn-secondary" asp-route-activeTab="accessories">
@@ -186,16 +183,13 @@
     }
 
     @@keyframes zoomIn {
-        from
+        from {
+            transform: scale(0)
+        }
 
-    {
-        transform: scale(0)
-    }
-
-    to {
-        transform: scale(1)
-    }
-
+        to {
+            transform: scale(1)
+        }
     }
 </style>
 

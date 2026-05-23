@@ -22,7 +22,9 @@ namespace Control_Machine_Sistem.Models
         [Display(Name = "Fecha de Venta")]
         public DateTime? SaleDate { get; set; }
 
+        [Display(Name = "Cliente")]
         public int? CustomerId { get; set; }
+        [Display(Name = "Cliente")]
         public virtual Customer? Customer { get; set; }
 
         // --- RELACIÓN CON UBICACIÓN ---
@@ -30,6 +32,7 @@ namespace Control_Machine_Sistem.Models
         [Display(Name = "Sucursal")]
         public int UbicationId { get; set; }
 
+        [Display(Name = "Sucursal")]
         [ForeignKey("UbicationId")]
         public virtual Ubication? Ubication { get; set; }
 
