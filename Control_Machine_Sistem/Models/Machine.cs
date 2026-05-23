@@ -33,18 +33,18 @@ namespace Control_Machine_Sistem.Models
         [Display(Name = "Fecha vencimiento garantía")]
         public DateTime? WarrantyExpirationDate { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Debe ingresar el año de fabricación.")]
         [Display(Name = "Año de fabricación")]
         public int? ManufactureYear { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Debe ingresar el N° de serie.")]
         [Display(Name = "Número de serie")]
         public string? SerialNumber { get; set; }
 
         [Display(Name = "Horas de uso")]
         public int? UserHours { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Debe ingresar su ubicación.")]
         [Display(Name = "Ubicación")]
         public int? UbicationId { get; set; }
 

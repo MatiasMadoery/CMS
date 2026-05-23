@@ -34,4 +34,4 @@ ehthumbs.db
 Control_Machine_Sistem/Migrations/*.Designer.cs
 Control_Machine_Sistem/Migrations/*.cs
 
-azurite_workspace/
+.azurite_workspace/*

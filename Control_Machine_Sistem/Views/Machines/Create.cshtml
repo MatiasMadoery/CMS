@@ -85,7 +85,7 @@
             </div>
             <div class="form-col">
                 <div class="form-group">
-                    <label asp-for="SerialNumber" class="form-label">Número de Serie</label>
+                    <label asp-for="SerialNumber" class="form-label">Número de Serie*</label>
                     <input asp-for="SerialNumber" class="form-control" />
                     <span asp-validation-for="SerialNumber" class="text-danger"></span>
                 </div>
@@ -94,7 +94,7 @@
         <div class="form-row">
             <div class="form-col">
                 <div class="form-group">
-                    <label asp-for="ManufactureYear" class="form-label">Año de Fabricación</label>
+                    <label asp-for="ManufactureYear" class="form-label">Año de Fabricación*</label>
                     <input asp-for="ManufactureYear" class="form-control" type="number" min="1900" max="@DateTime.Now.Year" />
                     <span asp-validation-for="ManufactureYear" class="text-danger"></span>
                 </div>
@@ -169,7 +169,7 @@
             <div class="form-row">
                 <div class="form-col">
                     <div class="form-group">
-                        <label asp-for="ImageFiles" class="form-label">Imágenes de Stock (Máximo 4) *</label>
+                        <label asp-for="ImageFiles" class="form-label">Imágenes de Stock (Máximo 4)</label>
                         <input asp-for="ImageFiles" type="file" class="form-control" multiple accept="image/*" id="imageInput" />
                         <span asp-validation-for="ImageFiles" class="text-danger"></span>
                         <small class="text-muted">Formatos permitidos: JPG, PNG. Se recomienda seleccionar las 4 fotos juntas.</small>
