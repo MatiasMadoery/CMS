@@ -28,7 +28,9 @@ namespace Control_Machine_Sistem.Services
                 await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
 
                 // Generar nombre único
-                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+                var originalFileName = Path.GetFileName(file.FileName);
+                var fileName = $"{Guid.NewGuid()}_{originalFileName}"; ;
+
                 var blobClient = containerClient.GetBlobClient(fileName);
 
                 var blobHttpHeader = new BlobHttpHeaders { ContentType = file.ContentType };
