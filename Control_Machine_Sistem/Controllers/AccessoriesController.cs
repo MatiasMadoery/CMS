@@ -59,12 +59,12 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Accessories/Details/5
+        [HttpGet("Accessories/Details/{id}")] // 🌟 Forzamos la ruta base explícita
         [Authorize(Roles = "Admin, Técnico, SuperAdmin, Viewer")]
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, [FromQuery] bool isStock = true) // 🌟 Indicamos que isStock viene del QueryString (?isStock=true)
         {
             if (id == null) return NotFound();
 
-            // CORRECCIÓN: Incluimos AccessoryModel y su Categoría
             var accessory = await _context.Accessories
                 .Include(a => a.AccessoryModel)
                     .ThenInclude(am => am!.Category)
@@ -73,6 +73,9 @@ namespace Control_Machine_Sistem.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (accessory == null) return NotFound();
+
+            // Guardamos el estado en el ViewBag para que la vista lo lea correctamente
+            ViewBag.IsStock = isStock;
 
             return View(accessory);
         }
@@ -132,7 +135,7 @@ namespace Control_Machine_Sistem.Controllers
                 _context.Add(accessory);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Stock", new { activeTab = "accessories" });
             }
 
             ViewBag.Ubications = new SelectList(_context.Ubications, "Id", "Name", accessory.UbicationId);
@@ -141,37 +144,41 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Accessories/Edit/5
+        [HttpGet] // 🌟 Volvemos al estándar
         [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
-        public async Task<IActionResult> Edit(int? id, bool isStock = true) // <-- Parámetro opcional añadido
+        public async Task<IActionResult> Edit(int? id, bool isStock = true)
         {
             if (id == null) return NotFound();
 
             var accessory = await _context.Accessories.FindAsync(id);
             if (accessory == null) return NotFound();
 
-            // CORRECCIÓN: Cambiamos a UbicationId para que coincida con el asp-items de la vista
             ViewBag.UbicationId = new SelectList(_context.Ubications, "Id", "Name", accessory.UbicationId);
 
-            // Si la vista no es de stock (es vendido), también necesitas cargar los clientes:
             if (!isStock)
             {
                 ViewBag.Customers = new SelectList(_context.Customers, "Id", "Name", accessory.CustomerId);
             }
 
-            // Pasamos el estado de las pestañas y tipo a la vista
             ViewBag.IsStock = isStock;
             ViewBag.ActiveTab = "accessories";
 
-            CargarModelosAccesorios(accessory.AccessoryModelId); // Asegúrate que dentro asigne a "ViewBag.AccessoryModelId"
+            CargarModelosAccesorios(accessory.AccessoryModelId);
 
             return View(accessory);
         }
 
         // POST: Accessories/Edit/5
-        [HttpPost]
+        [HttpPost] // 🌟 Volvemos al estándar
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,AccessoryModelId,UbicationId")] Accessory accessory, List<string> ExistingImageUrls, List<string> DeletedImageUrls, List<IFormFile> ImageFiles)
+        public async Task<IActionResult> Edit(
+            int id,
+            [Bind("Id,AccessoryModelId,UbicationId")] Accessory accessory,
+            List<string> ExistingImageUrls,
+            List<string> DeletedImageUrls,
+            List<IFormFile> ImageFiles,
+            bool origenStock) // 🌟 CAMBIO CLAVE: Renombramos el parámetro a 'origenStock' para romper la ambigüedad con el GET
         {
             if (id != accessory.Id) return NotFound();
 
@@ -185,8 +192,6 @@ namespace Control_Machine_Sistem.Controllers
                     var existingAccessory = await _context.Accessories.FirstOrDefaultAsync(a => a.Id == id);
                     if (existingAccessory == null) return NotFound();
 
-
-                    // CORRECCIÓN: Mapeo de propiedades físicas actualizadas
                     existingAccessory.AccessoryModelId = accessory.AccessoryModelId;
                     existingAccessory.UbicationId = accessory.UbicationId;
 
@@ -221,11 +226,18 @@ namespace Control_Machine_Sistem.Controllers
                     else throw;
                 }
 
-                return RedirectToAction(nameof(Index));
+                // 🌟 REDIRECCIÓN INTELIGENTE usando el nuevo parámetro
+                if (!origenStock)
+                {
+                    return RedirectToAction("Vendidos", "Stock", new { activeTab = "accessories" });
+                }
+
+                return RedirectToAction("Index", "Stock", new { activeTab = "accessories" });
             }
 
             ViewBag.Ubications = new SelectList(_context.Ubications, "Id", "Name", accessory.UbicationId);
             CargarModelosAccesorios(accessory.AccessoryModelId);
+            ViewBag.IsStock = origenStock; // Mantenemos el estado si falla el modelo
             return View(accessory);
         }
 
@@ -270,7 +282,7 @@ namespace Control_Machine_Sistem.Controllers
                 _context.Accessories.Remove(accessory);
                 await _context.SaveChangesAsync();
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Stock", new { activeTab = "accessories" });
         }
 
         private bool AccessoryExists(int id)

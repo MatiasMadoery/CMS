@@ -205,90 +205,95 @@
 
 @section Scripts {
     <script>
+        // Función centralizada para cargar modelos (sirve para Máquinas y Accesorios)
+        function loadModels(tabName, categoryId, selectedModelId = null) {
+            const modelSelect = document.getElementById('filterModel');
+            modelSelect.innerHTML = '<option value="">-- Todos --</option>';
+
+            if (!categoryId) return;
+
+            // Definir endpoints correctos según el contexto
+            const urlMachines = '@Url.Action("GetModelsByCategory", "Stock")';
+            const urlAccessories = '@Url.Action("GetAccessoryModelsByCategory", "Stock")';
+
+            const baseUrl = tabName === 'machines' ? urlMachines : urlAccessories;
+            const url = baseUrl + '?categoryId=' + categoryId;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(m => {
+                        const opt = document.createElement('option');
+                        opt.value = m.id || m.Id;
+                        opt.text = m.name || m.Name;
+
+                        // Si venimos de un postback/búsqueda previa, preseleccionamos el modelo
+                        if (selectedModelId && opt.value == selectedModelId) {
+                            opt.selected = true;
+                        }
+                        modelSelect.appendChild(opt);
+                    });
+                })
+                .catch(error => console.error('Error al cargar modelos:', error));
+        }
+
         // Cambiar entre pestañas
         function switchTab(tabName) {
-            // Mostrar/Ocultar secciones
+            // Mostrar/Ocultar secciones de las tablas
             document.getElementById('section-machines').style.display = tabName === 'machines' ? 'block' : 'none';
             document.getElementById('section-accessories').style.display = tabName === 'accessories' ? 'block' : 'none';
 
-            // Actualizar estado de botones
+            // Actualizar estado visual de los botones contenedores
             document.getElementById('btn-machines').classList.toggle('active', tabName === 'machines');
             document.getElementById('btn-accessories').classList.toggle('active', tabName === 'accessories');
 
-            const colCategory = document.getElementById('col-filter-category');
-            const colModel = document.getElementById('col-filter-model');
             const categorySelect = document.getElementById('filterCategory');
 
-            // Siempre mostramos el filtro de categoría, pero el de modelo solo en máquinas
-            colCategory.style.display = 'block';
-            colModel.style.display = tabName === 'machines' ? 'block' : 'none';
+            // Recuperamos el valor seleccionado por el ViewBag si existe, sino el actual del DOM
+            const currentCategorySelected = '@ViewBag.SelectedCategory' || categorySelect.value;
 
-            // Guardar el valor seleccionado actualmente para intentar mantenerlo si es posible
-            const currentSelected = categorySelect.value;
-
-            // Limpiar y recargar el select de categorías dinámicamente
+            // Limpiar y reconstruir select de categorías
             categorySelect.innerHTML = '<option value="">-- Todas --</option>';
 
             if (tabName === 'machines') {
                 @foreach (var cat in (IEnumerable<Control_Machine_Sistem.Models.Category>)ViewBag.CategoriesMachine)
                 {
-                        <text>
-                        var opt = document.createElement('option');
-                        opt.value = '@cat.Id';
-                        opt.text = '@cat.Name';
-                        if(opt.value == currentSelected) opt.selected = true;
-                        categorySelect.appendChild(opt);
-                        </text>
+                            <text>
+                            var opt = document.createElement('option');
+                            opt.value = '@cat.Id';
+                            opt.text = '@cat.Name';
+                            if(opt.value == currentCategorySelected) opt.selected = true;
+                            categorySelect.appendChild(opt);
+                            </text>
                 }
             } else {
                 @foreach (var cat in (IEnumerable<Control_Machine_Sistem.Models.Category>)ViewBag.CategoriesAccessory)
                 {
-                        <text>
-                        var opt = document.createElement('option');
-                        opt.value = '@cat.Id';
-                        opt.text = '@cat.Name';
-                        if(opt.value == currentSelected) opt.selected = true;
-                        categorySelect.appendChild(opt);
-                        </text>
+                            <text>
+                            var opt = document.createElement('option');
+                            opt.value = '@cat.Id';
+                            opt.text = '@cat.Name';
+                            if(opt.value == currentCategorySelected) opt.selected = true;
+                            categorySelect.appendChild(opt);
+                            </text>
                 }
             }
 
-            // Guardar en el input hidden
+            // Actualizar el campo oculto del formulario
             document.getElementById('inputActiveTab').value = tabName;
+
+            // CRUCIAL: Cargar inmediatamente los modelos heredados de la categoría activa
+            const initialModelId = '@ViewBag.SelectedModel';
+            loadModels(tabName, categorySelect.value, initialModelId);
         }
 
-        // Cascada de Categoría -> Modelo
-        const categorySelect = document.getElementById('filterCategory');
-        const modelSelect = document.getElementById('filterModel');
-
-        categorySelect.addEventListener('change', function() {
+        // Escucha activa al cambiar manualmente el selector de "Producto" (Categoría)
+        document.getElementById('filterCategory').addEventListener('change', function() {
             const tabName = document.getElementById('inputActiveTab').value;
-
-            // Si no estamos en máquinas, no buscamos modelos
-            if (tabName !== 'machines') {
-                modelSelect.innerHTML = '<option value="">-- Todos --</option>';
-                return;
-            }
-
-            const categoryId = this.value;
-            modelSelect.innerHTML = '<option value="">-- Todos --</option>';
-
-            if (categoryId) {
-                const url = '@Url.Action("GetModelsByCategory", "Stock")' + '?categoryId=' + categoryId;
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        data.forEach(m => {
-                            const opt = document.createElement('option');
-                            opt.value = m.id || m.Id;
-                            opt.text = m.name || m.Name;
-                            modelSelect.appendChild(opt);
-                        });
-                    })
-                    .catch(error => console.error('Error al cargar modelos:', error));
-            }
+            loadModels(tabName, this.value);
         });
 
+        // Inicialización al cargar el documento
         document.addEventListener("DOMContentLoaded", function() {
              const currentTab = "@Model.ActiveTab";
              switchTab(currentTab);

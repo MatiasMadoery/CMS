@@ -37,9 +37,16 @@ namespace Control_Machine_Sistem.Controllers
                 "Id", "Name", categoryId
             );
 
-            if (categoryId.HasValue && activeTab == "machines")
+            if (categoryId.HasValue)
             {
-                ViewBag.Models = new SelectList(await _context.Models.Where(m => m.CategoryId == categoryId).ToListAsync(), "Id", "Name", modelId);
+                if (activeTab == "machines")
+                {
+                    ViewBag.Models = new SelectList(await _context.Models.Where(m => m.CategoryId == categoryId).ToListAsync(), "Id", "Name", modelId);
+                }
+                else if (activeTab == "accessories")
+                {
+                    ViewBag.Models = new SelectList(await _context.AccessoryModels.Where(m => m.CategoryId == categoryId).ToListAsync(), "Id", "Name", modelId);
+                }
             }
 
             int pageSize = 10;
@@ -71,6 +78,11 @@ namespace Control_Machine_Sistem.Controllers
             if (categoryId.HasValue && activeTab == "accessories")
             {
                 aQuery = aQuery.Where(a => a.AccessoryModel!.CategoryId == categoryId);
+            }
+
+            if (modelId.HasValue && activeTab == "accessories")
+            {
+                aQuery = aQuery.Where(a => a.AccessoryModelId == modelId);
             }
 
             var aCount = await aQuery.CountAsync();
@@ -245,6 +257,18 @@ namespace Control_Machine_Sistem.Controllers
         public async Task<JsonResult> GetModelsByCategory(int categoryId)
         {
             var models = await _context.Models
+                .Where(m => m.CategoryId == categoryId)
+                .OrderBy(m => m.Name)
+                .Select(m => new { id = m.Id, name = m.Name })
+                .ToListAsync();
+
+            return Json(models);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetAccessoryModelsByCategory(int categoryId)
+        {
+            var models = await _context.AccessoryModels
                 .Where(m => m.CategoryId == categoryId)
                 .OrderBy(m => m.Name)
                 .Select(m => new { id = m.Id, name = m.Name })
