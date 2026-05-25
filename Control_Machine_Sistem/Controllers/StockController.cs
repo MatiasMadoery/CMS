@@ -103,6 +103,11 @@ namespace Control_Machine_Sistem.Controllers
         [HttpPost]
         public async Task<IActionResult> Sell(int id, string type, int customerId)
         {
+            if (User.IsInRole("Seller"))
+            {
+                return Forbid();
+            }
+
             if (type == "Machine")
             {
                 var machine = await _context.Machines.FindAsync(id);
@@ -162,6 +167,11 @@ namespace Control_Machine_Sistem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Vender(int id, string type, int customerId, DateTime deliveryDate)
         {
+            if (User.IsInRole("Seller"))
+            {
+                return Forbid();
+            }
+
             if (type == "Machine")
             {
                 var machine = await _context.Machines.FindAsync(id);
@@ -190,6 +200,7 @@ namespace Control_Machine_Sistem.Controllers
 
         public async Task<IActionResult> Vendidos(int? ubicationId, int? categoryId, int? modelId, int machinePage = 1, int accessoryPage = 1, string activeTab = "machines")
         {
+
             // Persistencia para los filtros en la vista
             ViewBag.ActiveTab = activeTab;
             ViewBag.SelectedUbication = ubicationId;

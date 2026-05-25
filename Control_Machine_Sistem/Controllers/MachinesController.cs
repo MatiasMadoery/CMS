@@ -9,7 +9,7 @@ using static Control_Machine_Sistem.Services.FileService;
 
 namespace Control_Machine_Sistem.Controllers
 {
-    [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer")]
+    [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer, Seller")]
     public class MachinesController : Controller
     {
         private readonly AppDbContext _context;
@@ -22,7 +22,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Machines
-        [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer")]
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer, Seller")]
         public async Task<IActionResult> Index(string searchString, int? categoryId, int page = 1, int pageSize = 5)
         {
             var machine = _context.Machines!
@@ -62,7 +62,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Machines/Details/5
-        [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer")]
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin,Viewer, Seller")]
         public async Task<IActionResult> Details(int? id, bool isStock = false)
         {
             if (id == null)
@@ -123,6 +123,11 @@ namespace Control_Machine_Sistem.Controllers
         [RequestSizeLimit(104857600)]
         public async Task<IActionResult> Create([Bind("Id,CustomerId,ModelId,ChasisNumber,EngineNumber,DeliveryDate,Documentations,ImageFiles,CheckListFile,ManufactureYear,SerialNumber,UserHours,UbicationId,,ImportNumber,OfficializationDate")] Machine machine, bool isStock = false)
         {
+            if (User.IsInRole("Seller"))
+            {
+                return Forbid();
+            }
+
             if (isStock)
             {
                 machine.CustomerId = null;
@@ -273,6 +278,11 @@ namespace Control_Machine_Sistem.Controllers
             bool isStock = false
             )
         {
+            if (User.IsInRole("Seller"))
+            {
+                return Forbid();
+            }
+
             if (id != machine.Id)
             {
                 return NotFound();
@@ -466,6 +476,11 @@ namespace Control_Machine_Sistem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int? id, bool isStock = false)
         {
+            if (User.IsInRole("Seller"))
+            {
+                return Forbid();
+            }
+
             var machine = await _context.Machines.FindAsync(id);
             if (machine != null)
             {

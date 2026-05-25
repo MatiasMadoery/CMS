@@ -39,23 +39,31 @@
 
                 <img src="@Url.Content("~/img/images/Logo.jpg")" alt="Logo" class="navbar-icon" />
 
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Customers" asp-action="Index">Clientes</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Models" asp-action="Index">Modelos</a>
-                </li>
+                @* Oculto para Sellers *@
+                @if (!User.IsInRole("Seller"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Customers" asp-action="Index">Clientes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Models" asp-action="Index">Modelos</a>
+                    </li>
+                }
+                @* Permitido para todos *@
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="Stock" asp-action="Index">Stock</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Stock" asp-action="Vendidos">Productos Vendidos</a>
-                </li>
-                
 
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Maintenance" asp-action="Index">Mantenimientos</a>
-                </li>
+                @* Oculto para Sellers *@
+                @if (!User.IsInRole("Seller"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Stock" asp-action="Vendidos">Productos Vendidos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Maintenance" asp-action="Index">Mantenimientos</a>
+                    </li>
+                }
                 @if (User.IsInRole("SuperAdmin"))
                 {
                     <li class="nav-item">
@@ -74,11 +82,21 @@
             <div id="menuQuery">
                 @if (User.Identity!.IsAuthenticated && ViewData["BodyClass"] != "login-page")
                 {
-                    <a class="nav-link" asp-controller="Customers" asp-action="Index">Clientes</a>
-                    <a class="nav-link" asp-controller="Models" asp-action="Index">Modelos</a>
+                    @* Oculto para Sellers en Móvil *@
+                    @if (!User.IsInRole("Seller"))
+                    {
+                        <a class="nav-link" asp-controller="Customers" asp-action="Index">Clientes</a>
+                        <a class="nav-link" asp-controller="Models" asp-action="Index">Modelos</a>
+                    }
+                    @* Permitido para todos *@
                     <a class="nav-link" asp-controller="Stock" asp-action="Index">Stock</a>
-                    <a class="nav-link" asp-controller="Stock" asp-action="Vendidos">Productos Vendidos</a>
-                    <a class="nav-link" asp-controller="Maintenance" asp-action="Index">Mantenimientos</a>
+
+                    @* Oculto para Sellers en Móvil *@
+                    @if (!User.IsInRole("Seller"))
+                    {
+                        <a class="nav-link" asp-controller="Stock" asp-action="Vendidos">Productos Vendidos</a>
+                        <a class="nav-link" asp-controller="Maintenance" asp-action="Index">Mantenimientos</a>
+                    }
                     @if (User.IsInRole("SuperAdmin"))
                     {
                         <a class="nav-link" asp-controller="Users" asp-action="Index">Usuarios</a>

@@ -68,22 +68,32 @@
             </div>
         </div>
 
-        <div class="branch-management">
-            <a asp-action="Index" asp-controller="Ubications" class="btn btn-outline-primary shadow-sm">
-                <i class="fas fa-map-marked-alt icon"></i> Gestionar Sucursales
-            </a>
-        </div>
+
+        @if (!User.IsInRole("Seller"))
+        {
+            <div class="branch-management">
+                <a asp-action="Index" asp-controller="Ubications" class="btn btn-outline-primary shadow-sm">
+                    <i class="fas fa-map-marked-alt icon"></i> Gestionar Sucursales
+                </a>
+            </div>
+        }
+        
     </div>
 
     @* --- SECCIÓN MÁQUINAS --- *@
     <div id="section-machines" style="@(Model.ActiveTab == "machines" ? "" : "display:none")">
         <div class="action-bar">
             <h2 class="form-section-title"><i class="fas fa-list icon"></i> Stock de Maquinaria</h2>
-            <div class="button-group">
-                <a asp-action="Create" asp-controller="Machines" asp-route-isStock="true" class="btn btn-success">
-                    <i class="fas fa-plus-circle icon"></i> Nueva Máquina
-                </a>
-            </div>
+
+            @if (!User.IsInRole("Seller"))
+            {
+                <div class="button-group">
+                    <a asp-action="Create" asp-controller="Machines" asp-route-isStock="true" class="btn btn-success">
+                        <i class="fas fa-plus-circle icon"></i> Nueva Máquina
+                    </a>
+                </div>
+            }
+            
         </div>
 
         @if (!Model.Machines.Elements.Any())
@@ -110,9 +120,13 @@
                                 <td>@item.ChasisNumber</td>
                                 <td><span class="badge bg-light text-dark">@item.Ubication?.Name</span></td>
                                 <td class="table-actions">
-                                    <a asp-action="Vender" asp-controller="Stock" asp-route-id="@item.Id" asp-route-type="Machine" class="btn-action details" style="background-color: #2ecc71;" title="Vender" asp-route-isStock="true">
-                                        <i class="fas fa-shopping-cart"></i>
-                                    </a>
+                                    @if (!User.IsInRole("Seller"))
+                                    {
+                                        <a asp-action="Vender" asp-controller="Stock" asp-route-id="@item.Id" asp-route-type="Machine" class="btn-action details" style="background-color: #2ecc71;" title="Vender" asp-route-isStock="true">
+                                            <i class="fas fa-shopping-cart"></i>
+                                        </a>
+                                    }
+                                    
                                     <a asp-action="Details" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action details" title="Ver Detalles" asp-route-isStock="true" asp-route-activeTab="machines">
                                         <i class="fas fa-info-circle"></i>
                                     </a>
@@ -130,12 +144,18 @@
                                             <i class="fas fa-file-pdf"></i>
                                         </button>
                                     }
-                                    <a asp-action="Edit" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action edit" title="Editar" asp-route-isStock="true" asp-route-activeTab="machines">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <a asp-action="Delete" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action delete" title="Eliminar" asp-route-isStock="true" asp-route-activeTab="machines">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </a>
+
+                                    @if (!User.IsInRole("Seller"))
+                                    {
+                                        <a asp-action="Edit" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action edit" title="Editar" asp-route-isStock="true" asp-route-activeTab="machines">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-controller="Machines" asp-route-id="@item.Id" class="btn-action delete" title="Eliminar" asp-route-isStock="true" asp-route-activeTab="machines">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                    }
+
+                                    
                                 </td>
                             </tr>
                         }
@@ -149,11 +169,16 @@
     <div id="section-accessories" style="@(Model.ActiveTab == "accessories" ? "" : "display:none")">
         <div class="action-bar">
             <h2 class="form-section-title"><i class="fas fa-boxes icon"></i> Stock de Accesorios</h2>
-            <div class="button-group">
-                <a asp-action="Create" asp-controller="Accessories" asp-route-isStock="true" class="btn btn-success" asp-route-activeTab="accessories">
-                    <i class="fas fa-plus-circle icon"></i> Nuevo Accesorio
-                </a>
-            </div>
+
+            @if (!User.IsInRole("Seller"))
+            {
+                <div class="button-group">
+                    <a asp-action="Create" asp-controller="Accessories" asp-route-isStock="true" class="btn btn-success" asp-route-activeTab="accessories">
+                        <i class="fas fa-plus-circle icon"></i> Nuevo Accesorio
+                    </a>
+                </div>
+            }
+            
         </div>
 
         @if (!Model.Accessories.Elements.Any())
@@ -181,18 +206,28 @@
                                 <td>@item.AccessoryModel?.LoadCapacity kg</td>
                                 <td><span class="badge bg-light text-dark">@item.Ubication?.Name</span></td>
                                 <td class="table-actions">
-                                    <a asp-action="Vender" asp-controller="Stock" asp-route-id="@item.Id" asp-route-type="Accessory" class="btn-action details" style="background-color: #2ecc71;" title="Vender" asp-route-isStock="true">
-                                        <i class="fas fa-shopping-cart"></i>
-                                    </a>
+
+                                    @if (!User.IsInRole("Seller"))
+                                    {
+                                        <a asp-action="Vender" asp-controller="Stock" asp-route-id="@item.Id" asp-route-type="Accessory" class="btn-action details" style="background-color: #2ecc71;" title="Vender" asp-route-isStock="true">
+                                            <i class="fas fa-shopping-cart"></i>
+                                        </a>
+                                    }
+                                    
                                     <a asp-action="Details" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action details" title="Ver Detalles" asp-route-isStock="true" asp-route-activeTab="accessories">
                                         <i class="fas fa-info-circle"></i>
                                     </a>
-                                    <a asp-action="Edit" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action edit" title="Editar" asp-route-isStock="true" asp-route-activeTab="accessories">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <a asp-action="Delete" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action delete" title="Eliminar" asp-route-isStock="true" asp-route-activeTab="accessories">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </a>
+
+                                    @if (!User.IsInRole("Seller"))
+                                    {
+                                        <a asp-action="Edit" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action edit" title="Editar" asp-route-isStock="true" asp-route-activeTab="accessories">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-controller="Accessories" asp-route-id="@item.Id" class="btn-action delete" title="Eliminar" asp-route-isStock="true" asp-route-activeTab="accessories">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                    }
+                                    
                                 </td>
                             </tr>
                         }

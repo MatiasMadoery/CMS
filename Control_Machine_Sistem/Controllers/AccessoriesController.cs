@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Control_Machine_Sistem.Controllers
 {
-    [Authorize(Roles = "Admin, Técnico, SuperAdmin, Viewer")]
+    [Authorize(Roles = "Admin, Técnico, SuperAdmin, Viewer, Seller")]
     public class AccessoriesController : Controller
     {
         private readonly AppDbContext _context;
@@ -22,7 +22,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Accessories
-        [Authorize(Roles = "Admin, Técnico, SuperAdmin, Viewer")]
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin, Viewer, Seller")]
         public async Task<IActionResult> Index(int page = 1, int pageSize = 5, int? productId = null)
         {
             // CORRECCIÓN: Ahora incluimos AccessoryModel para llegar a la Categoría indirectamente
@@ -60,7 +60,7 @@ namespace Control_Machine_Sistem.Controllers
 
         // GET: Accessories/Details/5
         [HttpGet("Accessories/Details/{id}")] // 🌟 Forzamos la ruta base explícita
-        [Authorize(Roles = "Admin, Técnico, SuperAdmin, Viewer")]
+        [Authorize(Roles = "Admin, Técnico, SuperAdmin, Viewer, Seller")]
         public async Task<IActionResult> Details(int? id, [FromQuery] bool isStock = true) // 🌟 Indicamos que isStock viene del QueryString (?isStock=true)
         {
             if (id == null) return NotFound();
@@ -114,6 +114,11 @@ namespace Control_Machine_Sistem.Controllers
         [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         public async Task<IActionResult> Create([Bind("Id,AccessoryModelId,UbicationId,ImageFiles")] Accessory accessory)
         {
+            if (User.IsInRole("Seller"))
+            {
+                return Forbid();
+            }
+
             accessory.CustomerId = null;
             accessory.SaleDate = null;
             ModelState.Remove("CustomerId");
@@ -180,6 +185,11 @@ namespace Control_Machine_Sistem.Controllers
             List<IFormFile> ImageFiles,
             bool origenStock) // 🌟 CAMBIO CLAVE: Renombramos el parámetro a 'origenStock' para romper la ambigüedad con el GET
         {
+            if (User.IsInRole("Seller"))
+            {
+                return Forbid();
+            }
+
             if (id != accessory.Id) return NotFound();
 
             ModelState.Remove("CustomerId");
@@ -268,6 +278,11 @@ namespace Control_Machine_Sistem.Controllers
         [Authorize(Roles = "Admin, SuperAdmin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (User.IsInRole("Seller"))
+            {
+                return Forbid();
+            }
+
             var accessory = await _context.Accessories.FindAsync(id);
             if (accessory != null)
             {

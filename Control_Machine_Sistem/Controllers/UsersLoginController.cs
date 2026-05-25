@@ -24,6 +24,11 @@ namespace Control_Machine_Sistem.Controllers
         {
             if (User.Identity!.IsAuthenticated)
             {
+                if (User.IsInRole("Seller"))
+                {
+                    return RedirectToAction("Index", "Stock");
+                }
+
                 return RedirectToAction("Index", "Home");
             }
             return View();
@@ -59,6 +64,11 @@ namespace Control_Machine_Sistem.Controllers
         //            await HttpContext.SignInAsync(
         //                CookieAuthenticationDefaults.AuthenticationScheme,
         //                new ClaimsPrincipal(claimsIdentity));
+
+                    //if (user.Rol == "Seller")
+                    //            {
+                    //                return RedirectToAction("Index", "Stock");
+                    //            }
 
         //            // Redirigir al usuario a la página principal (ej: "Home/Index")
         //            return RedirectToAction("Index", "Home");
@@ -132,6 +142,11 @@ namespace Control_Machine_Sistem.Controllers
                     await HttpContext.SignInAsync(
                         CookieAuthenticationDefaults.AuthenticationScheme,
                         new ClaimsPrincipal(claimsIdentity));
+
+                    if (user.Rol == "Seller")
+                    {
+                        return RedirectToAction("Index", "Stock");
+                    }
 
                     return RedirectToAction("Index", "Home");
                 }

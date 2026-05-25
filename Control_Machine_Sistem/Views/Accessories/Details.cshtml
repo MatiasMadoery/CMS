@@ -72,12 +72,16 @@
     <hr />
 
     <div class="button-group">
-        <a asp-action="Edit" asp-route-id="@Model?.Id" asp-route-isStock="@isStock" class="btn btn-primary" asp-route-activeTab="accessories">
-            <i class="fas fa-edit icon"></i> Editar
-        </a>
-        <a asp-action="Delete" asp-route-id="@Model?.Id" asp-route-isStock="@isStock" class="btn btn-danger" asp-route-activeTab="accessories">
-            <i class="fas fa-trash-alt icon"></i> Eliminar
-        </a>
+        @if (!User.IsInRole("Seller"))
+        {
+            <a asp-action="Edit" asp-route-id="@Model?.Id" asp-route-isStock="@isStock" class="btn btn-primary" asp-route-activeTab="accessories">
+                <i class="fas fa-edit icon"></i> Editar
+            </a>
+            <a asp-action="Delete" asp-route-id="@Model?.Id" asp-route-isStock="@isStock" class="btn btn-danger" asp-route-activeTab="accessories">
+                <i class="fas fa-trash-alt icon"></i> Eliminar
+            </a>
+        }
+        
         <a asp-controller="Stock" asp-action="@(isStock ? "Index" : "Vendidos")" class="btn btn-secondary" asp-route-activeTab="accessories">
             <i class="fas fa-arrow-left icon"></i> Volver
         </a>
