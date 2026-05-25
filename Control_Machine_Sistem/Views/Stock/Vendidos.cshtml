@@ -23,13 +23,13 @@
                 </div>
                 <div class="col-md-3" id="col-filter-category">
                     <label class="form-label small fw-bold">Categoría</label>
-                    <select id="filterCategory" name="categoryId" class="form-select" asp-items="ViewBag.Categories">
+                    <select id="filterCategory" name="categoryId" class="form-select">
                         <option value="">-- Todas --</option>
                     </select>
                 </div>
                 <div class="col-md-3" id="col-filter-model">
                     <label class="form-label small fw-bold">Modelo</label>
-                    <select id="filterModel" name="modelId" class="form-select" asp-items="ViewBag.Models">
+                    <select id="filterModel" name="modelId" class="form-select">
                         <option value="">-- Todos --</option>
                     </select>
                 </div>
@@ -37,7 +37,7 @@
                     <button type="submit" class="btn btn-primary w-100">
                         <i class="fas fa-filter icon"></i> Filtrar
                     </button>
-                    <a asp-action="Vendidos" class="btn btn-outline-secondary w-100">
+                    <a asp-action="Vendidos" class="btn btn-secondary w-100">
                         <i class="fas fa-sync-alt icon"></i> Limpiar
                     </a>
                 </div>
@@ -155,7 +155,6 @@
                         {
                             <tr>
                                 <td><strong>@item.Customer?.Name</strong></td>
-                                @* CORRECCIÓN: Acceso correcto a la propiedad del catálogo *@
                                 <td>@item.AccessoryModel?.Name</td>
                                 <td><span class="badge bg-light text-dark">@item.Ubication?.Name</span></td>
                                 <td>@item.SaleDate?.ToString("dd/MM/yyyy")</td>
@@ -163,11 +162,9 @@
                                     <a asp-action="Details" asp-controller="Accessories" asp-route-id="@item.Id" asp-route-isStock="false" class="btn-action details" title="Detalles">
                                         <i class="fas fa-info-circle"></i>
                                     </a>
-
                                     <a asp-action="Edit" asp-controller="Accessories" asp-route-id="@item.Id" asp-route-isStock="false" class="btn-action edit" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>
-
                                     <a asp-action="Delete" asp-controller="Accessories" asp-route-id="@item.Id" asp-route-isStock="false" class="btn-action delete" title="Eliminar">
                                         <i class="fas fa-trash-alt"></i>
                                     </a>
@@ -177,11 +174,11 @@
                     </tbody>
                 </table>
             </div>
-            @* Paginación Accesorios *@
+            @* Paginación Accesorios (CORREGIDA: Ahora mantiene categoría y modelo al paginar) *@
             <div class="pagination-container mt-3">
                 @for (int i = 1; i <= Model.SoldAccessories.TotalPages; i++)
                 {
-                    <a href="@Url.Action("Vendidos", new { accessoryPage = i, activeTab = "accessories", ubicationId = ViewBag.SelectedUbication })"
+                    <a href="@Url.Action("Vendidos", new { accessoryPage = i, activeTab = "accessories", ubicationId = ViewBag.SelectedUbication, categoryId = ViewBag.SelectedCategory, modelId = ViewBag.SelectedModel })"
                        class="btn btn-sm @(i == Model.SoldAccessories.CurrentPage ? "btn-primary" : "btn-outline-primary")">@i</a>
                 }
             </div>
@@ -190,47 +187,97 @@
 </div>
 
 @section Scripts {
-    <script src="~/js/views.js"></script>
     <script>
-        function switchTab(tabName) {
-            const isMachines = tabName === 'machines';
-            document.getElementById('section-machines').style.display = isMachines ? 'block' : 'none';
-            document.getElementById('section-accessories').style.display = isMachines ? 'none' : 'block';
+        // Función idéntica para controlar la carga asíncrona de modelos
+        function loadModels(tabName, categoryId, selectedModelId = null) {
+            const modelSelect = document.getElementById('filterModel');
+            modelSelect.innerHTML = '<option value="">-- Todos --</option>';
 
-            // Actualizar botones
-            document.getElementById('btn-machines').classList.toggle('active', isMachines);
-            document.getElementById('btn-accessories').classList.toggle('active', !isMachines);
+            if (!categoryId) return;
 
-            // Ocultar filtros irrelevantes
-            document.getElementById('col-filter-category').style.display = isMachines ? 'block' : 'none';
-            document.getElementById('col-filter-model').style.display = isMachines ? 'block' : 'none';
+            const urlMachines = '@Url.Action("GetModelsByCategory", "Stock")';
+            const urlAccessories = '@Url.Action("GetAccessoryModelsByCategory", "Stock")';
 
-            document.getElementById('inputActiveTab').value = tabName;
+            const baseUrl = tabName === 'machines' ? urlMachines : urlAccessories;
+            const url = baseUrl + '?categoryId=' + categoryId;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(m => {
+                        const opt = document.createElement('option');
+                        opt.value = m.id || m.Id;
+                        opt.text = m.name || m.Name;
+
+                        if (selectedModelId && opt.value == selectedModelId) {
+                            opt.selected = true;
+                        }
+                        modelSelect.appendChild(opt);
+                    });
+                })
+                .catch(error => console.error('Error al cargar modelos:', error));
         }
 
-        // Cascada Categoría -> Modelo (Fetch)
-        const categorySelect = document.getElementById('filterCategory');
-        const modelSelect = document.getElementById('filterModel');
+        // Control de pestañas y rellenado de categorías correspondientes
+        function switchTab(tabName) {
+            document.getElementById('section-machines').style.display = tabName === 'machines' ? 'block' : 'none';
+            document.getElementById('section-accessories').style.display = tabName === 'accessories' ? 'block' : 'none';
 
-        categorySelect.addEventListener('change', function() {
-            const categoryId = this.value;
-            modelSelect.innerHTML = '<option value="">-- Todos --</option>';
-            if (categoryId) {
-                fetch('@Url.Action("GetModelsByCategory", "Stock")?categoryId=' + categoryId)
-                    .then(r => r.json())
-                    .then(data => {
-                        data.forEach(m => {
-                            const opt = document.createElement('option');
-                            opt.value = m.id;
-                            opt.text = m.name;
-                            modelSelect.appendChild(opt);
-                        });
-                    });
+            document.getElementById('btn-machines').classList.toggle('active', tabName === 'machines');
+            document.getElementById('btn-accessories').classList.toggle('active', tabName === 'accessories');
+
+            const categorySelect = document.getElementById('filterCategory');
+            const currentCategorySelected = '@ViewBag.SelectedCategory' || categorySelect.value;
+
+            categorySelect.innerHTML = '<option value="">-- Todas --</option>';
+
+            // Cargar dinámicamente el listado de categorías según el contexto de venta
+            if (tabName === 'machines') {
+                @if (ViewBag.CategoriesMachine != null)
+                {
+                        foreach (var cat in (IEnumerable<Control_Machine_Sistem.Models.Category>)ViewBag.CategoriesMachine)
+                        {
+                                <text>
+                                var opt = document.createElement('option');
+                                opt.value = '@cat.Id';
+                                opt.text = '@cat.Name';
+                                if(opt.value == currentCategorySelected) opt.selected = true;
+                                categorySelect.appendChild(opt);
+                                </text>
+                        }
+                }
+            } else {
+                @if (ViewBag.CategoriesAccessory != null)
+                {
+                        foreach (var cat in (IEnumerable<Control_Machine_Sistem.Models.Category>)ViewBag.CategoriesAccessory)
+                        {
+                                <text>
+                                var opt = document.createElement('option');
+                                opt.value = '@cat.Id';
+                                opt.text = '@cat.Name';
+                                if(opt.value == currentCategorySelected) opt.selected = true;
+                                categorySelect.appendChild(opt);
+                                </text>
+                        }
+                }
             }
+
+            document.getElementById('inputActiveTab').value = tabName;
+
+            const initialModelId = '@ViewBag.SelectedModel';
+            loadModels(tabName, categorySelect.value, initialModelId);
+        }
+
+        // Escucha del cambio manual del selector de Producto/Categoría
+        document.getElementById('filterCategory').addEventListener('change', function() {
+            const tabName = document.getElementById('inputActiveTab').value;
+            loadModels(tabName, this.value);
         });
 
+        // Inicialización de la vista
         document.addEventListener("DOMContentLoaded", function() {
-            StockManager.initCategoryCascade('@Url.Action("GetModelsByCategory", "Stock")');
+             const currentTab = "@Model.ActiveTab" || "machines";
+             switchTab(currentTab);
         });
     </script>
 }

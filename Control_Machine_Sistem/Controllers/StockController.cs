@@ -198,11 +198,29 @@ namespace Control_Machine_Sistem.Controllers
 
             // Carga de Selects para los filtros
             ViewBag.Ubications = new SelectList(await _context.Ubications.ToListAsync(), "Id", "Name", ubicationId);
-            ViewBag.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Name", categoryId);
 
+            // CARGA DE CATEGORÍAS POR SEPARADO (Para que JS pueda usarlas al cambiar de pestaña)
+            var allCategories = await _context.Categories.ToListAsync();
+            ViewBag.CategoriesMachine = allCategories.Where(c => c.Type == CategoryType.Machine).ToList();
+            ViewBag.CategoriesAccessory = allCategories.Where(c => c.Type == CategoryType.Accessory).ToList();
+
+            // Mantener ViewBag.Categories para la carga inicial en el HTML
+            ViewBag.Categories = new SelectList(
+                activeTab == "machines" ? ViewBag.CategoriesMachine : ViewBag.CategoriesAccessory,
+                "Id", "Name", categoryId
+            );
+
+            // CARGA DE MODELOS INICIALES SEGÚN PESTAÑA ACTIVA (Evita que el select se vacíe al presionar "Filtrar")
             if (categoryId.HasValue)
             {
-                ViewBag.Models = new SelectList(await _context.Models.Where(m => m.CategoryId == categoryId).ToListAsync(), "Id", "Name", modelId);
+                if (activeTab == "machines")
+                {
+                    ViewBag.Models = new SelectList(await _context.Models.Where(m => m.CategoryId == categoryId).ToListAsync(), "Id", "Name", modelId);
+                }
+                else if (activeTab == "accessories")
+                {
+                    ViewBag.Models = new SelectList(await _context.AccessoryModels.Where(m => m.CategoryId == categoryId).ToListAsync(), "Id", "Name", modelId);
+                }
             }
 
             int pageSize = 10;
@@ -216,8 +234,12 @@ namespace Control_Machine_Sistem.Controllers
                 .Where(m => m.CustomerId != null); // Solo vendidas
 
             if (ubicationId.HasValue) mQuery = mQuery.Where(m => m.UbicationId == ubicationId);
-            if (categoryId.HasValue) mQuery = mQuery.Where(m => m.Model.CategoryId == categoryId);
-            if (modelId.HasValue) mQuery = mQuery.Where(m => m.ModelId == modelId);
+
+            if (activeTab == "machines")
+            {
+                if (categoryId.HasValue) mQuery = mQuery.Where(m => m.Model.CategoryId == categoryId);
+                if (modelId.HasValue) mQuery = mQuery.Where(m => m.ModelId == modelId);
+            }
 
             var mCount = await mQuery.CountAsync();
             var mElements = await mQuery
@@ -235,6 +257,12 @@ namespace Control_Machine_Sistem.Controllers
                 .Where(a => a.CustomerId != null); // Solo vendidos
 
             if (ubicationId.HasValue) aQuery = aQuery.Where(a => a.UbicationId == ubicationId);
+
+            if (activeTab == "accessories")
+            {
+                if (categoryId.HasValue) aQuery = aQuery.Where(a => a.AccessoryModel!.CategoryId == categoryId);
+                if (modelId.HasValue) aQuery = aQuery.Where(a => a.AccessoryModelId == modelId);
+            }
 
             var aCount = await aQuery.CountAsync();
             var aElements = await aQuery
