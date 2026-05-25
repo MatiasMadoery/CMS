@@ -1,6 +1,5 @@
 ﻿using ClosedXML.Excel;
 using Control_Machine_Sistem.Models;
-using Control_Machine_Sistem.Models.Control_Machine_Sistem.Models;
 using Control_Machine_Sistem.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -59,9 +58,9 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Accessories/Details/5
-        [HttpGet("Accessories/Details/{id}")] // 🌟 Forzamos la ruta base explícita
+        [HttpGet("Accessories/Details/{id}")] //Forzamos la ruta base explícita
         [Authorize(Roles = "Admin, Técnico, SuperAdmin, Viewer")]
-        public async Task<IActionResult> Details(int? id, [FromQuery] bool isStock = true) // 🌟 Indicamos que isStock viene del QueryString (?isStock=true)
+        public async Task<IActionResult> Details(int? id, [FromQuery] bool isStock = true) //Indica que isStock viene del QueryString (?isStock=true)
         {
             if (id == null) return NotFound();
 
@@ -74,7 +73,6 @@ namespace Control_Machine_Sistem.Controllers
 
             if (accessory == null) return NotFound();
 
-            // Guardamos el estado en el ViewBag para que la vista lo lea correctamente
             ViewBag.IsStock = isStock;
 
             return View(accessory);
@@ -91,7 +89,7 @@ namespace Control_Machine_Sistem.Controllers
 
             ViewBag.Categories = new SelectList(accessoriesCategories, "Id", "Name");
             ViewBag.UbicationId = new SelectList(_context.Ubications, "Id", "Name");
-            CargarModelosAccesorios(); // <--- NUEVO: Cargamos los modelos del catálogo
+            CargarModelosAccesorios(); // Carga los modelos del catálogo
 
             ViewBag.AccessoryModelId = new SelectList(Enumerable.Empty<SelectListItem>());
             return View();
@@ -144,7 +142,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // GET: Accessories/Edit/5
-        [HttpGet] // 🌟 Volvemos al estándar
+        [HttpGet]
         [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         public async Task<IActionResult> Edit(int? id, bool isStock = true)
         {
@@ -169,7 +167,7 @@ namespace Control_Machine_Sistem.Controllers
         }
 
         // POST: Accessories/Edit/5
-        [HttpPost] // 🌟 Volvemos al estándar
+        [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin, Técnico, SuperAdmin")]
         public async Task<IActionResult> Edit(
@@ -178,7 +176,7 @@ namespace Control_Machine_Sistem.Controllers
             List<string> ExistingImageUrls,
             List<string> DeletedImageUrls,
             List<IFormFile> ImageFiles,
-            bool origenStock) // 🌟 CAMBIO CLAVE: Renombramos el parámetro a 'origenStock' para romper la ambigüedad con el GET
+            bool origenStock) // Renombramos el parámetro a 'origenStock' para romper la ambigüedad con el GET
         {
             if (id != accessory.Id) return NotFound();
 
@@ -226,7 +224,7 @@ namespace Control_Machine_Sistem.Controllers
                     else throw;
                 }
 
-                // 🌟 REDIRECCIÓN INTELIGENTE usando el nuevo parámetro
+                // REDIRECCIÓN usando el nuevo parámetro
                 if (!origenStock)
                 {
                     return RedirectToAction("Vendidos", "Stock", new { activeTab = "accessories" });
@@ -237,7 +235,7 @@ namespace Control_Machine_Sistem.Controllers
 
             ViewBag.Ubications = new SelectList(_context.Ubications, "Id", "Name", accessory.UbicationId);
             CargarModelosAccesorios(accessory.AccessoryModelId);
-            ViewBag.IsStock = origenStock; // Mantenemos el estado si falla el modelo
+            ViewBag.IsStock = origenStock;
             return View(accessory);
         }
 
@@ -251,7 +249,7 @@ namespace Control_Machine_Sistem.Controllers
                 .Include(a => a.AccessoryModel)
                     .ThenInclude(am => am!.Category)
                 .Include(a => a.Ubication)
-                .Include(a => a.Customer) // Te agrego este Include por si borras un accesorio ya vendido
+                .Include(a => a.Customer)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (accessory == null) return NotFound();

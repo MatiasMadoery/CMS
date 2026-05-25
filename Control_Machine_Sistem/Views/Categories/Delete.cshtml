@@ -11,6 +11,8 @@
     <h1 class="page-title">@ViewData["Title"]</h1>
     <hr />
 
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3" style="list-style: none; padding: 10px; border-radius: 5px; background-color: #f8d7da; border: 1px solid #f5c6cb;"></div>
+
     <div class="alert alert-danger" role="alert">
         <i class="fas fa-exclamation-triangle icon"></i>
         ¿Estás seguro de que quieres eliminar este producto? Esta acción no se puede deshacer.
@@ -25,7 +27,7 @@
         </dl>
     </div>
 
-    <form asp-action="Delete">
+    <form asp-action="Delete" method="post">
         <input type="hidden" asp-for="Id" />
         <div class="button-group">
             <input type="submit" value="Eliminar" class="btn btn-danger" />

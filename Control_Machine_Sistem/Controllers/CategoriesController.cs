@@ -158,13 +158,24 @@ namespace Control_Machine_Sistem.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var category = await _context.Categories.FindAsync(id);
-            if (category != null)
+            if (category == null)
             {
-                _context.Categories.Remove(category);
+                return NotFound();
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _context.Categories.Remove(category);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError(string.Empty, "No se puede eliminar esta categoría porque tiene modelos de accesorios o maquinarias asociados.");
+
+                return View(category);
+            }
         }
 
         private bool CategoryExists(int id)
